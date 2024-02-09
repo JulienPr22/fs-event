@@ -6,9 +6,9 @@ import PopularEvents from "./home/event/PopularEvents";
 import Popularjobs from "./home/popular/Popularjobs";
 
 // job details screen
-import Company from "./eventdetails/company/Company";
+import EventInfo from "./eventdetails/company/Company";
 import { default as JobTabs } from "./eventdetails/tabs/Tabs";
-import { default as JobAbout } from "./eventdetails/about/About";
+import { default as EventAbout } from "./eventdetails/about/About";
 import { default as JobFooter } from "./eventdetails/footer/Footer";
 import Specifics from "./eventdetails/specifics/Specifics";
 
@@ -20,9 +20,9 @@ export {
   Welcome,
   PopularEvents,
   Popularjobs,
-  Company,
+  EventInfo as Company,
   JobTabs,
-  JobAbout,
+  EventAbout,
   JobFooter,
   Specifics,
   PopularEventCard

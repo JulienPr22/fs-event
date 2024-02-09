@@ -1,6 +1,7 @@
 
 import { SafeAreaView, View } from "react-native";
 
+
 const Details = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>

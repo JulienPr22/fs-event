@@ -14,6 +14,8 @@ const PopularEvents = () => {
     num_pages: '1',
   });
 
+
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>

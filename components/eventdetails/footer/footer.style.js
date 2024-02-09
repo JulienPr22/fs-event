@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.medium,
     justifyContent: "center",
     alignItems: "center",
+    bottom: 10
   },
   likeBtnImage: {
     width: "40%",
@@ -36,6 +37,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: SIZES.medium,
     borderRadius: SIZES.medium,
+    bottom: 10
   },
   applyBtnText: {
     fontSize: SIZES.medium,

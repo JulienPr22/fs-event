@@ -30,13 +30,13 @@ const Popularjobs = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Popular jobs</Text>
+        <Text style={styles.headerTitle}>Parcours populaires</Text>
         <TouchableOpacity>
-          <Text style={styles.headerBtn}>Show all</Text>
+          <Text style={styles.headerBtn}>Voir tous</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.cardsContainer}>
+     {/*  <View style={styles.cardsContainer}>
         {isLoading ? (
           <ActivityIndicator size='large' color={COLORS.primary} />
         ) : error ? (
@@ -56,7 +56,7 @@ const Popularjobs = () => {
             horizontal
           />
         )}
-      </View>
+      </View> */}
     </View>
   );
 };

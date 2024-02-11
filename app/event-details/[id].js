@@ -143,7 +143,7 @@ const EventDetails = () => {
 
       case "À Propos":
         return (
-          <EventAbout info={event.description_longue_fr ?? "No data provided"} />
+          <EventAbout description={event.description_longue_fr ?? "No data provided"} />
         );
 
       case "Responsibilities":

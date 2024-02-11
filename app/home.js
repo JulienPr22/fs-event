@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import { SafeAreaView, ScrollView, Text, View, TouchableOpacity } from "react-native";
 import { Stack, useRouter } from "expo-router";
+import data from '../assets/fr-esr-fete-de-la-science-23.json'
 
 import { COLORS, icons, images, SIZES } from "../constants";
 import {
@@ -9,10 +10,44 @@ import {
   ScreenHeaderBtn,
   Welcome,
 } from "../components";
+import { FIRESTORE_DB } from "../firebaseConfig";
+import { addDoc, collection, Firestore, getDocs } from "firebase/firestore";
 
 const Home = () => {
+  const events = [];
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("");
+
+  const exportData = async () => {
+         const updatedData = data.map(item => {
+       return {
+         ...item,
+         "rating": 0,
+         "votes":0
+       };
+
+     });
+
+     updatedData.map(event => {
+       try {
+         addDoc(collection(FIRESTORE_DB, 'events'), { event })
+         console.log("ok");
+       } catch (error) {
+         console.error('Erreur lors de l\'exportation des données :', error);
+       }
+        });
+  }
+
+  const importData = async () => {
+    const querySnapshot = await getDocs(collection(FIRESTORE_DB, "events"));
+
+    querySnapshot.forEach((doc) => {
+      events.push(doc.data());
+    });
+
+    console.log(events[0]);
+    console.log(events.length);
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -46,6 +81,14 @@ const Home = () => {
               }
             }}
           />
+
+
+          <TouchableOpacity
+            onPress={() => importData()}
+          >
+            <Text >Ajout Event Test</Text>
+          </TouchableOpacity>
+
 
           <Popularjobs />
           <PopularEvents />

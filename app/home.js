@@ -11,7 +11,7 @@ import {
   Welcome,
 } from "../components";
 import { FIRESTORE_DB } from "../firebaseConfig";
-import { addDoc, collection, Firestore, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 
 const Home = () => {
   const events = [];

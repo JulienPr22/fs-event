@@ -1,5 +1,4 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
-
 import styles from "./populareventcard.style";
 import { checkImageURL } from "../../../../utils";
 
@@ -11,7 +10,9 @@ const PopularEventCard = ({ event: event, handleNavigate }) => {
           source={{
             uri: checkImageURL(event.image)
               ? event.image
-              : "https://t4.ftcdn.net/jpg/05/05/61/73/360_F_505617309_NN1CW7diNmGXJfMicpY9eXHKV4sqzO5H.jpg",
+              : (
+                checkImageURL(event.organisateur_logo) ? event.organisateur_logo : "../../../../assets/images/placeholder.jpg"
+              )
           }}
           resizeMode='contain'
           style={styles.logImage}

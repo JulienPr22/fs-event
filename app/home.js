@@ -18,37 +18,6 @@ const Home = () => {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("");
 
-  const exportData = async () => {
-         const updatedData = data.map(item => {
-       return {
-         ...item,
-         "rating": 0,
-         "votes":0
-       };
-
-     });
-
-     updatedData.map(event => {
-       try {
-         addDoc(collection(FIRESTORE_DB, 'events'), { event })
-         console.log("ok");
-       } catch (error) {
-         console.error('Erreur lors de l\'exportation des données :', error);
-       }
-        });
-  }
-
-  const importData = async () => {
-    const querySnapshot = await getDocs(collection(FIRESTORE_DB, "events"));
-
-    querySnapshot.forEach((doc) => {
-      events.push(doc.data());
-    });
-
-    console.log(events[0]);
-    console.log(events.length);
-  }
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
       <Stack.Screen

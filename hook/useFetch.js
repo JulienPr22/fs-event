@@ -1,54 +1,39 @@
 import { useState, useEffect } from "react";
-import { addDoc, collection, getDocs, limit, orderBy, query } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, limit, query } from "firebase/firestore";
 import { FIRESTORE_DB } from "../firebaseConfig";
 import fakeData from "../assets/fr-esr-fete-de-la-science-23.json"
 
-const useFetch = () => {
+const useFetch = (collectionName, queryOptions ) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const events = [];
-
-  const fetchFakeData = async() => {
-    const updatedData = fakeData.map(item => {
-      return {
-        ...item,
-        "rating": 0,
-        "votes": 0
-      };
-    });
-
-    updatedData.forEach((obj) => {
-      events.push(obj);
-    });
-
-    setData(events);
-  }
-
   const fetchData = async () => {
     setIsLoading(true);
-
     try {
-      /*   let eventsRef = collection(FIRESTORE_DB, "events");
-        const q = query(eventsRef, limit(10));
-        const querySnapshot = await getDocs(q)
-
+      let dataToFetch;
+      if (queryOptions.docId) {
+        // Fetching a single document
+        const docRef = doc(FIRESTORE_DB, collectionName, queryOptions.docId);
+        dataToFetch = await getDoc(docRef);
+        setData(dataToFetch.data().event);
+      } else {
+        // Fetching multiple documents
+        const items = [];
+        let collectionRef = collection(FIRESTORE_DB, collectionName);
+        if (queryOptions.limit) {
+          collectionRef = query(collectionRef, limit(queryOptions.limit));
+        }
+        const querySnapshot = await getDocs(collectionRef);
         querySnapshot.forEach((doc) => {
-          const obj = (doc.data())
-          events.push(obj.event);
+          items.push({ id: doc.id, ...doc.data().event });
         });
-
-        setData(events); */
-
-      fetchFakeData()
+        setData(items);
+      }
       setIsLoading(false);
-
     } catch (error) {
       setError(error);
-      console.log(error)
-
-    } finally {
+      console.log(error);
       setIsLoading(false);
     }
   };
@@ -95,6 +80,22 @@ const importData = async () => {
 
   console.log(events[0]);
   console.log(events.length);
+};
+
+const fetchFakeData = async () => {
+  const updatedData = fakeData.map(item => {
+    return {
+      ...item,
+      "rating": 0,
+      "votes": 0
+    };
+  });
+
+  updatedData.forEach((obj) => {
+    events.push(obj);
+  });
+
+  setData(events);
 }
 
 export default useFetch;

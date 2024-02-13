@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { SafeAreaView, ScrollView, Text, View, TouchableOpacity } from "react-native";
 import { Stack, useRouter } from "expo-router";
-import data from '../assets/fr-esr-fete-de-la-science-23.json'
 
 import { COLORS, icons, images, SIZES } from "../constants";
 import {
@@ -10,11 +9,8 @@ import {
   ScreenHeaderBtn,
   Welcome,
 } from "../components";
-import { FIRESTORE_DB } from "../firebaseConfig";
-import { addDoc, collection, getDocs } from "firebase/firestore";
 
 const Home = () => {
-  const events = [];
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -50,14 +46,6 @@ const Home = () => {
               }
             }}
           />
-
-
-          <TouchableOpacity
-            onPress={() => importData()}
-          >
-            <Text >Ajout Event Test</Text>
-          </TouchableOpacity>
-
 
           <Popularjobs />
           <PopularEvents />

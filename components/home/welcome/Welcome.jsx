@@ -45,7 +45,7 @@ const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
       </View>
 
       <View style={styles.tabsContainer}>
-        <FlatList
+       {/*  <FlatList
           data={jobTypes}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -61,7 +61,7 @@ const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
           keyExtractor={(item) => item}
           contentContainerStyle={{ columnGap: SIZES.small }}
           horizontal
-        />
+        /> */}
       </View>
     </View>
   );

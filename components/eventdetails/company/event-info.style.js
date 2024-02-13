@@ -4,13 +4,13 @@ import { COLORS, FONT, SIZES } from "../../../constants";
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: SIZES.medium,
+    marginVertical: SIZES.small,
     justifyContent: "center",
     alignItems: "center",
   },
   logoBox: {
-    width: 80,
-    height: 80,
+    width: 500,
+    height: 500,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#FFF",

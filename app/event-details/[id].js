@@ -19,7 +19,7 @@ import {
 } from "../../components";
 import { COLORS, icons, SIZES } from "../../constants";
 import useFetch from "../../hook/useFetch";
-import EventInfo from "../../components/eventdetails/company/Company";
+import EventInfo from "../../components/eventdetails/company/EventInfo";
 
 const tabs = ["À Propos", "Qualifications", "Responsibilities"];
 
@@ -94,15 +94,15 @@ const EventDetails = () => {
             <ActivityIndicator size='large' color={COLORS.primary} />
           ) : error ? (
             <Text>Something went wrong</Text>
-          ) : !event ? (
+          ) : !data ? (
             <Text>No data available</Text>
           ) : (
             <View style={{ padding: SIZES.medium, paddingBottom: 100 }}>
               <EventInfo
-                image={event.image}
-                title={event.titre_fr}
-                animationType={event.type_d_animation}
-                conditions={event.detail_des_conditions_fr}
+                image={data.image}
+                title={data.titre_fr}
+                animationType={data.type_animation_project  }
+                conditions={data.detail_des_conditions_fr}
               />
 
               <JobTabs
@@ -116,7 +116,7 @@ const EventDetails = () => {
           )}
         </ScrollView>
 
-        <JobFooter url={data.lien ?? 'https://careers.google.com/jobs/results/'} />
+        {/* <JobFooter url={data.lien ?? 'https://careers.google.com/jobs/results/'} /> */}
       </>
     </SafeAreaView>
   );

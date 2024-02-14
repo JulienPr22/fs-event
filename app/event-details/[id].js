@@ -22,6 +22,7 @@ import useFetch from "../../hook/useFetch";
 import EventInfo from "../../components/eventdetails/company/EventInfo";
 import { Rating } from '@rneui/themed';
 import styles from "./details.style";
+
 const tabs = ["À Propos", "Qualifications", "Responsibilities"];
 
 const EventDetails = () => {
@@ -44,9 +45,9 @@ const EventDetails = () => {
       case "À Propos":
         return (
           <EventAbout
-          description={data.description_longue_fr ?? "Cet évennement n'a pas de description"}
-          dates={data.date_debut}
-          capacite={data.capacite ?? "Non renseigné"}/>
+            description={data.description_longue_fr ?? "Cet évennement n'a pas de description"}
+            dates={data.date_debut}
+            capacite={data.capacite ?? "Non renseigné"} />
         );
 
       case "Qualifications":
@@ -125,26 +126,24 @@ const EventDetails = () => {
                   Alert.alert('Modal has been closed.');
                   setModalVisible(!modalVisible);
                 }}>
-                <View style={styles.modalCenteredView}>
+                <View style={styles.centeredView}>
                   <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Votre note</Text>
+                    <Text style={styles.modalText}>Veuillez saisir une note</Text>
 
                     <Rating ratingBackgroundColor="#000" showRating fractions="{0}" ></Rating>
                     <View style={styles.buttons}>
                       <Pressable
-                        style={[styles.button, styles.modalButtonCancel]}
+                        style={[styles.button]}
                         onPress={() => setModalVisible(!modalVisible)}>
-                        <Text style={styles.cancelTextStyle}>Annuler</Text>
+                        <Text style={styles.textStyleCancel}>Annuler</Text>
                       </Pressable>
 
                       <Pressable
-                        style={[styles.button, styles.ModalButtonValidate]}
+                        style={[styles.button, styles.buttonValidate]}
                         onPress={() => setModalVisible(!modalVisible)}>
                         <Text style={styles.textStyle}>Valider</Text>
                       </Pressable>
                     </View>
-
-
                   </View>
                 </View>
               </Modal>
@@ -153,11 +152,13 @@ const EventDetails = () => {
             </View>
           )}
         </ScrollView>
-
-        <Pressable
-          style={[styles.button, styles.buttonOpen]}
-          onPress={() => { setModalVisible(!modalVisible) }}><Text>Noter l'évennement</Text>
-        </Pressable>
+        <View style={styles.actionBtnContainer}>
+          <Pressable
+            style={styles.openBtn}
+            onPress={() => { setModalVisible(!modalVisible) }}>
+            <Text style={styles.openBtnText}>Noter l'évennement</Text>
+          </Pressable>
+        </View>
       </>
     </SafeAreaView>
   );

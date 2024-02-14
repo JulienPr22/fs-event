@@ -1,70 +1,90 @@
 import {
-    StyleSheet,
-  } from "react-native";
-import { COLORS } from "../../constants";
+  StyleSheet,
+} from "react-native";
+import { COLORS, FONT, SIZES } from "../../constants";
 
-  const styles = StyleSheet.create({
-    modalCenteredView: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 22,
-    },
-    modalView: {
-      margin: 20,
-      backgroundColor:"rgba(255,255,255,0.7)",
-      borderRadius: 20,
-      padding: 35,
-      alignItems: 'center',
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-    },
-    button: {
-      borderRadius: 20,
-      paddingHorizontal: 10,
-      paddingVertical: 5,
-      elevation: 2,
-    },
-    buttonOpen: {
-      backgroundColor: COLORS.primary,
-      color: "white"
-    },
-    ModalButtonValidate: {
-      backgroundColor: '#2196F3',
-    },
 
-    modalButtonCancel: {
-    },
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
 
-    buttons:{
-        flex: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
+    margin: SIZES.large,
+    backgroundColor: 'white',
+    borderRadius: SIZES.large,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  buttons: {
+    paddingTop: SIZES.medium,
+    flexDirection: 'row',
+    gap: 20
+  },
 
-    textStyle: {
-      color: 'white',
-      fontWeight: 'bold',
-      textAlign: 'center',
-    },
-    cancelTextStyle: {
-      color: 'red',
-      fontWeight: 'bold',
-      textAlign: 'center',
-    },
-    modalText: {
-      marginBottom: 15,
-      textAlign: 'center',
-    },
-    rating: {
-        backgroundColor: "transparent"
-    }
-  });
+  button: {
+    borderRadius: SIZES.large,
+    padding: SIZES.small,
+    elevation: 2,
+  },
+  actionBtnContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: SIZES.small,
+    backgroundColor: "#FFF",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  openBtn: {
+    flex: 1,
+    backgroundColor: "#FE7654",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: SIZES.small,
+    marginLeft: SIZES.medium,
+    borderRadius: SIZES.medium,
+    bottom: 10
+  },
+  openBtnText: {
+    fontSize: SIZES.medium,
+    color: COLORS.white,
+    fontFamily: FONT.bold,
+  },
+  buttonValidate: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 
-  export default styles;
+  textStyleCancel: {
+    color: 'red',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
+  modalText: {
+    marginBottom: SIZES.medium,
+    textAlign: 'center',
+  },
+});
+
+
+export default styles;

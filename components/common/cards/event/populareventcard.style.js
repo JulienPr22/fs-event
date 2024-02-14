@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { COLORS, SHADOWS, SIZES } from "../../../../constants";
+import { COLORS, FONT, SHADOWS, SIZES } from "../../../../constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -30,17 +30,59 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: SIZES.medium,
   },
-  jobName: {
+
+  eventTitle: {
     fontSize: SIZES.medium,
     fontFamily: "DMBold",
     color: COLORS.primary,
   },
-  jobType: {
+
+  ratingContainer: {
+    flex: 1,
+    alignItems: "center",
+    gap: 5,
+    flexDirection: "row",
+  },
+
+  eventDescription: {
     fontSize: SIZES.small + 2,
     fontFamily: "DMRegular",
     color: COLORS.gray,
     marginTop: 3,
+    paddingHorizontal: 5,
     textTransform: "capitalize",
+  },
+  starIcon: {
+    width: SIZES.medium,
+    height: SIZES.medium,
+  },
+
+  InfoBox: {
+    marginTop: SIZES.small / 2,
+    flexDirection: "row",
+    ustifyContent: "center",
+    alignItems: "flex-start",
+  },
+  companyName: {
+    fontSize: SIZES.medium - 2,
+    color: COLORS.primary,
+    fontFamily: FONT.medium,
+  },
+  locationBox: {
+    flexDirection: "row",
+    // justifyContent: "center",
+    alignItems: "flex-start",
+  },
+  locationImage: {
+    width: 14,
+    height: 14,
+    tintColor: COLORS.gray,
+  },
+  locationName: {
+    fontSize: SIZES.medium - 2,
+    color: COLORS.gray,
+    fontFamily: FONT.regular,
+    marginLeft: 2,
   },
 });
 

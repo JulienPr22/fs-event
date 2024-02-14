@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     fontFamily: FONT.medium,
   },
   locationBox: {
+    marginLeft: -4,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",

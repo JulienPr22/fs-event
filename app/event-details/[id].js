@@ -8,14 +8,11 @@ import {
   ActivityIndicator,
   RefreshControl,
   Modal,
-  StyleSheet,
   Pressable
 } from "react-native";
 
 import {
-  Company,
   EventAbout,
-  JobFooter,
   JobTabs,
   ScreenHeaderBtn,
   Specifics,
@@ -24,6 +21,7 @@ import { COLORS, icons, SIZES } from "../../constants";
 import useFetch from "../../hook/useFetch";
 import EventInfo from "../../components/eventdetails/company/EventInfo";
 import { Rating } from '@rneui/themed';
+import styles from "./details.style";
 const tabs = ["À Propos", "Qualifications", "Responsibilities"];
 
 const EventDetails = () => {
@@ -123,16 +121,26 @@ const EventDetails = () => {
                   Alert.alert('Modal has been closed.');
                   setModalVisible(!modalVisible);
                 }}>
-                <View style={styles.centeredView}>
+                <View style={styles.modalCenteredView}>
                   <View style={styles.modalView}>
                     <Text style={styles.modalText}>Votre note</Text>
 
-                    <Rating showRating fractions="{0}"></Rating>
-                    <Pressable
-                      style={[styles.button, styles.buttonClose]}
-                      onPress={() => setModalVisible(!modalVisible)}>
-                      <Text style={styles.textStyle}>Valider</Text>
-                    </Pressable>
+                    <Rating ratingBackgroundColor="#000" showRating fractions="{0}" ></Rating>
+                    <View style={styles.buttons}>
+                      <Pressable
+                        style={[styles.button, styles.modalButtonCancel]}
+                        onPress={() => setModalVisible(!modalVisible)}>
+                        <Text style={styles.cancelTextStyle}>Annuler</Text>
+                      </Pressable>
+
+                      <Pressable
+                        style={[styles.button, styles.ModalButtonValidate]}
+                        onPress={() => setModalVisible(!modalVisible)}>
+                        <Text style={styles.textStyle}>Valider</Text>
+                      </Pressable>
+                    </View>
+
+
                   </View>
                 </View>
               </Modal>
@@ -144,56 +152,11 @@ const EventDetails = () => {
 
         <Pressable
           style={[styles.button, styles.buttonOpen]}
-          onPress={() => { setModalVisible(!modalVisible) }}><Text>Noter l'évennement</Text></Pressable>
-
-        {/* <JobFooter url={data.lien ?? 'https://careers.google.com/jobs/results/'} /> */}
+          onPress={() => { setModalVisible(!modalVisible) }}><Text>Noter l'évennement</Text>
+        </Pressable>
       </>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-});
 
 export default EventDetails;

@@ -40,17 +40,21 @@ const EventDetails = () => {
 
   const displayTabContent = () => {
     switch (activeTab) {
+
+      case "À Propos":
+        return (
+          <EventAbout
+          description={data.description_longue_fr ?? "Cet évennement n'a pas de description"}
+          dates={data.date_debut}
+          capacite={data.capacite ?? "Non renseigné"}/>
+        );
+
       case "Qualifications":
         return (
           <Specifics
             title='Qualifications'
             points={data.adresse ?? ["N/A"]}
           />
-        );
-
-      case "À Propos":
-        return (
-          <EventAbout description={data.description_longue_fr ?? "No data provided"} />
         );
 
       case "Responsibilities":

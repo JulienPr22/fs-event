@@ -22,6 +22,7 @@ import useFetch from "../../hook/useFetch";
 import EventInfo from "../../components/eventdetails/company/EventInfo";
 import { Rating } from '@rneui/themed';
 import styles from "./details.style";
+import firestoreService from "../../components/services/fireStoreService";
 
 const tabs = ["À Propos", "Qualifications", "Responsibilities"];
 
@@ -134,7 +135,10 @@ const EventDetails = () => {
                     <View style={styles.buttons}>
                       <Pressable
                         style={[styles.button]}
-                        onPress={() => setModalVisible(!modalVisible)}>
+                        onPress={() => {
+                          firestoreService.doRateEvent();
+                          setModalVisible(!modalVisible)
+                        }}>
                         <Text style={styles.textStyleCancel}>Annuler</Text>
                       </Pressable>
 

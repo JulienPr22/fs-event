@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import styles from './popularevents.style';
 import { COLORS } from '../../../constants';
 import PopularEventCard from '../../common/cards/event/PopularEventCard';
-import useFetch from '../../../hook/useFetch';
+import fireStoreService from '../../services/fireStoreService';
 
 const PopularEvents = () => {
   const router = useRouter();
-  const { data, isLoading, error } = useFetch('events', { limit: 20 });
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const newData = await fireStoreService.fetchData({ limit: 20, minRating: 4.500 }, setIsLoading);
+      setData(newData);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <View style={styles.container}>

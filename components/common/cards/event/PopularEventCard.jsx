@@ -45,7 +45,7 @@ const PopularEventCard = ({ event: event, handleNavigate }) => {
         </Text>
 
         <View style={styles.ratingContainer}>
-          <Text style={styles.eventDescription}>{event?.rating}</Text>
+          <Text style={styles.eventDescription}>{event?.rating.toFixed(1)}</Text>
           <Image
             source={icons.star}
             resizeMode='contain'

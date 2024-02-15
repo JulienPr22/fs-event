@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { SafeAreaView, ScrollView, Text, View, TouchableOpacity } from "react-native";
+import { SafeAreaView, ScrollView, View, Pressable } from "react-native";
 import { Stack, useRouter } from "expo-router";
+import fakeData from "../assets/fr-esr-fete-de-la-science-23.json"
+
 
 import { COLORS, icons, images, SIZES } from "../constants";
 import {
@@ -8,7 +10,12 @@ import {
   Popularjobs,
   ScreenHeaderBtn,
   Welcome,
+
 } from "../components";
+import { addDoc, collection } from "firebase/firestore";
+import { FIRESTORE_DB } from "../firebaseConfig";
+
+
 
 const Home = () => {
   const router = useRouter()
@@ -41,11 +48,14 @@ const Home = () => {
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             handleClick={() => {
-              if (searchTerm) {
+              /* if (searchTerm) {
                 router.push(`/search/${searchTerm}`)
-              }
+              } */
+              exportData();
             }}
           />
+
+
 
           <Popularjobs />
           <PopularEvents />

@@ -1,5 +1,5 @@
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   Modal,
-  Pressable
+  Pressable,
 } from "react-native";
 
 import {
@@ -18,25 +18,35 @@ import {
   Specifics,
 } from "../../components";
 import { COLORS, icons, SIZES } from "../../constants";
-import useFetch from "../../hook/useFetch";
 import EventInfo from "../../components/eventdetails/company/EventInfo";
 import { Rating } from '@rneui/themed';
 import styles from "./details.style";
 import firestoreService from "../../components/services/fireStoreService";
+import { checkImageURL } from "../../utils";
 
 const tabs = ["À Propos", "Qualifications", "Responsibilities"];
 
 const EventDetails = () => {
   const params = useGlobalSearchParams();
   const router = useRouter();
-  const { data, isLoading, error } = useFetch('events', { docId: params.id });
+  const [event, setEvent] = useState([]);
+  const [isLoading, setIsLoading] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await firestoreService.fetchData({ docId: params.id }, setIsLoading);
+      setEvent(data);
+    };
+
+    fetchData();
+  }, []);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    refetch()
     setRefreshing(false)
   }, []);
 
@@ -46,16 +56,16 @@ const EventDetails = () => {
       case "À Propos":
         return (
           <EventAbout
-            description={data.description_longue_fr ?? "Cet évennement n'a pas de description"}
-            dates={data.date_debut}
-            capacite={data.capacite ?? "Non renseigné"} />
+            description={event.description_longue_fr ?? "Cet évennement n'a pas de description"}
+            dates={event.date_debut}
+            capacite={event.capacite ?? "Non renseigné"} />
         );
 
       case "Qualifications":
         return (
           <Specifics
             title='Qualifications'
-            points={data.adresse ?? ["N/A"]}
+            points={event.adresse ?? ["N/A"]}
           />
         );
 
@@ -63,7 +73,7 @@ const EventDetails = () => {
         return (
           <Specifics
             title='Responsibilities'
-            points={data.type_d_animation ?? ["N/A"]}
+            points={event.type_d_animation ?? ["N/A"]}
           />
         );
 
@@ -75,7 +85,9 @@ const EventDetails = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
       <Stack.Screen
+
         options={{
+          visible:false,
           headerStyle: { backgroundColor: COLORS.lightWhite },
           headerShadowVisible: false,
           headerBackVisible: false,
@@ -100,61 +112,68 @@ const EventDetails = () => {
         >
           {isLoading ? (
             <ActivityIndicator size='large' color={COLORS.primary} />
-          ) : error ? (
+          ) /* : error ? (
             <Text>Something went wrong</Text>
-          ) : !data ? (
-            <Text>No data available</Text>
-          ) : (
-            <View style={{ padding: SIZES.medium, paddingBottom: 100 }}>
-              <EventInfo
-                image={data.image}
-                title={data.titre_fr}
-                animationType={data.type_animation_project}
-                conditions={data.detail_des_conditions_fr}
-              />
+          )  */
+            : !event ? (
+              <Text>No data available</Text>
+            ) : (
+              <View style={{ padding: SIZES.medium, paddingBottom: 100 }}>
+                <EventInfo
+                  image={{
+                    uri: checkImageURL(event.image)
+                      ? event.image
+                      : checkImageURL(event.organisateur_logo)
+                        ? event.organisateur_logo
+                        : '../../assets/images/placeholder.jpg',
+                  }}
+                  title={event.titre_fr}
+                  animationType={event.type_animation_project}
+                  conditions={event.detail_des_conditions_fr}
+                />
 
-              <JobTabs
-                tabs={tabs}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-              />
+                <JobTabs
+                  tabs={tabs}
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
+                />
 
-              <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                  Alert.alert('Modal has been closed.');
-                  setModalVisible(!modalVisible);
-                }}>
-                <View style={styles.centeredView}>
-                  <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Veuillez saisir une note</Text>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={modalVisible}
+                  onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setModalVisible(!modalVisible);
+                  }}>
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      <Text style={styles.modalText}>Veuillez saisir une note</Text>
 
-                    <Rating ratingBackgroundColor="#000" showRating fractions="{0}" ></Rating>
-                    <View style={styles.buttons}>
-                      <Pressable
-                        style={[styles.button]}
-                        onPress={() => {
-                          firestoreService.doRateEvent();
-                          setModalVisible(!modalVisible)
-                        }}>
-                        <Text style={styles.textStyleCancel}>Annuler</Text>
-                      </Pressable>
+                      <Rating ratingBackgroundColor="#000" showRating fractions="{0}" ></Rating>
+                      <View style={styles.buttons}>
+                        <Pressable
+                          style={[styles.button]}
+                          onPress={() => {
+                            firestoreService.doRateEvent();
+                            setModalVisible(!modalVisible)
+                          }}>
+                          <Text style={styles.textStyleCancel}>Annuler</Text>
+                        </Pressable>
 
-                      <Pressable
-                        style={[styles.button, styles.buttonValidate]}
-                        onPress={() => setModalVisible(!modalVisible)}>
-                        <Text style={styles.textStyle}>Valider</Text>
-                      </Pressable>
+                        <Pressable
+                          style={[styles.button, styles.buttonValidate]}
+                          onPress={() => setModalVisible(!modalVisible)}>
+                          <Text style={styles.textStyle}>Valider</Text>
+                        </Pressable>
+                      </View>
                     </View>
                   </View>
-                </View>
-              </Modal>
+                </Modal>
 
-              {displayTabContent()}
-            </View>
-          )}
+                {displayTabContent()}
+              </View>
+            )}
         </ScrollView>
         <View style={styles.actionBtnContainer}>
           <Pressable

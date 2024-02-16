@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { SafeAreaView, ScrollView, View, Pressable } from "react-native";
-import { Stack, useRouter } from "expo-router";
-import fakeData from "../assets/fr-esr-fete-de-la-science-23.json"
-
-
+import { Stack, Tabs, useRouter } from "expo-router";
 import { COLORS, icons, images, SIZES } from "../constants";
 import {
   PopularEvents,
@@ -12,8 +9,8 @@ import {
   Welcome,
 
 } from "../components";
-import { addDoc, collection } from "firebase/firestore";
-import { FIRESTORE_DB } from "../firebaseConfig";
+
+import { FontAwesome } from "@expo/vector-icons";
 
 
 
@@ -23,7 +20,7 @@ const Home = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
-      <Stack.Screen
+      <Tabs.Screen
         options={{
           headerStyle: { backgroundColor: COLORS.lightWhite },
           headerShadowVisible: false,
@@ -34,6 +31,14 @@ const Home = () => {
             <ScreenHeaderBtn iconUrl={images.profile} dimension='100%' />
           ),
           headerTitle: "",
+          tabBarIcon: ({ color }) => (
+            <FontAwesome
+              size={28}
+              style={{ marginBottom: -3 }}
+              name="home"
+              color={color}
+            />
+          ),
         }}
       />
 

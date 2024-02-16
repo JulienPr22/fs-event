@@ -20,7 +20,7 @@ export {
   Welcome,
   PopularEvents,
   Popularjobs,
-  EventInfo as Company,
+  EventInfo,
   JobTabs,
   EventAbout,
   JobFooter,

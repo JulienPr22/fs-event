@@ -152,9 +152,15 @@ const EventDetails = () => {
                     <View style={styles.modalView}>
                       <Text style={styles.modalText}>Veuillez saisir une note</Text>
 
-                      <AirbnbRating ratingBackgroundColor="#000" showRating fractions="{0}" onFinishRating={(rating) => {
-                        setRate(rating)
-                      }}></AirbnbRating>
+                      <AirbnbRating
+                        ratingBackgroundColor="#000"
+                        showRating fractions="{0}"
+                        reviews={["Très mauvais", "Mauvais", "Moyen", "Bien", "Super"]}
+                        onFinishRating={(rating) => {
+                          setRate(rating)
+                        }}>
+
+                      </AirbnbRating>
                       <View style={styles.buttons}>
                         <Pressable
                           style={[styles.button]}

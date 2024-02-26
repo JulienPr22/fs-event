@@ -19,20 +19,24 @@ import {
 } from "../../components";
 import { COLORS, icons, SIZES } from "../../constants";
 import EventInfo from "../../components/eventdetails/company/EventInfo";
-import { Rating } from '@rneui/themed';
 import styles from "./details.style";
 import firestoreService from "../../components/services/fireStoreService";
 import { checkImageURL } from "../../utils";
 import { AirbnbRating } from "@rneui/themed";
+import MapInfo from "../../components/eventdetails/map/MapInfo";
 
-const tabs = ["À Propos", "Qualifications", "Responsibilities"];
+const tabs = ["À Propos", "Qualifications", "Carte"];
 
 const EventDetails = () => {
   const params = useGlobalSearchParams();
   const router = useRouter();
   const [event, setEvent] = useState([]);
-  const [isLoading, setIsLoading] = useState([]);
   const [rate, setRate] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [imageVisible, setImageVisible] = useState(true);
+  const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [isLoading, setIsLoading] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,10 +46,6 @@ const EventDetails = () => {
 
     fetchData();
   }, []);
-
-  const [modalVisible, setModalVisible] = useState(false);
-  const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -71,11 +71,12 @@ const EventDetails = () => {
           />
         );
 
-      case "Responsibilities":
+      case "Carte":
+        console.log(event.geolocalisation);
         return (
-          <Specifics
-            title='Responsibilities'
-            points={event.type_d_animation ?? ["N/A"]}
+          <MapInfo
+            coordinate={{latitude: event.geolocalisation.lat, longitude: event.geolocalisation.lon,  latitudeDelta: 0.01,
+              longitudeDelta: 0.01, name:event.title }}
           />
         );
 
@@ -114,18 +115,16 @@ const EventDetails = () => {
         >
           {isLoading ? (
             <ActivityIndicator size='large' color={COLORS.primary} />
-          ) /* : error ? (
-            <Text>Something went wrong</Text>
-          )  */
+          )
             : !event ? (
               <Text>No data available</Text>
             ) : (
               <View style={{ padding: SIZES.medium, paddingBottom: 100 }}>
                 <EventInfo
                   image={{
-                    uri: checkImageURL(event.image)
+                    uri: (event.image)
                       ? event.image
-                      : checkImageURL(event.organisateur_logo)
+                      : (event.organisateur_logo)
                         ? event.organisateur_logo
                         : '../../assets/images/placeholder.jpg',
                   }}

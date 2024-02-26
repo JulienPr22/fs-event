@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { SafeAreaView, ScrollView, View, Pressable } from "react-native";
+import { SafeAreaView, ScrollView, View } from "react-native";
 import { Tabs, useRouter } from "expo-router";
-import { COLORS, icons, images, SIZES } from "../../constants";
+import { COLORS, SIZES } from "../../constants";
 import {
   PopularEvents,
   Popularjobs,
@@ -10,7 +10,7 @@ import {
 
 } from "../../components";
 
-import { FontAwesome } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const HomeScreen = () => {
   const router = useRouter()
@@ -19,27 +19,6 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
       <Tabs.Screen
-
-        options={{
-          tabBarLabel: "Accueil",
-          headerStyle: { backgroundColor: COLORS.lightWhite },
-          headerShadowVisible: false,
-          headerLeft: () => (
-            <ScreenHeaderBtn iconUrl={icons.menu} dimension='60%' />
-          ),
-          headerRight: () => (
-            <ScreenHeaderBtn iconUrl={images.profile} dimension='100%' />
-          ),
-          headerTitle: "",
-          tabBarIcon: ({ color }) => (
-            <FontAwesome
-              size={28}
-              style={{ marginBottom: -3 }}
-              name="home"
-              color={color}
-            />
-          ),
-        }}
       />
 
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -59,8 +38,6 @@ const HomeScreen = () => {
               exportData();
             }}
           />
-
-
 
           <Popularjobs />
           <PopularEvents />

@@ -1,27 +1,27 @@
 import { useState } from "react";
 import { SafeAreaView, ScrollView, View, Pressable } from "react-native";
-import { Stack, Tabs, useRouter } from "expo-router";
-import { COLORS, icons, images, SIZES } from "../constants";
+import { Tabs, useRouter } from "expo-router";
+import { COLORS, icons, images, SIZES } from "../../constants";
 import {
   PopularEvents,
   Popularjobs,
   ScreenHeaderBtn,
   Welcome,
 
-} from "../components";
+} from "../../components";
 
 import { FontAwesome } from "@expo/vector-icons";
 
-
-
-const Home = () => {
+const HomeScreen = () => {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("");
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
       <Tabs.Screen
+
         options={{
+          tabBarLabel: "Accueil",
           headerStyle: { backgroundColor: COLORS.lightWhite },
           headerShadowVisible: false,
           headerLeft: () => (
@@ -70,4 +70,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeScreen;

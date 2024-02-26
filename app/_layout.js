@@ -22,15 +22,10 @@ const Layout = () => {
   }
 
   return (
-    /*  <Stack initialRouteName="home">
-       <Stack.Screen name="home" />
-     </Stack> */
-
-    <Tabs initialRouteName="home">
-      <Tabs.Screen
-        name="home"
-      />
-    </Tabs>
+  //  <Stack initialRouteName="home">
+  //      <Stack.Screen name="home" />
+  //    </Stack>
+  <Stack></Stack>
   )
 };
 

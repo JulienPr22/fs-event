@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, FlatList, Image, TouchableOpacity, View } from 'react-native'
 import { Stack, useRouter, useSearchParams } from 'expo-router'
 import { Text, SafeAreaView } from 'react-native'
-import axios from 'axios'
+
 
 import { ScreenHeaderBtn, NearbyJobCard } from '../../components'
 import { COLORS, icons, SIZES } from '../../constants'
@@ -20,29 +20,6 @@ const JobSearch = () => {
     const handleSearch = async () => {
         setSearchLoader(true);
         setSearchResult([])
-
-        try {
-            const options = {
-                method: "GET",
-                url: `https://jsearch.p.rapidapi.com/search`,
-                headers: {
-                    "X-RapidAPI-Key": '',
-                    "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
-                },
-                params: {
-                    query: params.id,
-                    page: page.toString(),
-                },
-            };
-
-            const response = await axios.request(options);
-            setSearchResult(response.data.data);
-        } catch (error) {
-            setSearchError(error);
-            console.log(error);
-        } finally {
-            setSearchLoader(false);
-        }
     };
 
     const handlePagination = (direction) => {

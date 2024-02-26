@@ -1,5 +1,5 @@
 
-import { collection, doc, getDoc, getDocs, limit, query, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, limit, query, setDoc, where } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../firebaseConfig";
 import fakeData from "../../assets/fr-esr-fete-de-la-science-23.json"
 class firestoreService {
@@ -38,13 +38,19 @@ class firestoreService {
     }
   }
 
-  static doRateEvent = async (docId) => {
+  static doRateEvent = async (docId, rating) => {
     const docRef = doc(FIRESTORE_DB, "events", docId);
     dataToFetch = await getDoc(docRef);
-    console.log(dataToFetch.data());
+    const event = dataToFetch.data().event
+
+    setDoc(docRef,  {
+      rating: (event.rating * event.votes + rating) / (event.votes + 1),
+      votes: event.votes + 1
+    })
+
   }
 
-  randomNumber = (min,max,dec) => {
+  randomNumber = (min, max, dec) => {
     const nombreAleatoire = Math.random() * (max - min) + min;
     return parseFloat(nombreAleatoire.toFixed(dec));
   }

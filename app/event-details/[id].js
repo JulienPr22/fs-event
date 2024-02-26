@@ -23,6 +23,7 @@ import { Rating } from '@rneui/themed';
 import styles from "./details.style";
 import firestoreService from "../../components/services/fireStoreService";
 import { checkImageURL } from "../../utils";
+import { AirbnbRating } from "@rneui/themed";
 
 const tabs = ["À Propos", "Qualifications", "Responsibilities"];
 
@@ -31,6 +32,7 @@ const EventDetails = () => {
   const router = useRouter();
   const [event, setEvent] = useState([]);
   const [isLoading, setIsLoading] = useState([]);
+  const [rate, setRate] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,7 +89,7 @@ const EventDetails = () => {
       <Stack.Screen
 
         options={{
-          visible:false,
+          visible: false,
           headerStyle: { backgroundColor: COLORS.lightWhite },
           headerShadowVisible: false,
           headerBackVisible: false,
@@ -150,7 +152,9 @@ const EventDetails = () => {
                     <View style={styles.modalView}>
                       <Text style={styles.modalText}>Veuillez saisir une note</Text>
 
-                      <Rating ratingBackgroundColor="#000" showRating fractions="{0}" ></Rating>
+                      <AirbnbRating ratingBackgroundColor="#000" showRating fractions="{0}" onFinishRating={(rating) => {
+                        setRate(rating)
+                      }}></AirbnbRating>
                       <View style={styles.buttons}>
                         <Pressable
                           style={[styles.button]}
@@ -163,7 +167,10 @@ const EventDetails = () => {
 
                         <Pressable
                           style={[styles.button, styles.buttonValidate]}
-                          onPress={() => setModalVisible(!modalVisible)}>
+                          onPress={() => {
+                            setModalVisible(!modalVisible);
+                            firestoreService.doRateEvent(params.id, rate)
+                          }}>
                           <Text style={styles.textStyle}>Valider</Text>
                         </Pressable>
                       </View>

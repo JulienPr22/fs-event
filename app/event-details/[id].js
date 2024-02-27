@@ -15,13 +15,11 @@ import {
   EventAbout,
   JobTabs,
   ScreenHeaderBtn,
-  Specifics,
 } from "../../components";
 import { COLORS, icons, SIZES } from "../../constants";
 import GeneralEventInfo from "../../components/eventdetails/general-event-info/GeneralEventInfo";
 import styles from "./details.style";
 import firestoreService from "../../components/services/fireStoreService";
-import { checkImageURL } from "../../utils";
 import { AirbnbRating } from "@rneui/themed";
 import MapInfo from "../../components/eventdetails/map/MapInfo";
 import PlaceDetails from "../../components/eventdetails/place/PlaceDetails";
@@ -41,6 +39,7 @@ const EventDetails = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log("docId", params.id);
       const data = await firestoreService.fetchData({ docId: params.id }, setIsLoading);
       setEvent(data);
     };
@@ -192,7 +191,7 @@ const EventDetails = () => {
                         <Pressable
                           style={[styles.button, styles.buttonValidate]}
                           onPress={() => {
-                            firestoreService.doRateEvent(params.id, rate)
+                            firestoreService.doRateEvent(params.id, rate, setIsLoading)
                             setModalVisible(!modalVisible)
                           }}>
                           <Text style={styles.textStyle}>Valider</Text>

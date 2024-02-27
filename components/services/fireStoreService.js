@@ -38,15 +38,29 @@ class firestoreService {
     }
   }
 
-  static doRateEvent = async (docId, rating) => {
+  static doRateEvent = async (docId, rating, setIsLoading) => {
+    try {
     const docRef = doc(FIRESTORE_DB, "events", docId);
-    dataToFetch = await getDoc(docRef);
+    const dataToFetch = await getDoc(docRef);
     const event = dataToFetch.data().event
+    console.log("event", event);
 
-    setDoc(docRef,  {
-      rating: (event.rating * event.votes + rating) / (event.votes + 1),
-      votes: event.votes + 1
-    })
+    const updatedRating = (event.rating * event.votes + rating) / (event.votes + 1);
+    const updatedVotes = event.votes + 1;
+
+    await setDoc(docRef, {
+      ...event,
+      rating: updatedRating,
+      votes: updatedVotes
+    });
+
+    const updatedData = await firestoreService.fetchData({ docId, setIsLoading });
+    setEvent(updatedData);
+
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour de la note de l\'événement :', error);
+
+  }
 
   }
 

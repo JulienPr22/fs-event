@@ -18,14 +18,15 @@ import {
   Specifics,
 } from "../../components";
 import { COLORS, icons, SIZES } from "../../constants";
-import EventInfo from "../../components/eventdetails/company/EventInfo";
+import GeneralEventInfo from "../../components/eventdetails/general-event-info/GeneralEventInfo";
 import styles from "./details.style";
 import firestoreService from "../../components/services/fireStoreService";
 import { checkImageURL } from "../../utils";
 import { AirbnbRating } from "@rneui/themed";
 import MapInfo from "../../components/eventdetails/map/MapInfo";
+import PlaceDetails from "../../components/eventdetails/place/PlaceDetails";
 
-const tabs = ["À Propos", "Qualifications", "Carte"];
+const tabs = ["À Propos", "Adresse", "Carte"];
 
 const EventDetails = () => {
   const params = useGlobalSearchParams();
@@ -33,7 +34,7 @@ const EventDetails = () => {
   const [event, setEvent] = useState([]);
   const [rate, setRate] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [imageVisible, setImageVisible] = useState(true);
+  const [showImage, setShowImage] = useState(true);
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [isLoading, setIsLoading] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -52,10 +53,25 @@ const EventDetails = () => {
     setRefreshing(false)
   }, []);
 
+  const imageToDisplay = () => {
+    if (showImage) {
+      if (event.image) {
+        return event.image;
+      } else if (event.organisateur_logo) {
+        return event.organisateur_logo
+      } else {
+        return '../../assets/images/placeholder.jpg';
+      }
+    } else {
+      return null
+    }
+  }
+
   const displayTabContent = () => {
     switch (activeTab) {
 
       case "À Propos":
+        // setShowImage(true)
         return (
           <EventAbout
             description={event.description_longue_fr ?? "Cet évennement n'a pas de description"}
@@ -63,20 +79,26 @@ const EventDetails = () => {
             capacite={event.capacite ?? "Non renseigné"} />
         );
 
-      case "Qualifications":
+      case "Adresse":
+        // setShowImage(true)
         return (
-          <Specifics
-            title='Qualifications'
-            points={event.adresse ?? ["N/A"]}
+          <PlaceDetails
+            placeName={event.nom_du_lieu ?? ["Non renseigné"]}
+            adress={event.adresse ?? ["Non renseigné"]}
+            accessibility={event.accessibilite_fr ?? ["Non renseigné"]}
+
           />
         );
 
       case "Carte":
         console.log(event.geolocalisation);
+        // setShowImage(  false)
         return (
           <MapInfo
-            coordinate={{latitude: event.geolocalisation.lat, longitude: event.geolocalisation.lon,  latitudeDelta: 0.01,
-              longitudeDelta: 0.01, name:event.title }}
+            coordinate={{
+              latitude: event.geolocalisation.lat, longitude: event.geolocalisation.lon, latitudeDelta: 0.01,
+              longitudeDelta: 0.01, name: event.title
+            }}
           />
         );
 
@@ -88,7 +110,6 @@ const EventDetails = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
       <Stack.Screen
-
         options={{
           visible: false,
           headerStyle: { backgroundColor: COLORS.lightWhite },
@@ -120,18 +141,17 @@ const EventDetails = () => {
               <Text>No data available</Text>
             ) : (
               <View style={{ padding: SIZES.medium, paddingBottom: 100 }}>
-                <EventInfo
-                  image={{
-                    uri: (event.image)
-                      ? event.image
-                      : (event.organisateur_logo)
-                        ? event.organisateur_logo
-                        : '../../assets/images/placeholder.jpg',
-                  }}
-                  title={event.titre_fr}
-                  animationType={event.type_animation_project}
-                  conditions={event.detail_des_conditions_fr}
-                />
+                {showImage ? (
+                  <GeneralEventInfo
+                    image={{ uri: imageToDisplay() }}
+                    title={event.titre_fr}
+                    animationType={event.type_animation_project}
+                    city={event.lib_commune}
+                    rating={event.rating}
+                    votes={event.votes}
+
+                  />) :
+                  (<></>)}
 
                 <JobTabs
                   tabs={tabs}
@@ -164,7 +184,6 @@ const EventDetails = () => {
                         <Pressable
                           style={[styles.button]}
                           onPress={() => {
-                            firestoreService.doRateEvent();
                             setModalVisible(!modalVisible)
                           }}>
                           <Text style={styles.textStyleCancel}>Annuler</Text>
@@ -173,8 +192,8 @@ const EventDetails = () => {
                         <Pressable
                           style={[styles.button, styles.buttonValidate]}
                           onPress={() => {
-                            setModalVisible(!modalVisible);
                             firestoreService.doRateEvent(params.id, rate)
+                            setModalVisible(!modalVisible)
                           }}>
                           <Text style={styles.textStyle}>Valider</Text>
                         </Pressable>

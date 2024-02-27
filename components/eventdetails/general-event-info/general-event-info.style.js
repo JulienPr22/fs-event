@@ -9,33 +9,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logoBox: {
-    width: 500,
-    height: 500,
+    width: 350,
+    height: 350,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FFF",
-    borderRadius: SIZES.large,
   },
   logoImage: {
     width: "80%",
     height: "80%",
+    borderRadius: SIZES.small,
   },
-  jobTitleBox: {
+  eventTitleBox: {
     marginTop: SIZES.small,
   },
-  jobTitle: {
+  eventTitle: {
     fontSize: SIZES.large,
     color: COLORS.primary,
     fontFamily: FONT.bold,
     textAlign: "center",
   },
-  companyInfoBox: {
+  eventInfoBox: {
     marginTop: SIZES.small / 2,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
-  companyName: {
+  animationType: {
     fontSize: SIZES.medium - 2,
     color: COLORS.primary,
     fontFamily: FONT.medium,
@@ -56,6 +55,24 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
     fontFamily: FONT.regular,
     marginLeft: 2,
+  },
+  eventDetail: {
+    fontSize: SIZES.small + 2,
+    fontFamily: "DMRegular",
+    color: COLORS.gray,
+    marginTop: 3,
+    textTransform: "capitalize",
+  },
+  ratingContainer: {
+    flex: 1,
+    alignItems: "center",
+    gap: 5,
+    flexDirection: "row",
+  },
+
+  starIcon: {
+    width: SIZES.medium,
+    height: SIZES.medium,
   },
 });
 

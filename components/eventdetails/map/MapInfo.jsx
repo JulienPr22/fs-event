@@ -1,20 +1,19 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { StyleSheet } from 'react-native';
 import styles from './map-info.style';
 
 const INITIAL_REGION = {
-  latitude: 48.11,
-  longitude: -1.68,
-  latitudeDelta: 2,
-  longitudeDelta: 2,
+  latitude: 48.86,
+  longitude: 2.3522,
+  latitudeDelta: 10,
+  longitudeDelta: 10,
 };
 
 const MapInfo = ({ coordinate }) => {
   return (
-    <View style={styles.container}>
+    <View>
       <MapView
-        style={{ width: 250, height: 250 }}
+        style={styles.map}
         provider={PROVIDER_GOOGLE}
         initialRegion={INITIAL_REGION}
         showsUserLocation

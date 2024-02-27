@@ -6,11 +6,11 @@ import PopularEvents from "./home/event/PopularEvents";
 import Popularjobs from "./home/popular/Popularjobs";
 
 // job details screen
-import EventInfo from "./eventdetails/company/EventInfo";
+import GeneralEventInfo from "./eventdetails/general-event-info/GeneralEventInfo";
 import { default as JobTabs } from "./eventdetails/tabs/Tabs";
 import { default as EventAbout } from "./eventdetails/about/About";
 import { default as JobFooter } from "./eventdetails/footer/Footer";
-import Specifics from "./eventdetails/specifics/Specifics";
+import PlaceDetails from "./eventdetails/place/PlaceDetails";
 
 // common
 import PopularEventCard from "./common/cards/event/PopularEventCard";
@@ -20,10 +20,10 @@ export {
   Welcome,
   PopularEvents,
   Popularjobs,
-  EventInfo,
+  GeneralEventInfo as EventInfo,
   JobTabs,
   EventAbout,
   JobFooter,
-  Specifics,
+  PlaceDetails as Specifics,
   PopularEventCard
 };

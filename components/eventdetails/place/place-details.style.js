@@ -9,10 +9,25 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.medium,
     padding: SIZES.medium,
   },
-  title: {
+  headText: {
     fontSize: SIZES.large,
     color: COLORS.primary,
     fontFamily: FONT.bold,
+  },
+  contentBox: {
+    marginVertical: SIZES.small,
+  },
+  contextText: {
+    fontSize: SIZES.medium - 2,
+    color: COLORS.gray,
+    fontFamily: FONT.regular,
+    marginVertical: SIZES.small / 1.25,
+  },
+  highlightedText: {
+    fontSize: SIZES.medium - 2,
+    color: COLORS.primary,
+    fontFamily: FONT.regular,
+    marginVertical: SIZES.small / 1.25,
   },
   pointsContainer: {
     marginVertical: SIZES.small,

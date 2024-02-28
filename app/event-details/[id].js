@@ -23,23 +23,23 @@ import firestoreService from "../../components/services/fireStoreService";
 import { AirbnbRating } from "@rneui/themed";
 import MapInfo from "../../components/eventdetails/map/MapInfo";
 import PlaceDetails from "../../components/eventdetails/place/PlaceDetails";
+import { checkImageURL } from "../../utils";
 
 const tabs = ["À Propos", "Adresse", "Carte"];
 
 const EventDetails = () => {
   const params = useGlobalSearchParams();
   const router = useRouter();
+
   const [event, setEvent] = useState([]);
-  const [rate, setRate] = useState([]);
+  const [userRating, setUserRating] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [showImage, setShowImage] = useState(true);
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [isLoading, setIsLoading] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("docId", params.id);
       const data = await firestoreService.fetchData({ docId: params.id }, setIsLoading);
       setEvent(data);
     };
@@ -47,30 +47,23 @@ const EventDetails = () => {
     fetchData();
   }, []);
 
+  const validateRating = async () => {
+    setModalVisible(!modalVisible)
+    const updatedEvent = await firestoreService.updateEventRating(event, params.id, userRating)
+    setEvent(updatedEvent);
+  }
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setRefreshing(false)
   }, []);
 
-  const imageToDisplay = () => {
-    if (showImage) {
-      if (event.image) {
-        return event.image;
-      } else if (event.organisateur_logo) {
-        return event.organisateur_logo
-      } else {
-        return '../../assets/images/placeholder.jpg';
-      }
-    } else {
-      return null
-    }
-  }
+
 
   const displayTabContent = () => {
     switch (activeTab) {
 
       case "À Propos":
-        // setShowImage(true)
         return (
           <EventAbout
             description={event.description_longue_fr ?? "Cet évennement n'a pas de description"}
@@ -79,7 +72,6 @@ const EventDetails = () => {
         );
 
       case "Adresse":
-        // setShowImage(true)
         return (
           <PlaceDetails
             placeName={event.nom_du_lieu ?? ["Non renseigné"]}
@@ -91,7 +83,6 @@ const EventDetails = () => {
 
       case "Carte":
         console.log(event.geolocalisation);
-        // setShowImage(  false)
         return (
           <MapInfo
             coordinate={{
@@ -140,17 +131,19 @@ const EventDetails = () => {
               <Text>No data available</Text>
             ) : (
               <View style={{ padding: SIZES.medium, paddingBottom: 100 }}>
-                {showImage ? (
-                  <GeneralEventInfo
-                    image={{ uri: imageToDisplay() }}
-                    title={event.titre_fr}
-                    animationType={event.type_animation_project}
-                    city={event.lib_commune}
-                    rating={event.rating}
-                    votes={event.votes}
 
-                  />) :
-                  (<></>)}
+                <GeneralEventInfo
+                  image={{
+                    uri: checkImageURL(event.image)
+                      ? event.image
+                      : event.organisateur_logo
+                  }}
+                  title={event.titre_fr}
+                  animationType={event.type_animation_project}
+                  city={event.lib_commune}
+                  rating={event.rating}
+                  votes={event.votes}
+                />
 
                 <JobTabs
                   tabs={tabs}
@@ -175,7 +168,7 @@ const EventDetails = () => {
                         showRating fractions="{0}"
                         reviews={["Très mauvais", "Mauvais", "Moyen", "Bien", "Super"]}
                         onFinishRating={(rating) => {
-                          setRate(rating)
+                          setUserRating(rating)
                         }}>
 
                       </AirbnbRating>
@@ -191,8 +184,7 @@ const EventDetails = () => {
                         <Pressable
                           style={[styles.button, styles.buttonValidate]}
                           onPress={() => {
-                            firestoreService.doRateEvent(params.id, rate, setIsLoading)
-                            setModalVisible(!modalVisible)
+                            validateRating()
                           }}>
                           <Text style={styles.textStyle}>Valider</Text>
                         </Pressable>

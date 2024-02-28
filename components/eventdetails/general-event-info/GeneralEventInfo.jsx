@@ -2,12 +2,18 @@ import React from 'react';
 import { View, Text, Image } from 'react-native';
 import styles from './general-event-info.style';
 import { icons } from '../../../constants';
+import { checkImageURL } from '../../../utils';
 
 const GeneralEventInfo = ({ image, title, animationType, city, rating, votes }) => {
+
+  const imageSource = checkImageURL(image)
+  ? { uri: image }
+  : require('../../../assets/images/placeholder.jpg');
+
   return (
     <View style={styles.container}>
       <View style={styles.logoBox}>
-        <Image source={image} style={styles.logoImage} />
+        <Image source={imageSource} style={styles.logoImage} />
       </View>
 
       <View style={styles.eventTitleBox}>

@@ -7,61 +7,62 @@ class firestoreService {
   static fetchData = async (queryOptions, setLoading) => {
     setLoading(true);
     try {
+
       let dataToFetch;
       if (queryOptions.docId) {
+        console.log("docId", queryOptions.docId);
         const docRef = doc(FIRESTORE_DB, "events", queryOptions.docId);
         dataToFetch = await getDoc(docRef);
         setLoading(false);
         return dataToFetch.data().event;
       } else {
+
         const items = [];
         let collectionRef = collection(FIRESTORE_DB, "events");
         if (queryOptions.limit) {
           collectionRef = query(collectionRef, limit(queryOptions.limit));
         }
+
         if (queryOptions.minRating) {
           collectionRef = query(
             collectionRef,
             where("event.rating", ">", queryOptions.minRating)
           );
         }
+
         const querySnapshot = await getDocs(collectionRef);
         querySnapshot.forEach((doc) => {
           items.push({ id: doc.id, ...doc.data().event });
         });
+
         setLoading(false);
         return items;
       }
     } catch (error) {
+
       setLoading(false);
       throw error;
     }
   }
 
-  static doRateEvent = async (docId, rating, setIsLoading) => {
+  static updateEventRating = async (event, docId, userRating) => {
     try {
-    const docRef = doc(FIRESTORE_DB, "events", docId);
-    const dataToFetch = await getDoc(docRef);
-    const event = dataToFetch.data().event
-    console.log("event", event);
+      const docRef = doc(FIRESTORE_DB, "events", docId);
 
-    const updatedRating = (event.rating * event.votes + rating) / (event.votes + 1);
-    const updatedVotes = event.votes + 1;
+      const updatedRating = (event.rating * event.votes + userRating) / (event.votes + 1);
+      const updatedVotes = event.votes + 1;
+      const newEvent = { ...event, rating: updatedRating, votes: updatedVotes }
 
-    await setDoc(docRef, {
-      ...event,
-      rating: updatedRating,
-      votes: updatedVotes
-    });
+      await setDoc(docRef, {
+        newEvent
+      });
 
-    const updatedData = await firestoreService.fetchData({ docId, setIsLoading });
-    setEvent(updatedData);
+      return newEvent;
 
-  } catch (error) {
-    console.error('Erreur lors de la mise à jour de la note de l\'événement :', error);
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour de la note de l\'événement :', error);
 
-  }
-
+    }
   }
 
   randomNumber = (min, max, dec) => {

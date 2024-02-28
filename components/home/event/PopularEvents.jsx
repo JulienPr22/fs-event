@@ -37,7 +37,7 @@ const PopularEvents = () => {
             <PopularEventCard
               event={event}
               key={`popular-event-${event.id}`}
-              handleNavigate={() => {
+              onPress={() => {
                 router.push(`/event-details/${event.id}`);
               }}
             />

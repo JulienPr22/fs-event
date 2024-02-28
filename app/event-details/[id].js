@@ -9,6 +9,8 @@ import {
   RefreshControl,
   Modal,
   Pressable,
+  TouchableOpacity,
+  Image,
 } from "react-native";
 
 import {
@@ -20,7 +22,7 @@ import { COLORS, icons, SIZES } from "../../constants";
 import GeneralEventInfo from "../../components/eventdetails/general-event-info/GeneralEventInfo";
 import styles from "./details.style";
 import firestoreService from "../../components/services/fireStoreService";
-import { AirbnbRating } from "@rneui/themed";
+import { AirbnbRating, Overlay } from "@rneui/themed";
 import MapInfo from "../../components/eventdetails/map/MapInfo";
 import PlaceDetails from "../../components/eventdetails/place/PlaceDetails";
 import { checkImageURL } from "../../utils";
@@ -34,6 +36,8 @@ const EventDetails = () => {
   const [event, setEvent] = useState([]);
   const [userRating, setUserRating] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [overlayVisible, setOverlayVisible] = useState(false);
+
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [isLoading, setIsLoading] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -58,7 +62,9 @@ const EventDetails = () => {
     setRefreshing(false)
   }, []);
 
-
+  const toggleOverlay = () => {
+    setOverlayVisible(!overlayVisible);
+  };
 
   const displayTabContent = () => {
     switch (activeTab) {
@@ -113,11 +119,13 @@ const EventDetails = () => {
             />
           ),
           headerRight: () => (
-            <ScreenHeaderBtn iconUrl={icons.share} dimension='60%' />
+            <ScreenHeaderBtn iconUrl={icons.menu} dimension='60%' handlePress={toggleOverlay} />
           ),
           headerTitle: "",
         }}
       />
+
+
 
       <>
         <ScrollView showsVerticalScrollIndicator={false}
@@ -156,7 +164,6 @@ const EventDetails = () => {
                   transparent={true}
                   visible={modalVisible}
                   onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
                     setModalVisible(!modalVisible);
                   }}>
                   <View style={styles.centeredView}>
@@ -192,6 +199,38 @@ const EventDetails = () => {
                     </View>
                   </View>
                 </Modal>
+
+                <Overlay isVisible={overlayVisible} onBackdropPress={toggleOverlay}/*  style={styles.overlay} */>
+
+                {/*   <Button
+                    icon={
+                      <MaterialIcons
+                        size={28}
+                        style={{ marginBottom: -3 }}
+                        name="calendar_add_on"
+                      />
+                    }
+                    title="Ajouter l'évennement au calendrier"
+                    onPress={toggleOverlay}
+                  /> */}
+
+                  <TouchableOpacity /* style={styles.container}  */onPress={toggleOverlay}>
+                    <TouchableOpacity style={styles.logoContainer}>
+                      <Image
+                        source={require("../../assets/icons/calendar.png")}
+                        resizeMode='contain'
+                        style={styles.logImage}
+                      />
+                    </TouchableOpacity>
+                    <View style={styles.textContainer}>
+                      <View>
+                        <Text style={styles.eventTitle} numberOfLines={1}>
+                          {"Ajouter l'évennement au calendrier"}
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </Overlay>
 
                 {displayTabContent()}
               </View>

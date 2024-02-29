@@ -11,6 +11,7 @@ import {
   Pressable,
   TouchableOpacity,
   Image,
+  TouchableWithoutFeedback,
 } from "react-native";
 
 import {
@@ -35,7 +36,9 @@ const EventDetails = () => {
 
   const [event, setEvent] = useState([]);
   const [userRating, setUserRating] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [ratingModalVisible, setRatingModalVisible] = useState(false);
+  const [actionsModalVisible, setActionsModalVisible] = useState(false);
+
   const [overlayVisible, setOverlayVisible] = useState(false);
 
   const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -52,7 +55,7 @@ const EventDetails = () => {
   }, []);
 
   const validateRating = async () => {
-    setModalVisible(!modalVisible)
+    setRatingModalVisible(!ratingModalVisible)
     const updatedEvent = await firestoreService.updateEventRating(event, params.id, userRating)
     setEvent(updatedEvent);
   }
@@ -62,8 +65,8 @@ const EventDetails = () => {
     setRefreshing(false)
   }, []);
 
-  const toggleOverlay = () => {
-    setOverlayVisible(!overlayVisible);
+  const toggleActionsModal = () => {
+    setActionsModalVisible(!actionsModalVisible);
   };
 
   const displayTabContent = () => {
@@ -119,7 +122,7 @@ const EventDetails = () => {
             />
           ),
           headerRight: () => (
-            <ScreenHeaderBtn iconUrl={icons.menu} dimension='60%' handlePress={toggleOverlay} />
+            <ScreenHeaderBtn iconUrl={icons.menu} dimension='60%' handlePress={toggleActionsModal} />
           ),
           headerTitle: "",
         }}
@@ -162,12 +165,12 @@ const EventDetails = () => {
                 <Modal
                   animationType="slide"
                   transparent={true}
-                  visible={modalVisible}
+                  visible={ratingModalVisible}
                   onRequestClose={() => {
-                    setModalVisible(!modalVisible);
+                    setRatingModalVisible(!ratingModalVisible);
                   }}>
-                  <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
+                  <View style={styles.ratingModalCenteredView}>
+                    <View style={styles.ratingModalView}>
                       <Text style={styles.modalText}>Veuillez saisir une note</Text>
 
                       <AirbnbRating
@@ -183,7 +186,7 @@ const EventDetails = () => {
                         <Pressable
                           style={[styles.button]}
                           onPress={() => {
-                            setModalVisible(!modalVisible)
+                            setRatingModalVisible(!ratingModalVisible)
                           }}>
                           <Text style={styles.textStyleCancel}>Annuler</Text>
                         </Pressable>
@@ -200,37 +203,81 @@ const EventDetails = () => {
                   </View>
                 </Modal>
 
-                <Overlay isVisible={overlayVisible} onBackdropPress={toggleOverlay}/*  style={styles.overlay} */>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={actionsModalVisible}
+                  onRequestClose={toggleActionsModal}>
 
-                {/*   <Button
-                    icon={
-                      <MaterialIcons
-                        size={28}
-                        style={{ marginBottom: -3 }}
-                        name="calendar_add_on"
-                      />
-                    }
-                    title="Ajouter l'évennement au calendrier"
-                    onPress={toggleOverlay}
-                  /> */}
+                  <View style={styles.actionsModalCenteredView}>
+                    <View style={styles.actionsModalView}>
+                      <Text style={styles.actionText}>Plus d'actions</Text>
 
-                  <TouchableOpacity /* style={styles.container}  */onPress={toggleOverlay}>
-                    <TouchableOpacity style={styles.logoContainer}>
-                      <Image
-                        source={require("../../assets/icons/calendar.png")}
-                        resizeMode='contain'
-                        style={styles.logImage}
-                      />
-                    </TouchableOpacity>
-                    <View style={styles.textContainer}>
-                      <View>
-                        <Text style={styles.eventTitle} numberOfLines={1}>
-                          {"Ajouter l'évennement au calendrier"}
-                        </Text>
-                      </View>
+                      <TouchableOpacity style={styles.actionContainer} onPress={toggleActionsModal}>
+                        <TouchableOpacity style={styles.logoContainer}>
+                          <Image
+                            source={require("../../assets/icons/calendar.png")}
+                            resizeMode='contain'
+                            style={styles.logImage}
+                          />
+                        </TouchableOpacity>
+                        <View style={styles.textContainer}>
+                          <Text style={styles.actionText} numberOfLines={1}>
+                            {"Ajouter au calendrier"}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity style={styles.actionContainer} onPress={toggleActionsModal}>
+                        <TouchableOpacity style={styles.logoContainer}>
+                          <Image
+                            source={require("../../assets/icons/phone.png")}
+                            resizeMode='contain'
+                            style={styles.logImage}
+                          />
+                        </TouchableOpacity>
+                        <View style={styles.textContainer}>
+                          <Text style={styles.actionText} numberOfLines={1}>
+                            {"Appeler pour réserver"}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity style={styles.actionContainer} onPress={toggleActionsModal}>
+                        <TouchableOpacity style={styles.logoContainer}>
+                          <Image
+                            source={require("../../assets/icons/mail.png")}
+                            resizeMode='contain'
+                            style={styles.logImage}
+                          />
+                        </TouchableOpacity>
+                        <View style={styles.textContainer}>
+                          <Text style={styles.actionText} numberOfLines={1}>
+                            {"Mail de réservation"}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity style={styles.actionContainer} onPress={toggleActionsModal}>
+                        <TouchableOpacity style={styles.logoContainer}>
+                          <Image
+                            source={require("../../assets/favicon.png")}
+                            resizeMode='contain'
+                            style={styles.logImage}
+                          />
+                        </TouchableOpacity>
+                        <View style={styles.textContainer}>
+                          <Text style={styles.actionText} numberOfLines={1}>
+                            {"Voir sur le site"}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+
                     </View>
-                  </TouchableOpacity>
-                </Overlay>
+                  </View>
+                </Modal>
+
 
                 {displayTabContent()}
               </View>
@@ -239,7 +286,7 @@ const EventDetails = () => {
         <View style={styles.actionBtnContainer}>
           <Pressable
             style={styles.openBtn}
-            onPress={() => { setModalVisible(!modalVisible) }}>
+            onPress={() => { setRatingModalVisible(!ratingModalVisible) }}>
             <Text style={styles.openBtnText}>Noter l'évennement</Text>
           </Pressable>
         </View>

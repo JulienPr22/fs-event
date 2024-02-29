@@ -8,7 +8,7 @@ const GeneralEventInfo = ({ image, title, animationType, city, rating, votes }) 
 
   const imageSource = checkImageURL(image)
   ? { uri: image }
-  : require('../../../assets/images/placeholder.jpg');
+  : require('../../../assets/images/placeholder.png');
 
   return (
     <View style={styles.container}>

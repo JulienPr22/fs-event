@@ -9,7 +9,7 @@ const PopularEventCard = ({ event, onPress }) => {
     ? { uri: event.image }
     : checkImageURL(event.organisateur_logo)
     ? { uri: event.organisateur_logo }
-    : require('../../../../assets/images/placeholder.jpg');
+    : require('../../../../assets/images/placeholder.png');
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>

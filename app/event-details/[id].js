@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Image,
   TouchableWithoutFeedback,
+  Alert,
 } from "react-native";
 
 import {
@@ -53,12 +54,7 @@ const EventDetails = () => {
     };
 
     fetchData();
-    const getCalendars = async () => {
-      const calendars = await calendarService.getCalendars();
-      console.log("eventDetails", calendars);
-    };
-    getCalendars();
-  }, []);
+    }, []);
 
   const validateRating = async () => {
     setRatingModalVisible(!ratingModalVisible)
@@ -75,18 +71,36 @@ const EventDetails = () => {
     setActionsModalVisible(!actionsModalVisible);
   };
 
-  const eventDetails = {
-    title: event.titre_fr,
-    startDate: new Date('2024-03-01T09:00:00.000Z'),
-    endDate: new Date('2024-03-01T10:00:00.000Z'),
-    location: event.lib_commune,
-    timeZone: 'Europe/Paris', // Facultatif, spécifie le fuseau horaire
-    notes: 'Description de l\'événement',
-  };
+
 
   const addToCalendar = async () => {
+    console.log("description", event.description_longue_fr);
+    const eventDetails = {
+      title: event.titre_fr,
+      startDate: new Date('2024-03-01T09:00:00.000Z'),
+      endDate: new Date('2024-03-01T10:00:00.000Z'),
+      location: event.lib_commune,
+      timeZone: 'Europe/Paris',
+      notes: event.description_fr,
+      url: event.lien
+    };
 
-    await calendarService.addEvent(eventDetails)
+    Alert.alert(
+      'Confirmation',
+      `Voulez-vous vraiment ajouter l'événement au calendrier ?`,
+      [
+        {
+          text: 'Annuler',
+          style: 'cancel',
+        },
+        {
+          text: 'Ajouter',
+          onPress: async () => {
+            await calendarService.addEvent(eventDetails)
+          },
+        },
+      ]
+    );
   };
 
   const displayTabContent = () => {

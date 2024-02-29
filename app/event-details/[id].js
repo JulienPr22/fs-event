@@ -22,11 +22,14 @@ import {
 import { COLORS, icons, SIZES } from "../../constants";
 import GeneralEventInfo from "../../components/eventdetails/general-event-info/GeneralEventInfo";
 import styles from "./details.style";
-import firestoreService from "../../components/services/fireStoreService";
+import firestoreService from "../services/fireStoreService";
 import { AirbnbRating, Overlay } from "@rneui/themed";
 import MapInfo from "../../components/eventdetails/map/MapInfo";
 import PlaceDetails from "../../components/eventdetails/place/PlaceDetails";
 import { checkImageURL } from "../../utils";
+import * as Calendar from 'expo-calendar';
+import calendarService from "../services/calendarService";
+import { Platform } from "react-native";
 
 const tabs = ["À Propos", "Adresse", "Carte"];
 
@@ -39,8 +42,6 @@ const EventDetails = () => {
   const [ratingModalVisible, setRatingModalVisible] = useState(false);
   const [actionsModalVisible, setActionsModalVisible] = useState(false);
 
-  const [overlayVisible, setOverlayVisible] = useState(false);
-
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [isLoading, setIsLoading] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -52,6 +53,11 @@ const EventDetails = () => {
     };
 
     fetchData();
+    const getCalendars = async () => {
+      const calendars = await calendarService.getCalendars();
+      console.log("eventDetails", calendars);
+    };
+    getCalendars();
   }, []);
 
   const validateRating = async () => {
@@ -67,6 +73,20 @@ const EventDetails = () => {
 
   const toggleActionsModal = () => {
     setActionsModalVisible(!actionsModalVisible);
+  };
+
+  const eventDetails = {
+    title: event.titre_fr,
+    startDate: new Date('2024-03-01T09:00:00.000Z'),
+    endDate: new Date('2024-03-01T10:00:00.000Z'),
+    location: event.lib_commune,
+    timeZone: 'Europe/Paris', // Facultatif, spécifie le fuseau horaire
+    notes: 'Description de l\'événement',
+  };
+
+  const addToCalendar = async () => {
+
+    await calendarService.addEvent(eventDetails)
   };
 
   const displayTabContent = () => {
@@ -91,7 +111,6 @@ const EventDetails = () => {
         );
 
       case "Carte":
-        console.log(event.geolocalisation);
         return (
           <MapInfo
             coordinate={{
@@ -213,7 +232,7 @@ const EventDetails = () => {
                     <View style={styles.actionsModalView}>
                       <Text style={styles.actionText}>Plus d'actions</Text>
 
-                      <TouchableOpacity style={styles.actionContainer} onPress={toggleActionsModal}>
+                      <TouchableOpacity style={styles.actionContainer} onPress={addToCalendar}>
                         <TouchableOpacity style={styles.logoContainer}>
                           <Image
                             source={require("../../assets/icons/calendar.png")}

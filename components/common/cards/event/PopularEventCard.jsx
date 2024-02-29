@@ -35,7 +35,7 @@ const PopularEventCard = ({ event, onPress }) => {
               resizeMode='contain'
               style={styles.locationImage}
             />
-            <Text style={styles.companyName}>{event.lib_commune} </Text>
+            <Text style={styles.locationName}>{event.lib_commune} </Text>
           </View>
         </View>
 

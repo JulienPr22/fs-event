@@ -63,11 +63,6 @@ const styles = StyleSheet.create({
     ustifyContent: "center",
     alignItems: "flex-start",
   },
-  companyName: {
-    fontSize: SIZES.medium - 2,
-    color: COLORS.primary,
-    fontFamily: FONT.medium,
-  },
   locationBox: {
     flexDirection: "row",
     // justifyContent: "center",

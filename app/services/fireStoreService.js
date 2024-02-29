@@ -10,9 +10,9 @@ class firestoreService {
 
       let dataToFetch;
       if (queryOptions.docId) {
-        console.log("docId", queryOptions.docId);
         const docRef = doc(FIRESTORE_DB, "events", queryOptions.docId);
         dataToFetch = await getDoc(docRef);
+        setLoading(false);
         setLoading(false);
         return dataToFetch.data().event;
       } else {
@@ -81,10 +81,8 @@ class firestoreService {
     });
 
     updatedData.map(event => {
-      console.log(`rating: ${event.rating} / votes:  ${event.votes}`)
       try {
         addDoc(collection(FIRESTORE_DB, 'events'), { event })
-        console.log("ok");
       } catch (error) {
         console.error('Erreur lors de l\'exportation des données :', error);
       }

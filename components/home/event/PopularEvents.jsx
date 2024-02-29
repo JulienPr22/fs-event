@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import styles from './popularevents.style';
 import { COLORS } from '../../../constants';
 import PopularEventCard from '../../common/cards/event/PopularEventCard';
-import fireStoreService from '../../services/fireStoreService';
+import fireStoreService from '../../../app/services/fireStoreService';
 
 const PopularEvents = () => {
   const router = useRouter();

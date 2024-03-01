@@ -11,6 +11,7 @@ import {
 } from "../../components";
 
 import { MaterialIcons } from "@expo/vector-icons";
+import firestoreService from "../services/fireStoreService";
 
 const HomeScreen = () => {
   const router = useRouter()
@@ -32,10 +33,10 @@ const HomeScreen = () => {
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             handleClick={() => {
+              firestoreService.exportData()
               /* if (searchTerm) {
                 router.push(`/search/${searchTerm}`)
               } */
-              exportData();
             }}
           />
 

@@ -1,0 +1,77 @@
+
+accessibilite_fr: (4) ['Mobilité réduite', 'Handicap mental', 'Sourds et malentendants', 'Déficients visuels']
+adresse: "Avenue Saint Paul 13013 Marseille"
+annulation: "Non"
+code_postal: "13013"
+dates: (3) ['2023-10-10', '2023-10-11', '2023-10-12']
+departement: "Bouches-du-Rhône"
+description_fr: "Les 5 écoles du réseau pourront s'inscrire pour participer à des ateliers animés par des élèves de cinquièmes du collège"
+description_longue_fr: null
+detail_des_conditions_fr: ['Mandatory']
+detail_des_conditions_scolaire_fr: "Free entry"
+filling: 0
+geolocalisation: {lat: 43.327006, lon: 5.408493}
+grandpublic_reservation_email: "caroline-elisab.biurrun@ac-aix-marseille.fr"
+grandpublic_reservation_lien_d_inscription: null
+grandpublic_reservation_telephone: null
+image: null
+lib_commune: "Marseille"
+lien: "https://www.fetedelascience.fr/fete-de-la-science-au-college-renoir"
+lien_canonique: "https://www.fetedelascience.fr/fete-de-la-science-au-college-renoir"
+modalite: ['Presential']
+nom_du_lieu: "Collège Auguste Renoir"
+organisateur: "Collège Auguste Renoir"
+organisateur_logo: null
+organisateur_url: "https://www.clg-renoir.ac-aix-marseille.fr/"
+rating: 4.5281
+region: "Provence-Alpes-Côte d'Azur"
+resume_dates_fr: "10 - 12 octobre"
+scolaire_reservation_email: "caroline-elisab.biurrun@ac-aix-marseille.fr"
+scolaire_reservation_lien_d_inscription: null
+scolaire_reservation_telephone: null
+selection: "Provence-Alpes-Côte d'Azur>Bouches-du-Rhône>Marseille"
+telephone_du_lieu: null
+thematiques: (3) ["Sciences de l'environnement", 'Sciences de la vie et de la santé', 'Sciences participatives']
+titre_fr: "Fête de la science au Collège Renoir"
+type_animation_project: "Atelier"
+ville: "Marseille"
+votes: 183
+
+
+accessibilite_fr:
+adresse:
+annulation:
+code_postal:
+dates:
+departement:
+description_fr:
+description_longue_fr:
+detail_des_conditions_fr:
+detail_des_conditions_scolaire_fr:
+filling:
+geolocalisation:
+grandpublic_reservation_email:
+grandpublic_reservation_lien_d_inscription:
+grandpublic_reservation_telephone:
+image:
+lib_commune:
+lien:
+lien_canonique:
+modalite:
+nom_du_lieu:
+organisateur:
+organisateur_logo:
+organisateur_url:
+rating:
+region:
+resume_dates_fr:
+scolaire_reservation_email:
+scolaire_reservation_lien_d_inscription:
+scolaire_reservation_telephone:
+selection:
+telephone_du_lieu:
+thematiques:
+titre_fr:
+type_animation_project:
+ville:
+votes:

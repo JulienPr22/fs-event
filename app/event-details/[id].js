@@ -27,7 +27,8 @@ import firestoreService from "../services/fireStoreService";
 import { AirbnbRating, Overlay } from "@rneui/themed";
 import MapInfo from "../../components/eventdetails/map/MapInfo";
 import PlaceDetails from "../../components/eventdetails/place/PlaceDetails";
-import { checkImageURL } from "../../utils";
+import { checkImageURL, formatDate } from "../../utils";
+import { convertToIso } from "../../utils";
 import * as Calendar from 'expo-calendar';
 import calendarService from "../services/calendarService";
 import { Platform } from "react-native";
@@ -42,6 +43,10 @@ const EventDetails = () => {
   const [userRating, setUserRating] = useState([]);
   const [ratingModalVisible, setRatingModalVisible] = useState(false);
   const [actionsModalVisible, setActionsModalVisible] = useState(false);
+  const [slotPickerModalVisible, setSlotPickerModalVisible] = useState(false);
+  const [slotOptions, setSlotOptions] = useState([]);
+
+
 
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [isLoading, setIsLoading] = useState([]);
@@ -51,10 +56,11 @@ const EventDetails = () => {
     const fetchData = async () => {
       const data = await firestoreService.fetchData({ docId: params.id }, setIsLoading);
       setEvent(data);
+      console.log("event", data);
     };
 
     fetchData();
-    }, []);
+  }, []);
 
   const validateRating = async () => {
     setRatingModalVisible(!ratingModalVisible)
@@ -71,36 +77,65 @@ const EventDetails = () => {
     setActionsModalVisible(!actionsModalVisible);
   };
 
+  const toggleSlotPickerModal = () => {
+    setSlotPickerModalVisible(!slotPickerModal);
+  };
+
+  const slotPickerModal = () => {
+
+    setActionsModalVisible(false);
+    setSlotPickerModalVisible(true)
+    if (event.dates && event.dates.length > 0) {
+      const slots = event.dates.map(date => (
+        convertToIso(date)
+      ))
+      setSlotOptions(slots);
+      console.log("slotOptions", slotOptions);
+    } else {
+      Alert.alert("Pas d'horaire disponible");
+    }
+
+  }
 
 
-  const addToCalendar = async () => {
-    console.log("description", event.description_longue_fr);
+  const addToCalendar = async (slot) => {
+    console.log("slot", slot);
     const eventDetails = {
       title: event.titre_fr,
-      startDate: new Date('2024-03-01T09:00:00.000Z'),
-      endDate: new Date('2024-03-01T10:00:00.000Z'),
+      startDate: slot,
+      allDay: true,
       location: event.lib_commune,
       timeZone: 'Europe/Paris',
       notes: event.description_fr,
       url: event.lien
     };
 
-    Alert.alert(
-      'Confirmation',
-      `Voulez-vous vraiment ajouter l'événement au calendrier ?`,
-      [
-        {
-          text: 'Annuler',
-          style: 'cancel',
-        },
-        {
-          text: 'Ajouter',
-          onPress: async () => {
-            await calendarService.addEvent(eventDetails)
-          },
-        },
-      ]
-    );
+    console.log("eventDetails", eventDetails);
+
+    Alert.alert('Ajouter ce créneau au calendrier ?', '', [
+
+      {
+        text: 'Annuler',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'destructive',
+      },
+      { text: 'Oui', onPress: () => this.handleAddEventConfirmed(eventDetails) },
+    ]);
+
+  };
+
+
+  handleAddEventConfirmed = async (eventDetails) => {
+    setSlotPickerModalVisible(false)
+    try {
+      console.log("eventData", eventDetails);
+      await calendarService.addEvent(eventDetails)
+      Alert.alert('Succès', `L'événement "${eventDetails.title}" a été ajouté au calendrier.`);
+
+    } catch (error) {
+      console.error('Erreur lors de l\'ajout de l\'événement au calendrier:', error);
+      Alert.alert('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'événement au calendrier.');
+    }
   };
 
   const displayTabContent = () => {
@@ -195,6 +230,7 @@ const EventDetails = () => {
                   setActiveTab={setActiveTab}
                 />
 
+                {/* RATING MODAL */}
                 <Modal
                   animationType="slide"
                   transparent={true}
@@ -236,6 +272,7 @@ const EventDetails = () => {
                   </View>
                 </Modal>
 
+                {/* ACTION MODAL */}
                 <Modal
                   animationType="slide"
                   transparent={true}
@@ -246,7 +283,7 @@ const EventDetails = () => {
                     <View style={styles.actionsModalView}>
                       <Text style={styles.actionText}>Plus d'actions</Text>
 
-                      <TouchableOpacity style={styles.actionContainer} onPress={addToCalendar}>
+                      <TouchableOpacity style={styles.actionContainer} onPress={slotPickerModal}>
                         <TouchableOpacity style={styles.logoContainer}>
                           <Image
                             source={require("../../assets/icons/calendar.png")}
@@ -306,7 +343,56 @@ const EventDetails = () => {
                         </View>
                       </TouchableOpacity>
 
+                      <View style={styles.buttons}>
+                        <Pressable
+                          style={[styles.button]}
+                          onPress={() => {
+                            setActionsModalVisible(false)
+                          }}>
+                          <Text style={styles.textStyleCancel}>Annuler</Text>
+                        </Pressable>
 
+
+                      </View>
+
+                    </View>
+                  </View>
+                </Modal>
+
+                {/* SLOT PICKER MODAL */}
+
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={slotPickerModalVisible}
+                  onRequestClose={setSlotPickerModalVisible}>
+
+                  <View style={styles.actionsModalCenteredView}>
+                    <View style={styles.actionsModalView}>
+                      <Text style={styles.actionText}>Choisissez un créneau</Text>
+                      {
+                        slotOptions?.map((slot, index) => (
+                          <TouchableOpacity key={index} style={styles.actionContainer} onPress={() => addToCalendar(slot)}>
+                            <View style={styles.textContainer}>
+                              <Text style={styles.actionText} numberOfLines={1}>
+                                {formatDate(slot)}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        ))
+
+                      }
+
+                      <View style={styles.buttons}>
+                        <Pressable
+                          style={[styles.button]}
+                          onPress={() => {
+                            setSlotPickerModalVisible(false)
+                          }}>
+                          <Text style={styles.textStyleCancel}>Annuler</Text>
+                        </Pressable>
+
+                      </View>
                     </View>
                   </View>
                 </Modal>

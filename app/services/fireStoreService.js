@@ -1,5 +1,5 @@
 
-import { collection, doc, getDoc, getDocs, limit, query, setDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, limit, query, setDoc, where } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../firebaseConfig";
 import fakeData from "../../assets/fr-esr-fete-de-la-science-23.json"
 class firestoreService {
@@ -65,17 +65,90 @@ class firestoreService {
     }
   }
 
-  randomNumber = (min, max, dec) => {
+  static randomNumber = (min, max, dec) => {
     const nombreAleatoire = Math.random() * (max - min) + min;
     return parseFloat(nombreAleatoire.toFixed(dec));
   }
 
   static exportData = async () => {
     const updatedData = fakeData.map(item => {
+      const { accessibilite_fr,
+        adresse,
+        annulation,
+        code_postal,
+        dates,
+        departement,
+        description_fr,
+        description_longue_fr,
+        detail_des_conditions_fr,
+        detail_des_conditions_scolaire_fr,
+        filling,
+        geolocalisation,
+        grandpublic_reservation_email,
+        grandpublic_reservation_lien_d_inscription,
+        grandpublic_reservation_telephone,
+        image,
+        lib_commune,
+        lien,
+        lien_canonique,
+        modalite,
+        nom_du_lieu,
+        organisateur,
+        organisateur_logo,
+        organisateur_url,
+        rating,
+        region,
+        resume_dates_fr,
+        scolaire_reservation_email,
+        scolaire_reservation_lien_d_inscription,
+        scolaire_reservation_telephone,
+        selection,
+        telephone_du_lieu,
+        thematiques,
+        titre_fr,
+        type_animation_project,
+        ville,
+        votes } = item
       return {
-        ...item,
-        "rating": randomNumber(2.8325, 5, 4),
-        "votes": randomNumber(48, 250, 0),
+        accessibilite_fr,
+        adresse,
+        annulation,
+        code_postal,
+        dates,
+        departement,
+        description_fr,
+        description_longue_fr,
+        detail_des_conditions_fr,
+        detail_des_conditions_scolaire_fr,
+        filling,
+        geolocalisation,
+        grandpublic_reservation_email,
+        grandpublic_reservation_lien_d_inscription,
+        grandpublic_reservation_telephone,
+        image,
+        lib_commune,
+        lien,
+        lien_canonique,
+        modalite,
+        nom_du_lieu,
+        organisateur,
+        organisateur_logo,
+        organisateur_url,
+        rating,
+        region,
+        resume_dates_fr,
+        scolaire_reservation_email,
+        scolaire_reservation_lien_d_inscription,
+        scolaire_reservation_telephone,
+        selection,
+        telephone_du_lieu,
+        thematiques,
+        titre_fr,
+        type_animation_project,
+        ville,
+        votes,
+        "rating": this.randomNumber(2.2559, 4.8750, 4),
+        "votes": this.randomNumber(48, 250, 0),
         "filling": 0
       };
     });

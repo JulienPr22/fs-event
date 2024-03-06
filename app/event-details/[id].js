@@ -11,7 +11,6 @@ import {
   Pressable,
   TouchableOpacity,
   Image,
-  TouchableWithoutFeedback,
   Alert,
 } from "react-native";
 
@@ -32,6 +31,7 @@ import { convertToIso } from "../../utils";
 import * as Calendar from 'expo-calendar';
 import calendarService from "../services/calendarService";
 import { Platform } from "react-native";
+import { Linking } from "react-native";
 
 const tabs = ["À Propos", "Adresse", "Carte"];
 
@@ -45,7 +45,6 @@ const EventDetails = () => {
   const [actionsModalVisible, setActionsModalVisible] = useState(false);
   const [slotPickerModalVisible, setSlotPickerModalVisible] = useState(false);
   const [slotOptions, setSlotOptions] = useState([]);
-
 
 
   const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -68,6 +67,24 @@ const EventDetails = () => {
     setEvent(updatedEvent);
   }
 
+  const phoneResevation = async () => {
+    setActionsModalVisible(false)
+    if(event.grandpublic_reservation_telephone) {
+      Linking.openURL(`tel:${event.grandpublic_reservation_telephone}`)
+    } else {
+      // TODO: Message d'erreur: pas de numéro
+    }
+  }
+
+  const mailReservation = async () => {
+    setActionsModalVisible(false)
+    if(event.grandpublic_reservation_email) {
+      Linking.openURL(`mailto:${event.grandpublic_reservation_email}?subject=réservation pour l'évennement "${event.titre_fr}"`)
+    } else {
+      // TODO: Message d'erreur: pas de mail
+    }
+  }
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setRefreshing(false)
@@ -77,9 +94,6 @@ const EventDetails = () => {
     setActionsModalVisible(!actionsModalVisible);
   };
 
-  const toggleSlotPickerModal = () => {
-    setSlotPickerModalVisible(!slotPickerModal);
-  };
 
   const slotPickerModal = () => {
 
@@ -96,7 +110,6 @@ const EventDetails = () => {
     }
 
   }
-
 
   const addToCalendar = async (slot) => {
     console.log("slot", slot);
@@ -123,7 +136,6 @@ const EventDetails = () => {
     ]);
 
   };
-
 
   handleAddEventConfirmed = async (eventDetails) => {
     setSlotPickerModalVisible(false)
@@ -195,8 +207,6 @@ const EventDetails = () => {
           headerTitle: "",
         }}
       />
-
-
 
       <>
         <ScrollView showsVerticalScrollIndicator={false}
@@ -298,7 +308,7 @@ const EventDetails = () => {
                         </View>
                       </TouchableOpacity>
 
-                      <TouchableOpacity style={styles.actionContainer} onPress={toggleActionsModal}>
+                      <TouchableOpacity style={styles.actionContainer} onPress={phoneResevation}>
                         <TouchableOpacity style={styles.logoContainer}>
                           <Image
                             source={require("../../assets/icons/phone.png")}
@@ -313,7 +323,7 @@ const EventDetails = () => {
                         </View>
                       </TouchableOpacity>
 
-                      <TouchableOpacity style={styles.actionContainer} onPress={toggleActionsModal}>
+                      <TouchableOpacity style={styles.actionContainer} onPress={mailReservation}>
                         <TouchableOpacity style={styles.logoContainer}>
                           <Image
                             source={require("../../assets/icons/mail.png")}
@@ -328,7 +338,7 @@ const EventDetails = () => {
                         </View>
                       </TouchableOpacity>
 
-                      <TouchableOpacity style={styles.actionContainer} onPress={toggleActionsModal}>
+                      <TouchableOpacity style={styles.actionContainer} onPress={() => { Linking.openURL(event.lien) }}>
                         <TouchableOpacity style={styles.logoContainer}>
                           <Image
                             source={require("../../assets/favicon.png")}
@@ -352,9 +362,7 @@ const EventDetails = () => {
                           <Text style={styles.textStyleCancel}>Annuler</Text>
                         </Pressable>
 
-
                       </View>
-
                     </View>
                   </View>
                 </Modal>

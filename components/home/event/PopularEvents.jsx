@@ -5,19 +5,36 @@ import styles from './popularevents.style';
 import { COLORS } from '../../../constants';
 import PopularEventCard from '../../common/cards/event/PopularEventCard';
 import fireStoreService from '../../../app/services/fireStoreService';
+import * as Location from 'expo-location';
+
 
 const PopularEvents = () => {
   const router = useRouter();
-  const [data, setData] = useState([]);
+  const [popularEventsData, setPopularEventsData] = useState([]);
+  const [nearbyEventsData, setNearbyEventsData] = useState([]);
   const [isLoading, setIsLoading] = useState([]);
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const newData = await fireStoreService.fetchData({ limit: 20, minRating: 4.500 }, setIsLoading);
-      setData(newData);
-    };
+    (async () => {
+      // Récupération des évennements populaires
+      const popularEvents = await fireStoreService.fetchData({ limit: 20, minRating: 4.500 }, setIsLoading);
+      setPopularEventsData(popularEvents);
 
-    fetchData();
+      // Récupération de la position de l'utilisateur
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg("L'autorisation d'accéder à la position a été refusée");
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+
+    /*   const nearbyEvents = await fireStoreService.getNearbyEvents(location.coords.latitude, location.coords.longitude)
+      setNearbyEventsData(nearbyEvents) */
+    })();
+
   }, []);
 
   return (
@@ -33,7 +50,7 @@ const PopularEvents = () => {
         {isLoading ? (
           <ActivityIndicator size='large' color={COLORS.primary} />
         ) : (
-          data?.map((event) => (
+          popularEventsData?.map((event) => (
             <PopularEventCard
               event={event}
               key={`popular-event-${event.id}`}

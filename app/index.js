@@ -1,7 +1,7 @@
 import { Redirect } from "expo-router";
 
 export default function Index() {
-    return <Redirect href="/home/home-screen" />;
+    return <Redirect href="/login/Login" />;
 }
 
 /* import { Link } from 'expo-router';

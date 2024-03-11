@@ -1,9 +1,10 @@
 import { Stack, Tabs } from "expo-router";
 import { useFonts } from "expo-font";
 import { FontAwesome } from "@expo/vector-icons";
-// import * as SplashScreen from "expo-splash-screen";
+import HomeScreen from "./home/home-screen";
+import { creatNativeStackNavigator } from '@react-navigation/native-stack'
 
-// SplashScreen.preventAutoHideAsync();
+// const Stack = creatNativeStackNavigator();
 
 export const unstable_settings = {
   // Ensure any route can link back to `/`
@@ -22,10 +23,14 @@ const Layout = () => {
   }
 
   return (
-  //  <Stack initialRouteName="home">
-  //      <Stack.Screen name="home" />
-  //    </Stack>
-  <Stack></Stack>
+    <Stack>
+      <Stack.Screen
+        name="home"
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack>
   )
 };
 

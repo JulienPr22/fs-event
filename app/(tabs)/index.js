@@ -19,10 +19,7 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
-      <Tabs.Screen
-      />
-
-      <ScrollView showsVerticalScrollIndicator={false}>
+         <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
             flex: 1,

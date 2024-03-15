@@ -1,10 +1,5 @@
 import { Stack, Tabs } from "expo-router";
 import { useFonts } from "expo-font";
-import { FontAwesome } from "@expo/vector-icons";
-import HomeScreen from "./home/home-screen";
-import { creatNativeStackNavigator } from '@react-navigation/native-stack'
-
-// const Stack = creatNativeStackNavigator();
 
 export const unstable_settings = {
   // Ensure any route can link back to `/`
@@ -23,14 +18,11 @@ const Layout = () => {
   }
 
   return (
+
     <Stack>
-      <Stack.Screen
-        name="home"
-        options={{
-          headerShown: false,
-        }}
-      />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
+
   )
 };
 

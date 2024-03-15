@@ -1,4 +1,12 @@
-import { View, Text, TextInput, ActivityIndicator, Button, KeyboardAvoidingView } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  ActivityIndicator,
+  Button,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+} from 'react-native';
 import React, { useState } from 'react';
 import { Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native';
@@ -8,14 +16,21 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
+import styles from './login.style';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+
   const auth = FIREBASE_AUTH;
 
   const signIn = async () => {
+    if (!isLogin) {
+      signUp();
+      return;
+    }
     setLoading(true);
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
@@ -50,31 +65,48 @@ const Login = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
       <Stack.Screen options={{ headerShown: false }} />
 
-      <View>
+      <View style={styles.container}>
         <KeyboardAvoidingView>
-        <Text>Login</Text>
-        <TextInput
-          value={email}
-          placeholder='Email'
-          autoCapitalize='none'
-          onChangeText={(text) => setEmail(text)}
-        />
-        <TextInput
-          value={password}
-          secureTextEntry={true}
-          placeholder='Mot de passe'
-          autoCapitalize='none'
-          onChangeText={(text) => setPassword(text)}
-        />
+          <Text style={styles.title}>
+            {isLogin ? 'Connexion' : 'Inscription'}
+          </Text>
+          <TextInput
+            style={styles.input}
+            value={email}
+            placeholder='Email'
+            autoCapitalize='none'
+            onChangeText={(text) => setEmail(text)}
+          />
+          <TextInput
+            style={styles.input}
+            value={password}
+            secureTextEntry={true}
+            placeholder='Mot de passe'
+            autoCapitalize='none'
+            onChangeText={(text) => setPassword(text)}
+          />
 
-        {loading ? (
-          <ActivityIndicator size='large' />
-        ) : (
-          <>
-            <Button title='Se connecter' onPress={signIn} />
-            <Button title="S'inscrire" onPress={signUp} />
-          </>
-        )}
+          {loading ? (
+            <ActivityIndicator size='large' />
+          ) : (
+            <>
+              <TouchableOpacity style={styles.button} onPress={signIn}>
+                <Text style={styles.buttonText}>
+                  {isLogin ? 'Se connecter' : "S'inscrire"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.switchText}
+                onPress={() => setIsLogin(!isLogin)}
+              >
+                <Text style={styles.switchText}>
+                  {isLogin
+                    ? "Pas encore de compte ? S'inscrire"
+                    : 'Déjà inscrit ? Se connecter'}
+                </Text>
+              </TouchableOpacity>
+            </>
+          )}
         </KeyboardAvoidingView>
       </View>
     </SafeAreaView>

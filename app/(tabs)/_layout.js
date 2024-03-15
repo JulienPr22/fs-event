@@ -1,28 +1,16 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ProfileScreen from './profile-screen';
-import HomeScreen from './home-screen';
-import MapScreen from './map-screen';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
 import { COLORS } from '../../constants';
-
-const Tab = createBottomTabNavigator();
 
 function MyTabs() {
     return (
-        <Tab.Navigator>
-           {/*  screenOptions={{
-                tabBarStyle: { position: 'absolute' },
-                tabBarBackground: () => (
-                    <BlurView tint="light" intensity={100} style={StyleSheet.absoluteFill} />
-                ),
-            }} */}
-            <Tab.Screen
-                name="Accueil"
-                component={HomeScreen}
+        <Tabs screenOptions={{ tabBarActiveTintColor: COLORS.primary }}>
+            <Tabs.Screen
+                name="index"
                 options={{
+                    title: 'Accueil',
                     headerShadowVisible: false,
                     headerShown: false,
-                    headerTitle: "",
                     headerLeft: null,
                     tabBarIcon: ({ color }) => (
                         <MaterialIcons
@@ -34,10 +22,10 @@ function MyTabs() {
                     ),
                 }}
             />
-            <Tab.Screen
-                name="Carte"
-                component={MapScreen}
+            <Tabs.Screen
+                name="map-screen"
                 options={{
+                    title: 'Carte',
                     headerShadowVisible: false,
                     headerShown: false,
                     headerTitle: "",
@@ -51,10 +39,10 @@ function MyTabs() {
                     ),
                 }}
             />
-            <Tab.Screen
-                name="Profil"
-                component={ProfileScreen}
+            <Tabs.Screen
+                name="profile-screen"
                 options={{
+                    title: 'Profil',
                     headerShadowVisible: false,
                     headerTitle: "",
                     headerShown: false,
@@ -68,7 +56,7 @@ function MyTabs() {
                     ),
                 }}
             />
-        </Tab.Navigator>
+        </Tabs>
     );
 }
 export default MyTabs;

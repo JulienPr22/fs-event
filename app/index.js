@@ -1,11 +1,9 @@
 import { Redirect } from "expo-router";
+import { Link } from 'expo-router';
+
 
 export default function Index() {
-    return <Redirect href="/login/Login" />;
+    // return <Redirect href="/(tabs)" />;
+    return <Link href="/(tabs)">Navigate to nested route</Link>;
+
 }
-
-/* import { Link } from 'expo-router';
-
-export default function Root() {
-  return <Link href="/home/messages">Navigate to nested route</Link>;
-} */

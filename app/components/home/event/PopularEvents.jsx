@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import styles from './popularevents.style';
-import { COLORS } from '../../../constants';
+
 import PopularEventCard from '../../common/cards/event/PopularEventCard';
-import fireStoreService from '../../../app/services/fireStoreService';
+
 import * as Location from 'expo-location';
+import { COLORS } from '../../../constants';
+import firestoreService from '../../../(app)/services/fireStoreService';
 
 
 const PopularEvents = () => {
@@ -19,7 +21,7 @@ const PopularEvents = () => {
   useEffect(() => {
     (async () => {
       // Récupération des évennements populaires
-      const popularEvents = await fireStoreService.fetchData({ limit: 20, minRating: 4.500 }, setIsLoading);
+      const popularEvents = await firestoreService.fetchData({ limit: 20, minRating: 4.500 }, setIsLoading);
       setPopularEventsData(popularEvents);
 
       // Récupération de la position de l'utilisateur

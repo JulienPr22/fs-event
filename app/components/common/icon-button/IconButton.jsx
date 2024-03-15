@@ -1,6 +1,7 @@
+import { Icon } from '@rneui/themed';
 import React from 'react';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
-import { Icon } from 'react-native-elements'; // ou import Icon from 'react-native-vector-icons/Ionicons'; pour les icônes Vector Icons
+
 
 const IconButton = ({ onPress, iconName, iconType, iconColor, iconSize }) => {
   return (

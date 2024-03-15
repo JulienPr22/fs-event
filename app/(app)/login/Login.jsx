@@ -10,13 +10,13 @@ import {
 import React, { useState } from 'react';
 import { Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native';
-import { COLORS } from '../../constants';
-import { FIREBASE_AUTH } from '../../firebaseConfig';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import styles from './login.style';
+import { COLORS } from '../../constants';
+import { FIREBASE_AUTH } from '../../../firebaseConfig';
 
 const Login = () => {
   const [email, setEmail] = useState('');

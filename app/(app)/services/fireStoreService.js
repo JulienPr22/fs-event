@@ -1,8 +1,9 @@
 
 import { addDoc, collection, doc, endAt, getDoc, getDocs, limit, orderBy, query, setDoc, startAt, where } from "firebase/firestore";
-import { FIRESTORE_DB, GEOFIRESTORE } from "../../firebaseConfig";
 import fakeData from "../../assets/fr-esr-fete-de-la-science-23.json";
 import ngeohash from "ngeohash";
+import { FIRESTORE_DB } from "../../../firebaseConfig";
+
 
 class firestoreService {
 

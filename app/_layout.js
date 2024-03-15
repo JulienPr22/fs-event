@@ -1,29 +1,11 @@
-import { Stack, Tabs } from "expo-router";
-import { useFonts } from "expo-font";
+import { Slot } from 'expo-router';
+import { SessionProvider } from './ctx';
 
-export const unstable_settings = {
-  // Ensure any route can link back to `/`
-  initialRouteName: "home",
-};
-
-const Layout = () => {
-  const [fontsLoaded] = useFonts({
-    DMBold: require("../assets/fonts/DMSans-Bold.ttf"),
-    DMMedium: require("../assets/fonts/DMSans-Medium.ttf"),
-    DMRegular: require("../assets/fonts/DMSans-Regular.ttf"),
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
+export default function Root() {
+  // Set up the auth context and render our layout inside of it.
   return (
-
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
-
-  )
-};
-
-export default Layout;
+    <SessionProvider>
+      <Slot />
+    </SessionProvider>
+  );
+}

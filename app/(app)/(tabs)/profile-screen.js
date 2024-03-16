@@ -1,7 +1,9 @@
 import { View, Text, SafeAreaView } from 'react-native';
 import { useSession } from '../../ctx';
 
+
 export default function ProfileScreen() {
+  const {signOut}  = useSession();
   return (
     <SafeAreaView>
       <View>

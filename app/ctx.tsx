@@ -1,13 +1,17 @@
 import React from 'react';
 import { useStorageState } from './useStorageState';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { FIREBASE_AUTH } from '../firebaseConfig';
 
 const AuthContext = React.createContext<{
-  signIn: () => void;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
 }>({
-  signIn: () => null,
+  signIn: () => Promise.resolve(),
+  signUp: () => Promise.resolve(),
   signOut: () => null,
   session: null,
   isLoading: false,
@@ -21,23 +25,43 @@ export function useSession() {
       throw new Error('useSession must be wrapped in a <SessionProvider />');
     }
   }
-
   return value;
 }
 
 export function SessionProvider(props: React.PropsWithChildren) {
   const [[isLoading, session], setSession] = useStorageState('session');
 
+  const signIn = async (email: string, password: string) => {
+    try {
+      const response = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+      setSession(response.user.uid);
+      console.log("session", session);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const signUp = async (email: string, password: string) => {
+    try {
+      const response = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+      setSession(response.user.uid);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const signOut = () => {
+    setSession(null);
+  };
+
   return (
     <AuthContext.Provider
       value={{
-        signIn: () => {
-          // Perform sign-in logic here
-          setSession('xxx');
-        },
-        signOut: () => {
-          setSession(null);
-        },
+        signIn,
+        signUp,
+        signOut,
         session,
         isLoading,
       }}>

@@ -1,18 +1,20 @@
 import { Stack, router } from 'expo-router';
-import { ActivityIndicator, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, KeyboardAvoidingView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { useSession } from './ctx';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, SIZES } from './constants';
+import { COLORS, FONT, SIZES } from './constants';
 import { useState } from 'react';
 
 
 export default function SignIn() {
   const { signIn, signUp } = useSession();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [role, setRole] = useState('visitor');
 
   const handleSignIn = async () => {
     if (!isLogin) {
@@ -35,8 +37,8 @@ export default function SignIn() {
   const handleSignUp = async () => {
     setLoading(true);
     try {
-      await signUp(email, password);
-      alert('Inscription réussie!');
+      await signUp(email, password, name, role);
+      Alert.alert("Succès",'Inscription réussie!');
       router.push('/(app)')
     } catch (error) {
       console.log(error);
@@ -52,48 +54,83 @@ export default function SignIn() {
       <Stack.Screen options={{ headerShown: false }} />
 
       <View style={styles.container}>
-        {/* <KeyboardAvoidingView> */}
-        <Text style={styles.title}>
-          {isLogin ? 'Connexion' : 'Inscription'}
-        </Text>
-        <TextInput
-          style={styles.input}
-          value={email}
-          placeholder='Email'
-          autoCapitalize='none'
-          onChangeText={(text) => setEmail(text)}
-        />
-        <TextInput
-          style={styles.input}
-          value={password}
-          secureTextEntry={true}
-          placeholder='Mot de passe'
-          autoCapitalize='none'
-          onChangeText={(text) => setPassword(text)}
-        />
+        <KeyboardAvoidingView>
+          <Text style={styles.title}>
+            {isLogin ? 'Connexion' : 'Inscription'}
+          </Text>
+          <TextInput
+            style={styles.input}
+            value={email}
+            placeholder='Email'
+            autoCapitalize='none'
+            onChangeText={(text) => setEmail(text)}
+          />
+          <TextInput
+            style={styles.input}
+            value={password}
+            secureTextEntry={true}
+            placeholder='Mot de passe'
+            autoCapitalize='none'
+            onChangeText={(text) => setPassword(text)}
+          />
 
-        {loading ? (
-          <ActivityIndicator size='large' />
-        ) : (
-          <>
-            <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-              <Text style={styles.buttonText}>
-                {isLogin ? 'Se connecter' : "S'inscrire"}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.switchText}
-              onPress={() => setIsLogin(!isLogin)}
-            >
-              <Text style={styles.switchText}>
-                {isLogin
-                  ? "Pas encore de compte ? S'inscrire"
-                  : 'Déjà inscrit ? Se connecter'}
-              </Text>
-            </TouchableOpacity>
-          </>
-        )}
-        {/* </KeyboardAvoidingView> */}
+          {!isLogin && (
+            <>
+              <TextInput
+                style={styles.input}
+                value={name}
+                placeholder='Nom'
+                autoCapitalize='words'
+                onChangeText={(text) => setName(text)}
+              />
+
+              <View style={styles.tabsContainer}>
+                <Text style={styles.switchText}>Rôle:</Text>
+
+                <TouchableOpacity
+                  style={styles.tab(role)}
+                  onPress={() => {
+                    setRole("visitor");
+                  }}
+                >
+                  <Text style={styles.tabText(role, 'visitor')}>Visiteur</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.tab(role)}
+                  onPress={() => {
+                    setRole("organizer");
+                  }}
+                >
+                  <Text style={styles.tabText(role, 'organizer')}>Organisateur</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+
+          {loading ? (
+            <ActivityIndicator size='large' />
+          ) : (
+            <>
+              <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+                <Text style={styles.buttonText}>
+                  {isLogin ? 'Se connecter' : "S'inscrire"}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.switchText}
+                onPress={() => setIsLogin(!isLogin)}
+              >
+                <Text style={{color: COLORS.secondary, marginTop: 10}}>
+                  {isLogin
+                    ? "Pas encore de compte ? S'inscrire"
+                    : 'Déjà inscrit ? Se connecter'}
+                </Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </KeyboardAvoidingView>
       </View>
     </SafeAreaView>
   );
@@ -135,8 +172,22 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-  switchText: {
-    marginTop: 5,
-    color: COLORS.tertiary,
+  inputTag: {
+    color: COLORS.secondary,
   },
+  tabsContainer: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: 'center'
+  },
+  tab: (activeRole, switchRole) => ({
+    paddingVertical: SIZES.small / 2,
+    paddingLeft: SIZES.small,
+    borderColor: activeRole === switchRole ? COLORS.tertiary : COLORS.gray2,
+  }),
+  tabText: (activeJobType, switchRole) => ({
+    fontFamily: FONT.medium,
+    color: activeJobType === switchRole ? COLORS.tertiary : COLORS.gray2,
+  }),
 });

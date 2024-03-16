@@ -4,7 +4,6 @@ import firestoreService from '../services/fireStoreService';
 import { useEffect, useState } from 'react';
 import { COLORS, FONT, SIZES } from '../../constants';
 
-
 const ProfileScreen = () => {
   const { session, signOut } = useSession();
   const [user, setUser] = useState([])
@@ -59,14 +58,12 @@ const ProfileScreen = () => {
             <TouchableOpacity
               style={styles.tab(role)}
               onPress={() => {
-                setRole("organizer");
+                setRole("contributor");
               }}
             >
-              <Text style={styles.tabText(role, 'organizer')}>Contributeur</Text>
+              <Text style={styles.tabText(role, 'contributor')}>Contributeur</Text>
             </TouchableOpacity>
           </View>
-
-
         </View>
 
       ) : (

@@ -99,10 +99,10 @@ export default function SignIn() {
                 <TouchableOpacity
                   style={styles.tab(role)}
                   onPress={() => {
-                    setRole("organizer");
+                    setRole("contributor");
                   }}
                 >
-                  <Text style={styles.tabText(role, 'organizer')}>Organisateur</Text>
+                  <Text style={styles.tabText(role, 'contributor')}>Contributeur</Text>
                 </TouchableOpacity>
               </View>
             </>

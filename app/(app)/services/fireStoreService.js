@@ -68,17 +68,72 @@ class firestoreService {
     }
   }
 
-  static fetchUser = async (userId, setLoading) => {
+  static fetchUserData = async (userId, setLoading) => {
     console.log("fetchUser");
     console.log(userId);
+    const items = [];
+
     setLoading(true);
     try {
-
-      let dataToFetch;
+      // Récupération de l'utilisateur
       const docRef = doc(FIRESTORE_DB, "users", userId);
-      dataToFetch = await getDoc(docRef);
+      const user = await getDoc(docRef);
+
+      // Récupération du parcours associé
+      let routesRef = collection(FIRESTORE_DB, "routes");
+      routesRef = query(
+        routesRef,
+        where("creatorId", "==", userId),
+        limit(1)
+      );
+
+      const querySnapshot = await getDocs(routesRef);
+      querySnapshot.forEach((doc) => {
+        items.push(doc.data());
+      });
+      const route = items[0]
+
+      // Récupération des parcours associés (par référence)
+      const refEvents = route.relatedEvents || [];
+
+      const eventsPromises = refEvents.map(async (eventRef) => {
+        const eventDoc = await getDoc(eventRef)
+        return { id: eventDoc.id, ...eventDoc.data().event };
+      });
+
+      const eventsData = await Promise.all(eventsPromises);
+      console.log("eventsData", eventsData);
+
       setLoading(false);
-      return dataToFetch.data();
+      return ({ user: user.data(), route: route, events: eventsData });
+
+    } catch (error) {
+
+      setLoading(false);
+      throw error;
+    }
+  }
+
+  static fetchRoute = async (userId, setLoading) => {
+    setLoading(true);
+    const items = []
+    try {
+
+      let routesRef = collection(FIRESTORE_DB, "routes");
+      routesRef = query(
+        routesRef,
+        where("creatorId", "==", userId),
+        limit(1)
+      );
+
+      const querySnapshot = await getDocs(routesRef);
+      querySnapshot.forEach((route) => {
+        items.push(route.data());
+      });
+
+      setLoading(false);
+      console.log("items[0]", items[0]);
+      return items[0];
 
     } catch (error) {
 

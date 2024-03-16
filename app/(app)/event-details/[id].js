@@ -410,9 +410,19 @@ const EventDetails = () => {
               </View>
             )}
         </ScrollView>
+
         <View style={styles.actionBtnContainer}>
+
+        <TouchableOpacity style={styles.addBtn}>
+        <Image
+          source={icons.add}
+          resizeMode='contain'
+          style={styles.likeBtnImage}
+        />
+
+      </TouchableOpacity>
           <Pressable
-            style={styles.openBtn}
+            style={styles.ratingBtn}
             onPress={() => { setRatingModalVisible(!ratingModalVisible) }}>
             <Text style={styles.openBtnText}>Noter l'évennement</Text>
           </Pressable>

@@ -96,12 +96,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: SIZES.small,
-    backgroundColor: "#FFF",
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
   },
-  openBtn: {
+  ratingBtn: {
     flex: 1,
     backgroundColor: "#FE7654",
     height: "100%",
@@ -111,6 +110,22 @@ const styles = StyleSheet.create({
     marginLeft: SIZES.medium,
     borderRadius: SIZES.medium,
     bottom: 10
+  },
+  addBtn: {
+    width: 55,
+    height: 55,
+    borderWidth: 1,
+    borderColor: COLORS.tertiary,
+    borderRadius: SIZES.medium,
+    backgroundColor: COLORS.white,
+    justifyContent: "center",
+    alignItems: "center",
+    bottom: 10
+  },
+  likeBtnImage: {
+    width: "40%",
+    height: "40%",
+    tintColor: "#F37453",
   },
   openBtnText: {
     fontSize: SIZES.medium,

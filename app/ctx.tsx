@@ -36,6 +36,7 @@ export function SessionProvider(props: React.PropsWithChildren) {
     try {
       const response = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
       setSession(response.user.uid);
+
       console.log("session", session);
     } catch (error) {
       console.log(error);
@@ -49,7 +50,7 @@ export function SessionProvider(props: React.PropsWithChildren) {
       setSession(response.user.uid);
       await setDoc(doc(FIRESTORE_DB, "users", response.user.uid), {
         email: email,
-        name:  name,
+        name: name,
         role: role,
       })
     } catch (error) {

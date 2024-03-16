@@ -53,7 +53,7 @@ const EventDetails = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await firestoreService.fetchData({ docId: params.id }, setIsLoading);
+      const data = await firestoreService.fetchEvents({ docId: params.id }, setIsLoading);
       setEvent(data);
       console.log("event", data);
     };

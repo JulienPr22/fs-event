@@ -7,7 +7,7 @@ import { FIRESTORE_DB } from "../../../firebaseConfig";
 
 class firestoreService {
 
-  static fetchData = async (queryOptions, setLoading) => {
+  static fetchEvents = async (queryOptions, setLoading) => {
     setLoading(true);
     try {
 
@@ -67,6 +67,26 @@ class firestoreService {
 
     }
   }
+
+  static fetchUser = async (userId, setLoading) => {
+    console.log("fetchUser");
+    console.log(userId);
+    setLoading(true);
+    try {
+
+      let dataToFetch;
+      const docRef = doc(FIRESTORE_DB, "users", userId);
+      dataToFetch = await getDoc(docRef);
+      setLoading(false);
+      return dataToFetch.data();
+
+    } catch (error) {
+
+      setLoading(false);
+      throw error;
+    }
+  }
+
 
   static randomNumber = (min, max, dec) => {
     const nombreAleatoire = Math.random() * (max - min) + min;

@@ -1,8 +1,11 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import { COLORS } from '../../constants';
+import { COLORS, icons } from '../../constants';
+import { ScreenHeaderBtn } from '../../components';
+import { useSession } from '../../ctx';
 
 function MyTabs() {
+    const { signOut } = useSession()
     return (
         <Tabs screenOptions={{ tabBarActiveTintColor: COLORS.primary }}>
             <Tabs.Screen
@@ -43,9 +46,10 @@ function MyTabs() {
                 name="profile-screen"
                 options={{
                     title: 'Profil',
+                    visible: false,
+                    headerStyle: { backgroundColor: COLORS.lightWhite },
                     headerShadowVisible: false,
-                    headerTitle: "",
-                    headerShown: false,
+                    headerBackVisible: false,
                     tabBarIcon: ({ color }) => (
                         <MaterialIcons
                             size={28}
@@ -53,6 +57,9 @@ function MyTabs() {
                             name="person"
                             color={color}
                         />
+                    ),
+                    headerRight: () => (
+                        <ScreenHeaderBtn iconUrl={icons.signOut} dimension='60%' handlePress={signOut} />
                     ),
                 }}
             />

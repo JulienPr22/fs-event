@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -6,22 +6,35 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
-} from "react-native";
-import { useRouter } from "expo-router";
+} from 'react-native';
+import { useRouter } from 'expo-router';
 
-import styles from "./welcome.style";
-import { icons, SIZES } from "../../../constants";
+import styles from './welcome.style';
+import { icons, SIZES } from '../../../constants';
+import { UserContext } from '../../../(app)/UserContext';
+import { useSession } from '../../../ctx';
+import firestoreService from '../../../(app)/services/fireStoreService';
 
-const dataType = ["Évennements", "Parcours"];
+const dataType = ['Évennements', 'Parcours'];
 
 const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
   const router = useRouter();
-  const [activeJobType, setActiveJobType] = useState("Évennements");
+  const { session, isLoading } = useSession();
+  const { user, setUser } = useContext(UserContext);
+
+  useEffect(() => {
+    console.log('Session', session);
+    (async () => {
+      const userData = await firestoreService.fetchUser(session);
+      console.log(userData.data());
+      setUser(userData.data());
+    })();
+  }, []);
 
   return (
     <View>
       <View style={styles.container}>
-        <Text style={styles.userName}>Bonjour</Text>
+        {user && <Text style={styles.userName}>Bonjour {user.name}</Text>}
         <Text style={styles.welcomeMessage}>Trouvez un évennement</Text>
       </View>
 
@@ -45,7 +58,7 @@ const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
       </View>
 
       <View style={styles.tabsContainer}>
-       {/*  <FlatList
+        {/*  <FlatList
           data={dataType}
           renderItem={({ item }) => (
             <TouchableOpacity

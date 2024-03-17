@@ -68,17 +68,24 @@ class firestoreService {
     }
   }
 
-  static fetchUserData = async (userId, setLoading) => {
-    console.log("fetchUser");
-    console.log(userId);
+  static fetchUser = async (userId) => {
+
+    try {
+      const docRef = doc(FIRESTORE_DB, "users", userId);
+      const user = await getDoc(docRef);
+      return user;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+
+  static fetchUserRouteData = async (userId, setLoading) => {
     const items = [];
 
     setLoading(true);
     try {
-      // Récupération de l'utilisateur
-      const docRef = doc(FIRESTORE_DB, "users", userId);
-      const user = await getDoc(docRef);
-
       // Récupération du parcours associé
       let routesRef = collection(FIRESTORE_DB, "routes");
       routesRef = query(
@@ -105,7 +112,7 @@ class firestoreService {
       console.log("eventsData", eventsData);
 
       setLoading(false);
-      return ({ user: user.data(), route: route, events: eventsData });
+      return ({route: route, events: eventsData });
 
     } catch (error) {
 

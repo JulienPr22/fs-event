@@ -2,7 +2,7 @@ import React from 'react';
 import { useStorageState } from './useStorageState';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH, FIRESTORE_DB } from '../firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 const AuthContext = React.createContext<{
   signIn: (email: string, password: string) => Promise<void>;
@@ -35,6 +35,8 @@ export function SessionProvider(props: React.PropsWithChildren) {
   const signIn = async (email: string, password: string) => {
     try {
       const response = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+      const userRef = doc(FIRESTORE_DB, "users",  response.user?.uid!);
+      const user = (await getDoc(userRef)).data();
       setSession(response.user.uid);
 
       console.log("session", session);

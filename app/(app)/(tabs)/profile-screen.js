@@ -1,15 +1,16 @@
 import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, ScrollView } from 'react-native';
 import { useSession } from '../../ctx';
 import firestoreService from '../services/fireStoreService';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { COLORS, FONT, SIZES } from '../../constants';
 import { router } from 'expo-router';
 import { PopularEventCard } from '../../components';
 import { Switch } from 'react-native-gesture-handler';
+import { UserContext } from '../UserContext';
 
 const ProfileScreen = () => {
   const { session, signOut } = useSession();
-  const [user, setUser] = useState([])
+  const { user, setUser } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState([]);
   const [editing, setEditing] = useState(false)
   const [name, setName] = useState(false)
@@ -22,8 +23,8 @@ const ProfileScreen = () => {
   useEffect(() => {
     console.log("Session", session);
     (async () => {
-      const { user, route, events } = await firestoreService.fetchUserData(session, setIsLoading);
-      setUser(user)
+
+      const {route, events } = await firestoreService.fetchUserRouteData(session, setIsLoading);
       setName(user.name);
       setRole(user.role);
       setRelatedRoute(route)

@@ -1,6 +1,9 @@
 import { Redirect, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useSession } from "../ctx";
+import { UserContext, UserProvider } from "./UserContext";
+import firestoreService from "./services/fireStoreService";
+import { useContext } from "react";
 
 export const unstable_settings = {
   initialRouteName: "home",
@@ -31,11 +34,18 @@ const Layout = () => {
     return <Redirect href="/sign-in" />;
   }
 
-  return (
 
-    <Stack >
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
+/*   const docRef = doc(FIRESTORE_DB, "users", session);
+  const userData = await getDoc(docRef);
+  setUser(userData.data()); */
+
+  return (
+    <UserProvider>
+      <Stack >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
+    </UserProvider>
+
 
   )
 };

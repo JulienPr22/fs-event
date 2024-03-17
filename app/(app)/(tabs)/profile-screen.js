@@ -24,7 +24,7 @@ const ProfileScreen = () => {
     console.log("Session", session);
     (async () => {
 
-      const {route, events } = await firestoreService.fetchUserRouteData(session, setIsLoading);
+      const { route, events } = await firestoreService.fetchUserRouteData(session, setIsLoading);
       setName(user.name);
       setRole(user.role);
       setRelatedRoute(route)
@@ -42,7 +42,7 @@ const ProfileScreen = () => {
   }, [relatedEvents]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite, justifyContent: "center" }}>
       <View style={styles.container}>
         <Text style={styles.title}>Mes Informations</Text>
         <View style={styles.infosContainer}>
@@ -117,7 +117,7 @@ const ProfileScreen = () => {
 
           </View>
         ) : (
-          <Text>Aucun parcours n'a été créé</Text>
+          <Text style={{ flex: 1, justifyContent: 'center', color: COLORS.tertiary }}>Aucun parcours n'a été créé</Text>
         ))}
     </SafeAreaView >
   );

@@ -35,14 +35,18 @@ const Layout = () => {
   }
 
 
-/*   const docRef = doc(FIRESTORE_DB, "users", session);
-  const userData = await getDoc(docRef);
-  setUser(userData.data()); */
+  /*   const docRef = doc(FIRESTORE_DB, "users", session);
+    const userData = await getDoc(docRef);
+    setUser(userData.data()); */
 
   return (
     <UserProvider>
       <Stack >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="fillingModal"
+          options={{ presentation: 'modal' }}
+        />
       </Stack>
     </UserProvider>
 

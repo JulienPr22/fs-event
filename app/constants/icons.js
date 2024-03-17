@@ -11,6 +11,8 @@ import chevronRight from '../assets/icons/chevron-right.png'
 import star from '../assets/icons/star.png'
 import add from '../assets/icons/add.png'
 import signOut from '../assets/icons/sign-out.png'
+import remove from '../assets/icons/minus.png'
+
 
 
 export default {
@@ -26,5 +28,6 @@ export default {
   chevronRight,
   star,
   add,
-  signOut
+  signOut,
+  remove
 };

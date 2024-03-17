@@ -68,6 +68,26 @@ class firestoreService {
     }
   }
 
+  static updateEventFilling = async (event, docId, userRating) => {
+    try {
+      const docRef = doc(FIRESTORE_DB, "events", docId);
+
+      const updatedRating = (event.rating * event.votes + userRating) / (event.votes + 1);
+      const updatedVotes = event.votes + 1;
+      const newEvent = { ...event, rating: updatedRating, votes: updatedVotes }
+
+      await setDoc(docRef, {
+        newEvent
+      });
+
+      return newEvent;
+
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour de la note de l\'événement :', error);
+
+    }
+  }
+
   static fetchUser = async (userId) => {
 
     try {
@@ -113,6 +133,48 @@ class firestoreService {
 
       setLoading(false);
       return ({route: route, events: eventsData });
+
+    } catch (error) {
+
+      setLoading(false);
+      throw error;
+    }
+  }
+
+  static fetchUserEventsRouteIds = async (userId, setLoading) => {
+    console.log("fetchUserEventsRouteIds", userId);
+    const ids = [];
+    const items = [];
+
+    setLoading(true);
+    try {
+      // Récupération du parcours associé
+      let routesRef = collection(FIRESTORE_DB, "routes");
+      routesRef = query(
+        routesRef,
+        where("creatorId", "==", userId),
+        limit(1)
+      );
+
+      const querySnapshot = await getDocs(routesRef);
+      querySnapshot.forEach((doc) => {
+        items.push(doc.data());
+      });
+      const route = items[0]
+
+      // Récupération des parcours associés (par référence)
+      const refEvents = route.relatedEvents || [];
+
+      const eventsPromises = refEvents.map(async (eventRef) => {
+        const eventDoc = await getDoc(eventRef)
+        return eventDoc.id;
+      });
+
+
+      const eventsData = await Promise.all(eventsPromises);
+
+      setLoading(false);
+      return (eventsData);
 
     } catch (error) {
 

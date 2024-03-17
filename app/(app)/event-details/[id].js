@@ -1,5 +1,5 @@
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -32,12 +32,18 @@ import * as Calendar from 'expo-calendar';
 import calendarService from "../services/calendarService";
 import { Platform } from "react-native";
 import { Linking } from "react-native";
+import { UserContext } from "../UserContext";
+import { Slider } from '@rneui/themed';
+import { useSession } from "../../ctx";
 
 const tabs = ["À Propos", "Adresse", "Carte"];
 
 const EventDetails = () => {
   const params = useGlobalSearchParams();
   const router = useRouter();
+  const { user, setUser } = useContext(UserContext);
+  const session = useSession();
+
 
   const [event, setEvent] = useState([]);
   const [userRating, setUserRating] = useState([]);
@@ -45,6 +51,7 @@ const EventDetails = () => {
   const [actionsModalVisible, setActionsModalVisible] = useState(false);
   const [slotPickerModalVisible, setSlotPickerModalVisible] = useState(false);
   const [slotOptions, setSlotOptions] = useState([]);
+  const [isAdded, setIsAdded] = useState()
 
 
   const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -53,9 +60,20 @@ const EventDetails = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await firestoreService.fetchEvents({ docId: params.id }, setIsLoading);
-      setEvent(data);
-      console.log("event", data);
+      const eventData = await firestoreService.fetchEvents({ docId: params.id }, setIsLoading);
+      setEvent(eventData);
+      console.log("event", eventData);
+
+      const userEventRouteData = await firestoreService.fetchUserEventsRouteIds(session.session, setIsLoading);
+      setIsAdded(userEventRouteData.includes(event.id));
+      if (userEventRouteData.includes(event.id)) {
+        console.log("Contains")
+      }
+      else {
+        console.log("!Contains")
+      }
+      console.log("userEventRouteData", userEventRouteData);
+
     };
 
     fetchData();
@@ -69,7 +87,7 @@ const EventDetails = () => {
 
   const phoneResevation = async () => {
     setActionsModalVisible(false)
-    if(event.grandpublic_reservation_telephone) {
+    if (event.grandpublic_reservation_telephone) {
       Linking.openURL(`tel:${event.grandpublic_reservation_telephone}`)
     } else {
       // TODO: Message d'erreur: pas de numéro
@@ -78,7 +96,7 @@ const EventDetails = () => {
 
   const mailReservation = async () => {
     setActionsModalVisible(false)
-    if(event.grandpublic_reservation_email) {
+    if (event.grandpublic_reservation_email) {
       Linking.openURL(`mailto:${event.grandpublic_reservation_email}?subject=réservation pour l'évennement "${event.titre_fr}"`)
     } else {
       // TODO: Message d'erreur: pas de mail
@@ -413,19 +431,35 @@ const EventDetails = () => {
 
         <View style={styles.actionBtnContainer}>
 
-        <TouchableOpacity style={styles.addBtn}>
-        <Image
-          source={icons.add}
-          resizeMode='contain'
-          style={styles.likeBtnImage}
-        />
+          <TouchableOpacity style={styles.addBtn}>
+            <Image
+              source={isAdded ? icons.remove : icons.add }
+              resizeMode='contain'
+              style={styles.likeBtnImage}
+            />
+          </TouchableOpacity>
 
-      </TouchableOpacity>
-          <Pressable
+          {user.role == "visitor" ? (<Pressable
             style={styles.ratingBtn}
             onPress={() => { setRatingModalVisible(!ratingModalVisible) }}>
             <Text style={styles.openBtnText}>Noter l'évennement</Text>
-          </Pressable>
+          </Pressable>) : (
+
+            <Pressable
+              style={styles.ratingBtn}
+             /*  onPress={() => {
+                router.setParams({
+                  eventId: event.id,
+                  eventFilling: 60
+                })
+                router.navigate('/fillingModal/', {
+                  eventId: event.id,
+                  eventFilling: 60
+                })
+              }} */>
+              <Text style={styles.openBtnText}>Remplissage</Text>
+            </Pressable>)}
+
         </View>
       </>
     </SafeAreaView>

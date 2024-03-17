@@ -1,5 +1,5 @@
 import { Stack, router } from 'expo-router';
-import { ActivityIndicator, Alert, KeyboardAvoidingView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { useSession } from './ctx';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -50,11 +50,10 @@ export default function SignIn() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+
       <Stack.Screen options={{ headerShown: false }} />
 
-      <View style={styles.container}>
-        <KeyboardAvoidingView>
           <Text style={styles.title}>
             {isLogin ? 'Connexion' : 'Inscription'}
           </Text>
@@ -63,7 +62,7 @@ export default function SignIn() {
             value={email}
             placeholder='Email'
             autoCapitalize='none'
-            onChangeText={(text) => setEmail(text)}
+            onChangeText={setEmail}
           />
           <TextInput
             style={styles.input}
@@ -71,7 +70,7 @@ export default function SignIn() {
             secureTextEntry={true}
             placeholder='Mot de passe'
             autoCapitalize='none'
-            onChangeText={(text) => setPassword(text)}
+            onChangeText={setPassword}
           />
 
           {!isLogin && (
@@ -131,8 +130,7 @@ export default function SignIn() {
             </>
           )}
         </KeyboardAvoidingView>
-      </View>
-    </SafeAreaView>
+
   );
 };
 
@@ -142,6 +140,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: SIZES.large,
+    backgroundColor: COLORS.lightWhite
   },
   title: {
     fontSize: SIZES.xLarge,

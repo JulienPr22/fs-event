@@ -35,10 +35,7 @@ export function SessionProvider(props: React.PropsWithChildren) {
   const signIn = async (email: string, password: string) => {
     try {
       const response = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
-      const userRef = doc(FIRESTORE_DB, "users",  response.user?.uid!);
-      const user = (await getDoc(userRef)).data();
       setSession(response.user.uid);
-
       console.log("session", session);
     } catch (error) {
       console.log(error);

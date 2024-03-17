@@ -1,9 +1,11 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Pressable } from 'react-native';
 import styles from './populareventcard.style';
 import { checkImageURL } from '../../../../utils';
 import { icons } from '../../../../constants';
+import { useState } from 'react';
 
 const PopularEventCard = ({ event, onPress }) => {
+  const [isDescriptionVisible, setIsDescriptionVisible] = useState(false);
 
   const imageSource = checkImageURL(event.image)
     ? { uri: event.image }
@@ -12,10 +14,15 @@ const PopularEventCard = ({ event, onPress }) => {
     : require('../../../../assets/images/placeholder.png');
 
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <Pressable
+      style={styles.container}
+      onPress={onPress}
+      onLongPress={() => setIsDescriptionVisible(true)}
+      onPressOut={() => setIsDescriptionVisible(false)}
+    >
       <TouchableOpacity style={styles.logoContainer}>
         <Image
-          source={ imageSource }
+          source={imageSource}
           resizeMode='contain'
           style={styles.logImage}
         />
@@ -39,9 +46,13 @@ const PopularEventCard = ({ event, onPress }) => {
           </View>
         </View>
 
-        <Text style={styles.eventDescription} numberOfLines={3}>
-          {event?.description_fr}
-        </Text>
+        {isDescriptionVisible ? (
+          <Text style={styles.eventDescription} >
+            {event?.description_fr}
+          </Text>
+        ) : (
+          <></>
+        )}
 
         <View style={styles.ratingContainer}>
           <Text style={styles.eventDescription}>
@@ -55,7 +66,7 @@ const PopularEventCard = ({ event, onPress }) => {
           <Text style={styles.eventDescription}>({event?.votes})</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { COLORS, FONT, SIZES } from '../../constants';
 import { router } from 'expo-router';
 import { PopularEventCard } from '../../components';
+import { Switch } from 'react-native-gesture-handler';
 
 const ProfileScreen = () => {
   const { session, signOut } = useSession();
@@ -15,6 +16,7 @@ const ProfileScreen = () => {
   const [role, setRole] = useState(false)
   const [relatedRoute, setRelatedRoute] = useState([])
   const [relatedEvents, setRelatedEvents] = useState()
+  const [published, setPublished] = useState()
 
 
   useEffect(() => {
@@ -25,6 +27,7 @@ const ProfileScreen = () => {
       setName(user.name);
       setRole(user.role);
       setRelatedRoute(route)
+      setPublished(route.published)
       setRelatedEvents(events)
       console.log("route", route);
       console.log("events", events);
@@ -43,37 +46,52 @@ const ProfileScreen = () => {
         <Text style={styles.title}>Mes Informations</Text>
         <View style={styles.infosContainer}>
 
-          <View style={styles.infoContainer}>
+          <View style={styles.field}>
             <Text style={styles.infoLabel} >Nom: </Text>
             <Text style={styles.infoValue}>{user.name}</Text>
           </View>
-          <View style={styles.infoContainer}>
+          <View style={styles.field}>
             <Text style={styles.infoLabel}>Mail: </Text>
             <Text style={styles.infoValue}>{user.email}</Text>
           </View>
-          <View style={styles.infoContainer}>
+          <View style={styles.field}>
             <Text style={styles.infoLabel}>Rôle: </Text>
             <Text style={styles.infoValue}>{user.role = "visitor" ? "Visiteur" : "Contributeur"}</Text>
           </View>
         </View>
       </View>
+
       {isLoading ? (
         <ActivityIndicator />
       ) : (
         relatedEvents && relatedEvents.length > 0 ? (
-          <>
+          <View>
             <View style={styles.container}>
 
 
               <Text style={styles.title}>Mon Parcours</Text>
               <View style={styles.infosContainer}>
 
-                <View style={styles.infoContainer}>
+                <View style={styles.field}>
                   <Text style={styles.infoLabel} >Titre:  </Text>
                   <Text style={styles.infoValue}>{relatedRoute.title}</Text>
                 </View>
 
-                {/* <View style={styles.infoContainer}>
+                <View style={styles.field}>
+                  <Text style={styles.infoLabel} >Publié:  </Text>
+                  <Text style={styles.infoValue}>{published ? "Oui" : "Non"}</Text>
+                </View>
+
+                {/* <View tyle={styles.field}>
+                  <Text tyle={styles.infoLabel}>Publié: </Text>
+                  <Switch
+                  trackColor={{false: COLORS.gray, true: COLORS.primary}}
+                  thumbColor={published ? '#f5dd4b' : '#f4f3f4'}
+                  value={published}
+                  onValueChange={() => setPublished(!published)}></Switch>
+                </View> */}
+
+                {/* <View style={styles.field}>
               <Text style={styles.infoLabel} >Description: </Text>
               <Text style={styles.infoValue}>{relatedRoute.description}</Text>
             </View> */}
@@ -96,7 +114,7 @@ const ProfileScreen = () => {
 
             </ScrollView>
 
-          </>
+          </View>
         ) : (
           <Text>Aucun parcours n'a été créé</Text>
         ))}
@@ -115,22 +133,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  infoContainer: {
+  field: {
     flexDirection: "row",
     justifyContent: "flex-start",
+    marginVertical: 5,
   },
-  infoContainer: {
-    flexDirection: "row",
-    marginVertical: 10,
-  },
+
   infoLabel: {
-    flexDirection: "row",
     fontSize: SIZES.large,
     color: COLORS.secondary,
     fontFamily: FONT.bold,
   },
   infoValue: {
-    flexDirection: "row",
     fontSize: SIZES.large,
     color: COLORS.primary,
   },

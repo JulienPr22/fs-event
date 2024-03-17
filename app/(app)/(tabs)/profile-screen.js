@@ -38,82 +38,51 @@ const ProfileScreen = () => {
   }, [relatedEvents]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <Text style={styles.title}>Mon Profil</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Mes Informations</Text>
+        <View style={styles.infosContainer}>
 
-        {editing ? (
-
-          <View style={styles.infosContainer}>
-
-            <View style={styles.infoContainer}>
-              {/* <Text style={styles.infoLabel} >Nom: </Text> */}
-              <TextInput
-                style={styles.input}
-                value={name}
-                placeholder='Nom'
-                autoCapitalize='words'
-                onChangeText={(text) => setName(text)}
-              />
-            </View>
-
-
-            <View style={styles.infoContainer}>
-              <Text >Rôle:</Text>
-
-              <TouchableOpacity
-                style={styles.tab(role)}
-                onPress={() => {
-                  setRole("visitor");
-                }}
-              >
-                <Text style={styles.tabText(role, 'visitor')}>Visiteur</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.tab(role)}
-                onPress={() => {
-                  setRole("contributor");
-                }}
-              >
-                <Text style={styles.tabText(role, 'contributor')}>Contributeur</Text>
-              </TouchableOpacity>
-            </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel} >Nom: </Text>
+            <Text style={styles.infoValue}>{user.name}</Text>
           </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>Mail: </Text>
+            <Text style={styles.infoValue}>{user.email}</Text>
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoLabel}>Rôle: </Text>
+            <Text style={styles.infoValue}>{user.role = "visitor" ? "Visiteur" : "Contributeur"}</Text>
+          </View>
+        </View>
+      </View>
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        relatedEvents && relatedEvents.length > 0 ? (
+          <>
+            <View style={styles.container}>
 
-        ) : (
 
-          <View style={styles.infosContainer}>
+              <Text style={styles.title}>Mon Parcours</Text>
+              <View style={styles.infosContainer}>
 
-            <View style={styles.infoContainer}>
-              <Text style={styles.infoLabel} >Nom: </Text>
-              <Text style={styles.infoValue}>{user.name}</Text>
-            </View>
-            <View style={styles.infoContainer}>
-              <Text style={styles.infoLabel}>Mail: </Text>
-              <Text style={styles.infoValue}>{user.email}</Text>
-            </View>
-            <View style={styles.infoContainer}>
-              <Text style={styles.infoLabel}>Rôle: </Text>
-              <Text style={styles.infoValue}>{user.role = "visitor" ? "Visiteur" : "Contributeur"}</Text>
-            </View>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.infoLabel} >Titre:  </Text>
+                  <Text style={styles.infoValue}>{relatedRoute.title}</Text>
+                </View>
 
+                {/* <View style={styles.infoContainer}>
+              <Text style={styles.infoLabel} >Description: </Text>
+              <Text style={styles.infoValue}>{relatedRoute.description}</Text>
+            </View> */}
 
-            {isLoading ? (
-              <ActivityIndicator />
-            ) : (
-              <View>
-                <Text style={styles.title}>Mon Parcours</Text>
-                <Text style={styles.infoLabel} >{relatedRoute.title}</Text>
-                <Text>{relatedRoute.description}</Text>
               </View>
-            )}
+            </View>
+            <ScrollView style={styles.cardsContainer}>
 
-            {isLoading ? (
-              <ActivityIndicator />
-            ) : (
-              relatedEvents && relatedEvents.length > 0 ? (
-
+              {
                 relatedEvents?.map((event) => (
                   <PopularEventCard
                     event={event}
@@ -122,30 +91,24 @@ const ProfileScreen = () => {
                       router.push(`/event-details/${event.id}`);
                     }}
                   />
-                ))) : (
-                <Text>Aucun événement trouvé</Text>
-              )
-            )}
+                ))
+              }
 
-          </View>
-        )}
+            </ScrollView>
 
-        {/*    <TouchableOpacity
-        style={styles.button}
-        onPress={() => { setEditing(!editing); console.log("editing", editing); }}>
-        <Text style={styles.buttonText} >Modifier les informations</Text>
-      </TouchableOpacity> */}
-      </ScrollView>
+          </>
+        ) : (
+          <Text>Aucun parcours n'a été créé</Text>
+        ))}
     </SafeAreaView >
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: "center",
     paddingHorizontal: SIZES.xSmall,
+    marginTop: SIZES.xLarge
   },
   title: {
     fontSize: SIZES.xLarge,
@@ -158,18 +121,23 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flexDirection: "row",
-    paddingVertical: 10,
+    marginVertical: 10,
   },
   infoLabel: {
     flexDirection: "row",
     fontSize: SIZES.large,
-    color: COLORS.primary,
+    color: COLORS.secondary,
     fontFamily: FONT.bold,
   },
   infoValue: {
     flexDirection: "row",
     fontSize: SIZES.large,
     color: COLORS.primary,
+  },
+  cardsContainer: {
+    marginTop: SIZES.medium,
+    marginHorizontal: SIZES.medium,
+    gap: SIZES.small,
   },
   input: {
     width: '100%',

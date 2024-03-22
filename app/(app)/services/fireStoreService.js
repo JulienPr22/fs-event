@@ -1,5 +1,5 @@
 
-import { addDoc, collection, doc, endAt, getDoc, getDocs, limit, orderBy, query, setDoc, startAt, where } from "firebase/firestore";
+import { GeoPoint, addDoc, collection, doc, endAt, getDoc, getDocs, limit, orderBy, query, setDoc, startAt, where } from "firebase/firestore";
 import fakeData from "../../assets/fr-esr-fete-de-la-science-23.json";
 import ngeohash from "ngeohash";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
@@ -12,14 +12,14 @@ class firestoreService {
     try {
 
       let dataToFetch;
-      if (queryOptions.docId) {
+      if (queryOptions.docId) { // fetch one
         const docRef = doc(FIRESTORE_DB, "events", queryOptions.docId);
         dataToFetch = await getDoc(docRef);
         setLoading(false);
         setLoading(false);
-        return dataToFetch.data().event;
+        return dataToFetch.data();
       } else {
-
+        // fetch some
         const items = [];
         let collectionRef = collection(FIRESTORE_DB, "events");
         if (queryOptions.limit) {
@@ -29,13 +29,13 @@ class firestoreService {
         if (queryOptions.minRating) {
           collectionRef = query(
             collectionRef,
-            where("event.rating", ">", queryOptions.minRating)
+            where("rating", ">", queryOptions.minRating)
           );
         }
 
         const querySnapshot = await getDocs(collectionRef);
         querySnapshot.forEach((doc) => {
-          items.push({ id: doc.id, ...doc.data().event });
+          items.push({ id: doc.id, ...doc.data() });
         });
 
         setLoading(false);
@@ -125,14 +125,14 @@ class firestoreService {
 
       const eventsPromises = refEvents.map(async (eventRef) => {
         const eventDoc = await getDoc(eventRef)
-        return { id: eventDoc.id, ...eventDoc.data().event };
+        return { id: eventDoc.id, ...eventDoc.data() };
       });
 
       const eventsData = await Promise.all(eventsPromises);
       console.log("eventsData", eventsData);
 
       setLoading(false);
-      return ({route: route, events: eventsData });
+      return ({ route: route, events: eventsData });
 
     } catch (error) {
 
@@ -218,6 +218,8 @@ class firestoreService {
   }
 
   static exportData = async () => {
+    const typeAnimationSet = new Set(); // Utilisation d'un Set pour éviter les doublons
+
     const updatedData = fakeData.map(item => {
       const { identifiant,
         accessibilite_fr,
@@ -248,7 +250,6 @@ class firestoreService {
         scolaire_reservation_email,
         scolaire_reservation_lien_d_inscription,
         scolaire_reservation_telephone,
-        selection,
         telephone_du_lieu,
         thematiques,
         titre_fr,
@@ -256,14 +257,18 @@ class firestoreService {
         ville } = item
 
       // Génération du géohash pour la position de l'événement
-      let hash
+      let hash = null
+      let geoPoint = null
       if (geolocalisation) {
         const { lat, lon } = geolocalisation;
+        geoPoint = geolocalisation ? new GeoPoint(lat, lon) : null;
+
         hash = ngeohash.encode(lat, lon)
-        console.log("coords", lat, lon);
       }
 
-      else { hash = null; }
+      /*   if (type_animation_project) {
+          typeAnimationSet.add(type_animation_project); // Ajouter le thème au Set
+        } */
 
       return {
         identifiant,
@@ -279,6 +284,7 @@ class firestoreService {
         detail_des_conditions_scolaire_fr,
         "filling": 0,
         "geohash": hash,
+        "geopoint": geoPoint,
         geolocalisation,
         grandpublic_reservation_email,
         grandpublic_reservation_lien_d_inscription,
@@ -297,7 +303,6 @@ class firestoreService {
         scolaire_reservation_email,
         scolaire_reservation_lien_d_inscription,
         scolaire_reservation_telephone,
-        selection,
         telephone_du_lieu,
         thematiques,
         titre_fr,
@@ -308,10 +313,22 @@ class firestoreService {
       };
     });
 
+    /*  const animationTypeArray = Array.from(typeAnimationSet);
+     animationTypeArray.map(typeAnimation => {
+       try {
+         console.log("Ajout de ", typeAnimation);
+         addDoc(collection(FIRESTORE_DB, 'animations-type'), { name: typeAnimation })
+       } catch (error) {
+         console.error('Erreur lors de l\'exportation des données :', error);
+       }
+     });
+  */
     updatedData.map(event => {
       try {
-        console.log("identifiant", event.identifiant);
-        addDoc(collection(FIRESTORE_DB, 'events'), { event })
+        console.log("Ajout de ", event.titre_fr);
+        const eventRef = doc(FIRESTORE_DB, 'events', event.identifiant)
+        setDoc(eventRef, event);
+        // addDoc(collection(FIRESTORE_DB, 'events'), event, id: event.identifiant })
       } catch (error) {
         console.error('Erreur lors de l\'exportation des données :', error);
       }

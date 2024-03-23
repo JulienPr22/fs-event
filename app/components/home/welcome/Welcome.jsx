@@ -18,18 +18,7 @@ import firestoreService from '../../../(app)/services/fireStoreService';
 const dataType = ['Évennements', 'Parcours'];
 
 const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
-  const router = useRouter();
-  const { session, isLoading } = useSession();
   const { user, setUser } = useContext(UserContext);
-
-  useEffect(() => {
-    console.log('Session', session);
-    (async () => {
-      const userData = await firestoreService.fetchUser(session);
-      console.log(userData.data());
-      setUser(userData.data());
-    })();
-  }, []);
 
   return (
     <View>

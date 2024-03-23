@@ -1,9 +1,25 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import firestoreService from './services/fireStoreService';
+import { useSession } from '../ctx';
 
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
+  const { session } = useSession()
   const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = await firestoreService.fetchUser(session);
+        setUser(userData);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données de l\'utilisateur:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

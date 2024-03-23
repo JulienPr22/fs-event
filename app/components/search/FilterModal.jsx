@@ -42,15 +42,11 @@ const FilterModal = ({ visible, onClose, onApply, onReset }) => {
   const handleCheckboxPress = (label) => {
     const updatedItems = checkedItems.map((item) => {
       if (item.label === label) {
-        console.log(item);
-
         return { ...item, checked: !item.checked };
       }
       return item;
     });
-    console.log('updatedItems', updatedItems);
     setCheckedItems(updatedItems);
-    console.log('checkedItems', checkedItems);
   };
 
   return (

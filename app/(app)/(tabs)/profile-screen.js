@@ -13,33 +13,29 @@ const ProfileScreen = () => {
   const { user, setUser } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState([]);
   const [editing, setEditing] = useState(false)
-  const [name, setName] = useState(false)
-  const [role, setRole] = useState(false)
+
   const [relatedRoute, setRelatedRoute] = useState([])
   const [relatedEvents, setRelatedEvents] = useState()
   const [published, setPublished] = useState()
 
 
   useEffect(() => {
-    console.log("Session", session);
+    console.log("Profile Screen", user);
     (async () => {
 
       const { route, events } = await firestoreService.fetchUserRouteData(session, setIsLoading);
-      setName(user.name);
-      setRole(user.role);
-      setRelatedRoute(route)
-      setPublished(route.published)
-      setRelatedEvents(events)
-      console.log("route", route);
-      console.log("events", events);
-      console.log("relatedEvents", relatedEvents);
+
+      if (route) {
+        setRelatedRoute(route)
+        setPublished(route.published)
+      }
+      if (events) {
+        setRelatedEvents(events)
+      }
+
     })();
 
   }, []);
-
-  useEffect(() => {
-    console.log("relatedEvents changed:", relatedEvents);
-  }, [relatedEvents]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite, justifyContent: "center" }}>
@@ -57,7 +53,7 @@ const ProfileScreen = () => {
           </View>
           <View style={styles.field}>
             <Text style={styles.infoLabel}>Rôle: </Text>
-            <Text style={styles.infoValue}>{user.role = "visitor" ? "Visiteur" : "Contributeur"}</Text>
+            <Text style={styles.infoValue}>{user.role == "visitor" ? "Visiteur" : "Contributeur"}</Text>
           </View>
         </View>
       </View>
@@ -117,7 +113,9 @@ const ProfileScreen = () => {
 
           </View>
         ) : (
-          <Text style={{ flex: 1, justifyContent: 'center', color: COLORS.tertiary }}>Aucun parcours n'a été créé</Text>
+          <View style={{ alignItems: "center" }}>
+            <Text style={{ color: COLORS.tertiary, marginTop: SIZES.medium }}>Aucun parcours n'a été créé</Text>
+          </View>
         ))}
     </SafeAreaView >
   );

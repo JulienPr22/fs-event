@@ -73,7 +73,7 @@ const EventSearch = () => {
                             />
                         ),
                         headerRight: () => (
-                            <ScreenHeaderBtn iconUrl={icons.menu} dimension='60%' handlePress={() => setFilterModalVisible(true)} />
+                            <ScreenHeaderBtn iconUrl={icons.filter} dimension='60%' handlePress={() => setFilterModalVisible(true)} />
                           ),
                         headerTitle: "",
                     }}

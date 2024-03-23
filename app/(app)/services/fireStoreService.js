@@ -93,7 +93,9 @@ class firestoreService {
     try {
       const docRef = doc(FIRESTORE_DB, "users", userId);
       const user = await getDoc(docRef);
-      return user;
+      console.log("fetched user", user.data());
+
+      return user.data();
     } catch (error) {
       console.log(error);
       throw error;
@@ -121,8 +123,10 @@ class firestoreService {
       const route = items[0]
 
       // Récupération des parcours associés (par référence)
-      const refEvents = route.relatedEvents || [];
-
+      let refEvents = []
+      if (route) {
+        refEvents = route.relatedEvents || [];
+      }
       const eventsPromises = refEvents.map(async (eventRef) => {
         const eventDoc = await getDoc(eventRef)
         return { id: eventDoc.id, ...eventDoc.data() };
@@ -163,7 +167,10 @@ class firestoreService {
       const route = items[0]
 
       // Récupération des parcours associés (par référence)
-      const refEvents = route.relatedEvents || [];
+      let refEvents = []
+      if (route) {
+        refEvents = route.relatedEvents || [];
+      }
 
       const eventsPromises = refEvents.map(async (eventRef) => {
         const eventDoc = await getDoc(eventRef)
@@ -182,6 +189,8 @@ class firestoreService {
       throw error;
     }
   }
+
+
 
   static fetchRoute = async (userId, setLoading) => {
     setLoading(true);

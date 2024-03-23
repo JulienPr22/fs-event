@@ -30,10 +30,10 @@ const HomeScreen = () => {
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             handleClick={() => {
-              firestoreService.exportData()
-              /* if (searchTerm) {
+              // firestoreService.exportData()
+              if (searchTerm) {
                 router.push(`/search/${searchTerm}`)
-              } */
+              }
             }}
           />
 

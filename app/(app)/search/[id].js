@@ -38,7 +38,6 @@ const EventSearch = () => {
     }
 
     useEffect(() => {
-        console.log("params: ", params);
         setSearchTerm(params.id)
         handleSearch()
     }, [])

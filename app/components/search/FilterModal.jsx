@@ -1,8 +1,33 @@
-import React, { useState } from 'react';
-import { Modal, View, Text, Button, SafeAreaView } from 'react-native';
+import { CheckBox } from '@rneui/base';
+import React, { useEffect, useState } from 'react';
+import {
+  Modal,
+  View,
+  Text,
+  Button,
+  SafeAreaView,
+  StyleSheet,
+} from 'react-native';
+import { COLORS, FONT, SIZES } from '../../constants';
 
 const FilterModal = ({ visible, onClose, onApply, onReset }) => {
   const [filters, setFilters] = useState({});
+  const animationTypes = [
+    'Atelier',
+    'Conférence',
+    'Exposition',
+    'Festival',
+    'Jeu',
+    'Spectacle',
+    'Visite',
+    'Parcours scientifique',
+    'Rencontre / débat',
+    'Village des Sciences',
+  ];
+
+  const [checkedItems, setCheckedItems] = useState(
+    animationTypes.map((type) => ({ label: type, checked: false }))
+  );
 
   const handleApply = () => {
     onApply(filters);
@@ -14,14 +39,43 @@ const FilterModal = ({ visible, onClose, onApply, onReset }) => {
     onReset();
   };
 
+  const handleCheckboxPress = (label) => {
+    const updatedItems = checkedItems.map((item) => {
+      if (item.label === label) {
+        console.log(item);
+
+        return { ...item, checked: !item.checked };
+      }
+      return item;
+    });
+    console.log('updatedItems', updatedItems);
+    setCheckedItems(updatedItems);
+    console.log('checkedItems', checkedItems);
+  };
+
   return (
     <Modal visible={visible} onRequestClose={onClose}>
       <SafeAreaView>
-        <View>
-          {/* Add your filter options here */}
-          <Text>Filtres</Text>
+        <View style={{ padding: SIZES.medium }}>
+          <Text style={styles.headerTitle}>Filtres</Text>
+          <Text style={styles.filterTitle}> Type d'animation: </Text>
+
+          <View>
+            {checkedItems.map((item, index) => (
+              <View key={item.label}>
+                <CheckBox
+                  style={styles.checkbox}
+                  title={item.label}
+                  checked={item.checked}
+                  onPress={() => handleCheckboxPress(item.label)}
+                  checkedColor={COLORS.primary}
+                />
+              </View>
+            ))}
+          </View>
 
           {/* Apply and Reset buttons */}
+
           <Button title='Apply' onPress={handleApply} />
           <Button title='Reset' onPress={handleReset} />
         </View>
@@ -29,5 +83,25 @@ const FilterModal = ({ visible, onClose, onApply, onReset }) => {
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
+  headerTitle: {
+    fontFamily: FONT.bold,
+    fontSize: SIZES.xLarge,
+    color: COLORS.primary,
+    marginBottom: SIZES.medium,
+  },
+  filterTitle: {
+    fontFamily: FONT.bold,
+    fontSize: SIZES.medium,
+    color: COLORS.primary,
+  },
+  checkbox: {
+    marginVertical: 0,
+  },
+});
 
 export default FilterModal;

@@ -146,7 +146,6 @@ class firestoreService {
   }
 
   static fetchUserEventsRouteIds = async (userId, setLoading) => {
-    console.log("fetchUserEventsRouteIds", userId);
     const ids = [];
     const items = [];
 
@@ -189,8 +188,6 @@ class firestoreService {
       throw error;
     }
   }
-
-
 
   static fetchRoute = async (userId, setLoading) => {
     setLoading(true);

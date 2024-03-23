@@ -35,24 +35,25 @@ import { Linking } from "react-native";
 import { UserContext } from "../UserContext";
 import { Slider } from '@rneui/themed';
 import { useSession } from "../../ctx";
+import routesService from "../services/routesService";
 
 const tabs = ["À Propos", "Adresse", "Carte"];
 
 const EventDetails = () => {
   const params = useGlobalSearchParams();
   const router = useRouter();
-  const { user, setUser } = useContext(UserContext);
   const session = useSession();
-
+  const { user, setUser } = useContext(UserContext);
 
   const [event, setEvent] = useState([]);
   const [userRating, setUserRating] = useState([]);
-  const [ratingModalVisible, setRatingModalVisible] = useState(false);
-  const [actionsModalVisible, setActionsModalVisible] = useState(false);
-  const [slotPickerModalVisible, setSlotPickerModalVisible] = useState(false);
+
   const [slotOptions, setSlotOptions] = useState([]);
   const [isAdded, setIsAdded] = useState()
 
+  const [ratingModalVisible, setRatingModalVisible] = useState(false);
+  const [actionsModalVisible, setActionsModalVisible] = useState(false);
+  const [slotPickerModalVisible, setSlotPickerModalVisible] = useState(false);
 
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [isLoading, setIsLoading] = useState([]);
@@ -62,16 +63,11 @@ const EventDetails = () => {
     const fetchData = async () => {
       const eventData = await firestoreService.fetchEvents({ docId: params.id }, setIsLoading);
       setEvent(eventData);
-      console.log("event", eventData);
+      console.log("event details", eventData);
 
       const userEventRouteData = await firestoreService.fetchUserEventsRouteIds(session.session, setIsLoading);
       setIsAdded(userEventRouteData.includes(event.id));
-      if (userEventRouteData.includes(event.id)) {
-        console.log("Contains")
-      }
-      else {
-        console.log("!Contains")
-      }
+
       console.log("userEventRouteData", userEventRouteData);
 
     };
@@ -101,6 +97,15 @@ const EventDetails = () => {
     } else {
       // TODO: Message d'erreur: pas de mail
     }
+  }
+
+  const handleOnAdd = async () => {
+    if (isAdded) {
+    } else {
+      await routesService.addEventToUserRoute(session.session, params.id);
+
+    }
+    setIsAdded(!isAdded)
   }
 
   const onRefresh = useCallback(() => {
@@ -431,9 +436,10 @@ const EventDetails = () => {
 
         <View style={styles.actionBtnContainer}>
 
-          <TouchableOpacity style={styles.addBtn}>
+          <TouchableOpacity style={styles.addBtn} onPress={handleOnAdd}>
+
             <Image
-              source={isAdded ? icons.remove : icons.add }
+              source={isAdded ? icons.remove : icons.add}
               resizeMode='contain'
               style={styles.likeBtnImage}
             />

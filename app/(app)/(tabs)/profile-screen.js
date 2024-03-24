@@ -1,7 +1,7 @@
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
 import { useSession } from '../../ctx';
 import firestoreService from '../services/fireStoreService';
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { COLORS, FONT, SIZES } from '../../constants';
 import { router } from 'expo-router';
 import { PopularEventCard } from '../../components';
@@ -12,12 +12,13 @@ const ProfileScreen = () => {
   const { session, signOut } = useSession();
   const { user, setUser } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
   const [editing, setEditing] = useState(false)
 
   const [relatedRoute, setRelatedRoute] = useState([])
   const [relatedEvents, setRelatedEvents] = useState()
   const [published, setPublished] = useState()
-
 
   useEffect(() => {
     console.log("Profile Screen", user);
@@ -37,8 +38,25 @@ const ProfileScreen = () => {
 
   }, []);
 
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    const { route, events } = await firestoreService.fetchUserRouteData(session, setIsLoading);
+
+    if (route) {
+      setRelatedRoute(route)
+      setPublished(route.published)
+    }
+    if (events) {
+      setRelatedEvents(events)
+    }
+    setRefreshing(false)
+  }, []);
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite, justifyContent: "center" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite, justifyContent: "center" }}
+    >
+
+
       <View style={styles.container}>
         <Text style={styles.title}>Mes Informations</Text>
         <View style={styles.infosContainer}>
@@ -95,23 +113,33 @@ const ProfileScreen = () => {
 
               </View>
             </View>
-            <ScrollView style={styles.cardsContainer}>
+            <View style={{ height: 350 }}>
+              <ScrollView
+                style={styles.cardsContainer}
+                showsVerticalScrollIndicator={false}
+                refreshControl={
+                  <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+              >
 
-              {
-                relatedEvents?.map((event) => (
-                  <PopularEventCard
-                    event={event}
-                    key={`popular-event-${event.id}`}
-                    onPress={() => {
-                      router.push(`/event-details/${event.id}`);
-                    }}
-                  />
-                ))
-              }
+                {
 
-            </ScrollView>
+                  relatedEvents?.map((event) => (
+                    <PopularEventCard
+                      event={event}
+                      key={`popular-event-${event.id}`}
+                      onPress={() => {
+                        router.push(`/event-details/${event.id}`);
+                      }}
+                    />
+                  ))
+                }
 
+              </ScrollView>
+            </View>
           </View>
+
+
         ) : (
           <View style={{ alignItems: "center" }}>
             <Text style={{ color: COLORS.tertiary, marginTop: SIZES.medium }}>Aucun parcours n'a été créé</Text>

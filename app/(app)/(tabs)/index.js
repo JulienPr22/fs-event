@@ -21,22 +21,6 @@ const HomeScreen = () => {
   const { user, setUser } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState([]);
 
- /*  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userData = await firestoreService.fetchUser(session);
-        console.log("userData", userData);
-        setUser(userData);
-        console.log(user, "user");
-      } catch (error) {
-        console.error('Erreur lors de la récupération des données de l\'utilisateur:', error);
-      }
-    };
-
-    fetchData();
-  }, []); */
-
-
   const [searchTerm, setSearchTerm] = useState("");
 
   return (

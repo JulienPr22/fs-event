@@ -1,18 +1,13 @@
 
-import { FieldValue, GeoPoint, addDoc, collection, count, doc, endAt, getDoc, getDocs, limit, orderBy, query, setDoc, startAt, updateDoc, where } from "firebase/firestore";
-import fakeData from "../../assets/fr-esr-fete-de-la-science-23.json";
-import ngeohash from "ngeohash";
+import { addDoc, collection, doc, getDoc, getDocs, limit, query, updateDoc, where } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
-import eventService from "./eventService";
 
 /**
  * classe de service pour gérer les parcours des utilisateurs
  */
 class routesService {
 
-
   static createRoute = async (userId, routeTitle, routeDescription, publishRoute) => {
-    console.log("createRoute");
     try {
       const routesRef = collection(FIRESTORE_DB, "routes");
       const newRouteDoc = await addDoc(routesRef, {
@@ -44,7 +39,6 @@ class routesService {
         limit(1)
       );
 
-
       const querySnapshot = await getDocs(routesRef);
 
       querySnapshot.forEach((route) => {
@@ -61,41 +55,25 @@ class routesService {
 
 
   static addEventToUserRoute = async (userId, eventId) => {
-    console.log("addEventToUserRoute", userId, eventId);
 
     try {
       let userRoute = await this.fetchRoute(userId)
 
       if (userRoute == null) {
         userRoute = await this.createRoute(userId, "Nouveau parcours", "", true)
-        console.log("new user Route", userRoute);
-      } else {
-        console.log("fetched userRoute", userRoute);
       }
 
       let events = []
 
       if (userRoute.relatedEvents) {
         events = userRoute.relatedEvents;
-        console.log("current events", events);
       }
 
-      // const event = await eventService.getEventById(eventId)
-      // console.log("new event", event);
-      // events.push(event)
-
       const eventRef = doc(FIRESTORE_DB, "events", eventId);
-      const routeRef = doc(FIRESTORE_DB, "routes", userRoute.id)
-
       events.push(eventRef);
 
+      const routeRef = doc(FIRESTORE_DB, "routes", userRoute.id)
       await updateDoc(routeRef, { relatedEvents: events })
-
-      const updatedRouteRef = doc(FIRESTORE_DB, "routes", userRoute.id)
-      const updatedRoute = await getDoc(updatedRouteRef)
-
-
-      console.log("updatedRoute", updatedRoute.data());
 
     } catch (error) {
       throw error;

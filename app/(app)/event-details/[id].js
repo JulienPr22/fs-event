@@ -36,6 +36,7 @@ import { UserContext } from "../UserContext";
 import { Slider } from '@rneui/themed';
 import { useSession } from "../../ctx";
 import routesService from "../services/routesService";
+import ActionModal from "../../components/eventdetails/actionModal/ActionModal";
 
 const tabs = ["À Propos", "Adresse", "Carte"];
 
@@ -306,89 +307,15 @@ const EventDetails = () => {
                 </Modal>
 
                 {/* ACTION MODAL */}
-                <Modal
-                  animationType="slide"
-                  transparent={true}
+                <ActionModal
                   visible={actionsModalVisible}
-                  onRequestClose={toggleActionsModal}>
-
-                  <View style={styles.actionsModalCenteredView}>
-                    <View style={styles.actionsModalView}>
-                      <Text style={styles.actionText}>Plus d'actions</Text>
-
-                      <TouchableOpacity style={styles.actionContainer} onPress={slotPickerModal}>
-                        <TouchableOpacity style={styles.logoContainer}>
-                          <Image
-                            source={require("../../assets/icons/calendar.png")}
-                            resizeMode='contain'
-                            style={styles.logImage}
-                          />
-                        </TouchableOpacity>
-                        <View style={styles.textContainer}>
-                          <Text style={styles.actionText} numberOfLines={1}>
-                            {"Ajouter au calendrier"}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity style={styles.actionContainer} onPress={phoneResevation}>
-                        <TouchableOpacity style={styles.logoContainer}>
-                          <Image
-                            source={require("../../assets/icons/phone.png")}
-                            resizeMode='contain'
-                            style={styles.logImage}
-                          />
-                        </TouchableOpacity>
-                        <View style={styles.textContainer}>
-                          <Text style={styles.actionText} numberOfLines={1}>
-                            {"Appeler pour réserver"}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity style={styles.actionContainer} onPress={mailReservation}>
-                        <TouchableOpacity style={styles.logoContainer}>
-                          <Image
-                            source={require("../../assets/icons/mail.png")}
-                            resizeMode='contain'
-                            style={styles.logImage}
-                          />
-                        </TouchableOpacity>
-                        <View style={styles.textContainer}>
-                          <Text style={styles.actionText} numberOfLines={1}>
-                            {"Mail de réservation"}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity style={styles.actionContainer} onPress={() => { Linking.openURL(event.lien) }}>
-                        <TouchableOpacity style={styles.logoContainer}>
-                          <Image
-                            source={require("../../assets/favicon.png")}
-                            resizeMode='contain'
-                            style={styles.logImage}
-                          />
-                        </TouchableOpacity>
-                        <View style={styles.textContainer}>
-                          <Text style={styles.actionText} numberOfLines={1}>
-                            {"Voir sur le site"}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-
-                      <View style={styles.buttons}>
-                        <Pressable
-                          style={[styles.button]}
-                          onPress={() => {
-                            setActionsModalVisible(false)
-                          }}>
-                          <Text style={styles.textStyleCancel}>Annuler</Text>
-                        </Pressable>
-
-                      </View>
-                    </View>
-                  </View>
-                </Modal>
+                  setVisible={setActionsModalVisible}
+                  toggleModal={toggleActionsModal}
+                  slotPickerModal={slotPickerModal}
+                  phoneResevation={phoneResevation}
+                  mailReservation={mailReservation}
+                  eventLink={event.lien}
+                />
 
                 {/* SLOT PICKER MODAL */}
 

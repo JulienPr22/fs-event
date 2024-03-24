@@ -2,7 +2,7 @@ import { View, Text, Modal, TouchableOpacity, Image, Pressable, Linking } from '
 import React from 'react'
 import styles from '../../../styles/modals.style';
 
-export default function ActionModal({visible, setVisible, toggleModal, slotPickerModal, phoneResevation, mailReservation, eventLink}) {
+export default function ActionModal({visible, setVisible, slotPickerModal, phoneResevation, mailReservation, eventLink}) {
   return (
     <Modal
     animationType="slide"

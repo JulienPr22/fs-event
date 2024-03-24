@@ -38,6 +38,7 @@ import { useSession } from "../../ctx";
 import routesService from "../services/routesService";
 import ActionModal from "../../components/eventdetails/modals/ActionModal";
 import RatingModal from "../../components/eventdetails/modals/RatingModal";
+import SlotPickerModal from "../../components/eventdetails/modals/SlotPickerModal";
 
 const tabs = ["À Propos", "Adresse", "Carte"];
 
@@ -115,25 +116,21 @@ const EventDetails = () => {
     setRefreshing(false)
   }, []);
 
-  const toggleActionsModal = () => {
-    setActionsModalVisible(!actionsModalVisible);
-  };
-
 
   const slotPickerModal = () => {
-
     setActionsModalVisible(false);
     setSlotPickerModalVisible(true)
+
     if (event.dates && event.dates.length > 0) {
       const slots = event.dates.map(date => (
         convertToIso(date)
       ))
+
       setSlotOptions(slots);
       console.log("slotOptions", slotOptions);
     } else {
       Alert.alert("Pas d'horaire disponible");
     }
-
   }
 
   const addToCalendar = async (slot) => {
@@ -227,7 +224,10 @@ const EventDetails = () => {
             />
           ),
           headerRight: () => (
-            <ScreenHeaderBtn iconUrl={icons.menu} dimension='60%' handlePress={toggleActionsModal} />
+            <ScreenHeaderBtn
+              iconUrl={icons.menu}
+              dimension='60%'
+              handlePress={() => setActionsModalVisible(true)} />
           ),
           headerTitle: "",
         }}
@@ -265,7 +265,7 @@ const EventDetails = () => {
                   setActiveTab={setActiveTab}
                 />
 
-                {/* RATING MODAL */}
+                {/* MODALS*/}
                 <RatingModal
                   visible={ratingModalVisible}
                   setVisible={setRatingModalVisible}
@@ -273,100 +273,27 @@ const EventDetails = () => {
                   validateRating={validateRating}
                 />
 
-              {/*   <Modal
-                  animationType="slide"
-                  transparent={true}
-                  visible={ratingModalVisible}
-                  onRequestClose={() => {
-                    setRatingModalVisible(!ratingModalVisible);
-                  }}>
-                  <View style={styles.ratingModalCenteredView}>
-                    <View style={styles.ratingModalView}>
-                      <Text style={styles.modalText}>Veuillez saisir une note</Text>
-
-                      <AirbnbRating
-                        ratingBackgroundColor="#000"
-                        showRating fractions="{0}"
-                        reviews={["Très mauvais", "Mauvais", "Moyen", "Bien", "Super"]}
-                        onFinishRating={(rating) => {
-                          setUserRating(rating)
-                        }}>
-
-                      </AirbnbRating>
-                      <View style={styles.buttons}>
-                        <Pressable
-                          style={[styles.button]}
-                          onPress={() => {
-                            setRatingModalVisible(!ratingModalVisible)
-                          }}>
-                          <Text style={styles.textStyleCancel}>Annuler</Text>
-                        </Pressable>
-
-                        <Pressable
-                          style={[styles.button, styles.buttonValidate]}
-                          onPress={() => {
-                            validateRating()
-                          }}>
-                          <Text style={styles.textStyle}>Valider</Text>
-                        </Pressable>
-                      </View>
-                    </View>
-                  </View>
-                </Modal> */}
-
-                {/* ACTION MODAL */}
                 <ActionModal
                   visible={actionsModalVisible}
                   setVisible={setActionsModalVisible}
-                  toggleModal={toggleActionsModal}
                   slotPickerModal={slotPickerModal}
                   phoneResevation={phoneResevation}
                   mailReservation={mailReservation}
                   eventLink={event.lien}
                 />
 
-                {/* SLOT PICKER MODAL */}
-
-                <Modal
-                  animationType="slide"
-                  transparent={true}
+                <SlotPickerModal
                   visible={slotPickerModalVisible}
-                  onRequestClose={setSlotPickerModalVisible}>
-
-                  <View style={styles.actionsModalCenteredView}>
-                    <View style={styles.actionsModalView}>
-                      <Text style={styles.actionText}>Choisissez un créneau</Text>
-                      {
-                        slotOptions?.map((slot, index) => (
-                          <TouchableOpacity key={index} style={styles.actionContainer} onPress={() => addToCalendar(slot)}>
-                            <View style={styles.textContainer}>
-                              <Text style={styles.actionText} numberOfLines={1}>
-                                {formatDate(slot)}
-                              </Text>
-                            </View>
-                          </TouchableOpacity>
-                        ))
-
-                      }
-
-                      <View style={styles.buttons}>
-                        <Pressable
-                          style={[styles.button]}
-                          onPress={() => {
-                            setSlotPickerModalVisible(false)
-                          }}>
-                          <Text style={styles.textStyleCancel}>Annuler</Text>
-                        </Pressable>
-
-                      </View>
-                    </View>
-                  </View>
-                </Modal>
-
+                  setVisible={setSlotPickerModalVisible}
+                  slotOptions={slotOptions}
+                  addToCalendar={addToCalendar}
+                />
 
                 {displayTabContent()}
+
               </View>
             )}
+
         </ScrollView>
 
         <View style={styles.actionBtnContainer}>

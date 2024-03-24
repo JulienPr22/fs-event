@@ -7,11 +7,7 @@ import {
   ScrollView,
   ActivityIndicator,
   RefreshControl,
-  Modal,
-  Pressable,
-  TouchableOpacity,
-  Image,
-  Alert,
+   Alert,
 } from "react-native";
 
 import {
@@ -22,19 +18,14 @@ import {
 } from "../../components";
 import { COLORS, icons, SIZES } from "../../constants";
 import GeneralEventInfo from "../../components/eventdetails/general-event-info/GeneralEventInfo";
-import styles from "./details.style";
 import firestoreService from "../services/fireStoreService";
-import { AirbnbRating, Overlay } from "@rneui/themed";
 import MapInfo from "../../components/eventdetails/map/MapInfo";
 import PlaceDetails from "../../components/eventdetails/place/PlaceDetails";
-import { checkImageURL, formatDate } from "../../utils";
+import { checkImageURL } from "../../utils";
 import { convertToIso } from "../../utils";
-import * as Calendar from 'expo-calendar';
 import calendarService from "../services/calendarService";
-import { Platform } from "react-native";
 import { Linking } from "react-native";
 import { UserContext } from "../UserContext";
-import { Slider } from '@rneui/themed';
 import { useSession } from "../../ctx";
 import routesService from "../services/routesService";
 import ActionModal from "../../components/eventdetails/modals/ActionModal";
@@ -70,7 +61,8 @@ const EventDetails = () => {
       console.log("event details", eventData);
 
       const userEventRouteData = await firestoreService.fetchUserEventsRouteIds(session.session, setIsLoading);
-      setIsAdded(userEventRouteData.includes(event.id));
+      setIsAdded(userEventRouteData.includes(params.id));
+      console.log("eventId", params.id);
 
       console.log("userEventRouteData", userEventRouteData);
 

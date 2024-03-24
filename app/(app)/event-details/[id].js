@@ -36,7 +36,8 @@ import { UserContext } from "../UserContext";
 import { Slider } from '@rneui/themed';
 import { useSession } from "../../ctx";
 import routesService from "../services/routesService";
-import ActionModal from "../../components/eventdetails/actionModal/ActionModal";
+import ActionModal from "../../components/eventdetails/modals/ActionModal";
+import RatingModal from "../../components/eventdetails/modals/RatingModal";
 
 const tabs = ["À Propos", "Adresse", "Carte"];
 
@@ -265,7 +266,14 @@ const EventDetails = () => {
                 />
 
                 {/* RATING MODAL */}
-                <Modal
+                <RatingModal
+                  visible={ratingModalVisible}
+                  setVisible={setRatingModalVisible}
+                  setUserRating={setUserRating}
+                  validateRating={validateRating}
+                />
+
+              {/*   <Modal
                   animationType="slide"
                   transparent={true}
                   visible={ratingModalVisible}
@@ -304,7 +312,7 @@ const EventDetails = () => {
                       </View>
                     </View>
                   </View>
-                </Modal>
+                </Modal> */}
 
                 {/* ACTION MODAL */}
                 <ActionModal

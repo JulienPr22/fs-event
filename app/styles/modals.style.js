@@ -9,6 +9,27 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: 100,
       },
+      ratingModalCenteredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+      },
+      ratingModalView: {
+        margin: SIZES.large,
+        backgroundColor: 'white',
+        borderRadius: SIZES.large,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
       actionsModalView: {
         margin: SIZES.large,
         backgroundColor: 'white',
@@ -62,6 +83,9 @@ const styles = StyleSheet.create({
         padding: SIZES.small,
         elevation: 2,
       },
+      buttonValidate: {
+        backgroundColor: '#2196F3',
+      },
       actionBtnContainer: {
         position: "absolute",
         bottom: 0,
@@ -71,6 +95,15 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         flexDirection: "row",
+      },
+      modalText: {
+        marginBottom: SIZES.medium,
+        textAlign: 'center',
+      },
+      textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
       },
       textStyleCancel: {
         color: 'red',

@@ -53,9 +53,7 @@ const ProfileScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite, justifyContent: "center" }}
-    >
-
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite, justifyContent: "center" }}>
 
       <View style={styles.container}>
         <Text style={styles.title}>Mes Informations</Text>

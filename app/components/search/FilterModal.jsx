@@ -10,32 +10,16 @@ import {
 } from 'react-native';
 import { COLORS, FONT, SIZES } from '../../constants';
 
-const FilterModal = ({ visible, onClose, onApply, onReset }) => {
-  const [filters, setFilters] = useState({});
-  const animationTypes = [
-    'Atelier',
-    'Conférence',
-    'Exposition',
-    'Festival',
-    'Jeu',
-    'Spectacle',
-    'Visite',
-    'Parcours scientifique',
-    'Rencontre / débat',
-    'Village des Sciences',
-  ];
-
-  const [checkedItems, setCheckedItems] = useState(
-    animationTypes.map((type) => ({ label: type, checked: false }))
-  );
+const FilterModal = ({ visible, onClose, onApply, onReset, checkedItems, setCheckedItems }) => {
 
   const handleApply = () => {
-    onApply(filters);
+    onApply();
     onClose();
   };
 
   const handleReset = () => {
-    setFilters({});
+    const updatedItems = checkedItems.map(item => ({ ...item, checked: false }));
+    setCheckedItems(updatedItems);
     onReset();
   };
 

@@ -8,6 +8,7 @@ import { FIRESTORE_DB } from "../../../firebaseConfig";
 class firestoreService {
 
   static fetchEvents = async (queryOptions, setLoading) => {
+    console.log("queryOptions", queryOptions);
     setLoading(true);
     try {
 
@@ -33,9 +34,20 @@ class firestoreService {
           );
         }
 
+        if (queryOptions.animationTypeFilter) {
+          queryOptions.animationTypeFilter.forEach((filterValue) => {
+            console.log("filterValue", filterValue);
+            collectionRef = query(
+              collectionRef,
+              where("type_animation_project", "==", filterValue)
+            );
+          })
+        }
+
         const querySnapshot = await getDocs(collectionRef);
         querySnapshot.forEach((doc) => {
-          items.push({ id: doc.id, ...doc.data() });
+          const e = { id: doc.id, ...doc.data() };
+          items.push(e);
         });
 
         setLoading(false);

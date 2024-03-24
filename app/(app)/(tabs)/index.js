@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { RefreshControl, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { Tabs, useRouter } from "expo-router";
 import { COLORS, SIZES } from "../../constants";
 import {
@@ -17,14 +17,15 @@ import { UserContext } from "../UserContext";
 
 const HomeScreen = () => {
   const router = useRouter()
-  const { session } = useSession()
-  const { user, setUser } = useContext(UserContext);
-  const [isLoading, setIsLoading] = useState([]);
+
 
   const [searchTerm, setSearchTerm] = useState("");
 
+
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
@@ -41,6 +42,9 @@ const HomeScreen = () => {
               // firestoreService.exportData()
               if (searchTerm) {
                 router.push(`/search/${searchTerm}`)
+              } else {
+                router.push(`/search/all`)
+
               }
             }}
           />

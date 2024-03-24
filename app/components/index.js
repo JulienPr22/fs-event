@@ -9,7 +9,7 @@ import Popularjobs from "./home/popular/Popularjobs";
 import GeneralEventInfo from "./eventdetails/general-event-info/GeneralEventInfo";
 import { default as JobTabs } from "./eventdetails/tabs/Tabs";
 import { default as EventAbout } from "./eventdetails/about/About";
-import { default as JobFooter } from "./eventdetails/footer/Footer";
+import { default as EventFooter } from "./eventdetails/footer/Footer";
 import PlaceDetails from "./eventdetails/place/PlaceDetails";
 
 // common
@@ -23,7 +23,7 @@ export {
   GeneralEventInfo as EventInfo,
   JobTabs,
   EventAbout,
-  JobFooter,
+  EventFooter,
   PlaceDetails as Specifics,
   PopularEventCard
 };

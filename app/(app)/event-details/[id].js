@@ -16,6 +16,7 @@ import {
 
 import {
   EventAbout,
+  EventFooter,
   JobTabs,
   ScreenHeaderBtn,
 } from "../../components";
@@ -296,39 +297,14 @@ const EventDetails = () => {
 
         </ScrollView>
 
-        <View style={styles.actionBtnContainer}>
+        <EventFooter
+          isAdded={isAdded}
+          handleOnAdd={handleOnAdd}
+          userRole={user?.role}
+          ratingModalVisible={ratingModalVisible}
+          setRatingModalVisible={setRatingModalVisible}
+        />
 
-          <TouchableOpacity style={styles.addBtn} onPress={handleOnAdd}>
-
-            <Image
-              source={isAdded ? icons.remove : icons.add}
-              resizeMode='contain'
-              style={styles.likeBtnImage}
-            />
-          </TouchableOpacity>
-
-          {user.role == "visitor" ? (<Pressable
-            style={styles.ratingBtn}
-            onPress={() => { setRatingModalVisible(!ratingModalVisible) }}>
-            <Text style={styles.openBtnText}>Noter l'évennement</Text>
-          </Pressable>) : (
-
-            <Pressable
-              style={styles.ratingBtn}
-             /*  onPress={() => {
-                router.setParams({
-                  eventId: event.id,
-                  eventFilling: 60
-                })
-                router.navigate('/fillingModal/', {
-                  eventId: event.id,
-                  eventFilling: 60
-                })
-              }} */>
-              <Text style={styles.openBtnText}>Remplissage</Text>
-            </Pressable>)}
-
-        </View>
       </>
     </SafeAreaView>
   );

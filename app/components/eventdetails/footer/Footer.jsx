@@ -1,25 +1,51 @@
-import { View, Text, TouchableOpacity, Image, Linking } from "react-native";
+import { View, Text, TouchableOpacity, Image, Pressable } from 'react-native';
 
-import styles from "./footer.style";
-import { icons } from "../../../constants";
+import styles from './footer.style';
+import { icons } from '../../../constants';
 
-const Footer = ({ url }) => {
+const Footer = ({
+  isAdded,
+  handleOnAdd,
+  userRole,
+  ratingModalVisible,
+  setRatingModalVisible,
+}) => {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.likeBtn}>
+    <View style={styles.actionBtnContainer}>
+      <TouchableOpacity style={styles.addBtn} onPress={handleOnAdd}>
         <Image
-          source={icons.heartOutline}
+          source={isAdded ? icons.remove : icons.add}
           resizeMode='contain'
           style={styles.likeBtnImage}
         />
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.applyBtn}
-        onPress={() => Linking.openURL(url)}
-      >
-        <Text style={styles.applyBtnText}>Noter l'évennement</Text>
-      </TouchableOpacity>
+      {userRole == 'visitor' ? (
+        <Pressable
+          style={styles.ratingBtn}
+          onPress={() => {
+            setRatingModalVisible(!ratingModalVisible);
+          }}
+        >
+          <Text style={styles.openBtnText}>Noter l'évennement</Text>
+        </Pressable>
+      ) : (
+        <Pressable
+          style={styles.ratingBtn}
+          /*  onPress={() => {
+          router.setParams({
+            eventId: event.id,
+            eventFilling: 60
+          })
+          router.navigate('/fillingModal/', {
+            eventId: event.id,
+            eventFilling: 60
+          })
+        }} */
+        >
+          <Text style={styles.openBtnText}>Remplissage</Text>
+        </Pressable>
+      )}
     </View>
   );
 };

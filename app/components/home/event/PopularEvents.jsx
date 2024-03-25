@@ -43,7 +43,7 @@ const PopularEvents = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Évennements populaires</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={ () => router.push(`/search/all`)}>
           <Text style={styles.headerBtn}>Voir tous</Text>
         </TouchableOpacity>
       </View>

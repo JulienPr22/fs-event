@@ -34,14 +34,12 @@ class firestoreService {
           );
         }
 
-        if (queryOptions.animationTypeFilter) {
-          queryOptions.animationTypeFilter.forEach((filterValue) => {
-            console.log("filterValue", filterValue);
-            collectionRef = query(
-              collectionRef,
-              where("type_animation_project", "==", filterValue)
-            );
-          })
+        if (queryOptions.animationTypeFilter && queryOptions.animationTypeFilter.length > 0) {
+          collectionRef = query(
+            collectionRef,
+            where("type_animation_project", "in", queryOptions.animationTypeFilter)
+          );
+
         }
 
         const querySnapshot = await getDocs(collectionRef);
@@ -145,7 +143,6 @@ class firestoreService {
       });
 
       const eventsData = await Promise.all(eventsPromises);
-      console.log("eventsData", eventsData);
 
       setLoading(false);
       return ({ route: route, events: eventsData });

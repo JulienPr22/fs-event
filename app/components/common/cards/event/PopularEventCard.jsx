@@ -56,7 +56,7 @@ const PopularEventCard = ({ event, onPress }) => {
 
         <View style={styles.ratingContainer}>
           <Text style={styles.eventDescription}>
-            {event?.rating.toFixed(1)}
+            {event?.rating?.toFixed(1)}
           </Text>
           <Image
             source={icons.star}

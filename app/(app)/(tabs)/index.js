@@ -17,12 +17,6 @@ import { UserContext } from "../UserContext";
 
 const HomeScreen = () => {
   const router = useRouter()
-
-
-  const [searchTerm, setSearchTerm] = useState("");
-
-
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
 
@@ -36,9 +30,7 @@ const HomeScreen = () => {
 
 
           <Welcome
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            handleClick={() => {
+            handleClick={(searchTerm) => {
               // firestoreService.exportData()
               if (searchTerm) {
                 router.push(`/search/${searchTerm}`)

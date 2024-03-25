@@ -17,8 +17,9 @@ import firestoreService from '../../../(app)/services/fireStoreService';
 
 const dataType = ['Évennements', 'Parcours'];
 
-const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
+const Welcome = ({handleClick }) => {
   const { user, setUser } = useContext(UserContext);
+  const [text, setText] = useState("")
 
   return (
     <View>
@@ -31,13 +32,13 @@ const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
         <View style={styles.searchWrapper}>
           <TextInput
             style={styles.searchInput}
-            value={searchTerm}
-            onChangeText={(text) => setSearchTerm(text)}
+            value={text}
+            onChangeText={(text) => setText(text)}
             placeholder='Que recherchez vous ?'
           />
         </View>
 
-        <TouchableOpacity style={styles.searchBtn} onPress={handleClick}>
+        <TouchableOpacity style={styles.searchBtn} onPress={() => handleClick(text)} >
           <Image
             source={icons.search}
             resizeMode='contain'

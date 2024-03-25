@@ -19,14 +19,20 @@ class firestoreService {
         setLoading(false);
         setLoading(false);
         return dataToFetch.data();
-      } else {
-        // fetch some
+      } else { // fetch some
         const items = [];
         let collectionRef = collection(FIRESTORE_DB, "events");
-        if (queryOptions.limit) {
-          collectionRef = query(collectionRef, limit(queryOptions.limit));
-        }
 
+        const { maxResults, page } = queryOptions
+
+        /* if (queryOptions.searchTerm) {
+          collectionRef = query(
+            collectionRef,
+            where("titre_fr", ">=", queryOptions.searchTerm),
+            where("titre_fr", "<=", queryOptions.searchTerm + "\uf8ff")
+          );
+        }
+ */
         if (queryOptions.minRating) {
           collectionRef = query(
             collectionRef,
@@ -39,8 +45,14 @@ class firestoreService {
             collectionRef,
             where("type_animation_project", "in", queryOptions.animationTypeFilter)
           );
-
         }
+
+          // Pagination
+          if (page && maxResults) {
+            const offset = (page - 1) * maxResults;
+            console.log("offset", offset);
+            collectionRef = query(collectionRef, orderBy("rating"), startAt(offset), limit(maxResults));
+          }
 
         const querySnapshot = await getDocs(collectionRef);
         querySnapshot.forEach((doc) => {
@@ -49,6 +61,9 @@ class firestoreService {
         });
 
         setLoading(false);
+        if (queryOptions.page) {
+          console.log("events", items);
+        }
         return items;
       }
     } catch (error) {

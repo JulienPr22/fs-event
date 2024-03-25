@@ -24,7 +24,7 @@ const EventSearch = () => {
 
     const [filterModalVisible, setFilterModalVisible] = useState(false);
     const [animationTypeFilter, setAnimationTypeFilter] = useState([]);
-
+    const [searchTerm, setSearchTerm] = useState("");
 
     const animationTypes = [
         'Atelier',
@@ -46,12 +46,15 @@ const EventSearch = () => {
 
     const handleSearch = async () => {
         setSearchLoader(true);
-        setSearchResult([])
+        // setSearchResult([])
 
         try {
-            const events = await firestoreService.fetchEvents({ limit: 20, minRating: 4.500, animationTypeFilter: animationTypeFilter }, setSearchLoader);
+            const events = await firestoreService.fetchEvents({ maxResults: 20, minRating: 0.1, animationTypeFilter: animationTypeFilter, page: page }, setSearchLoader);
             console.log('events', events);
             setSearchResult(events);
+            setRefreshing(true)
+            setRefreshing(false)
+
         } catch (error) {
             console.log(error);
         } finally {
@@ -61,13 +64,15 @@ const EventSearch = () => {
     };
 
     const handlePagination = (direction) => {
+        let nextPage = page;
+
         if (direction === 'left' && page > 1) {
-            setPage(page - 1)
-            handleSearch()
+            nextPage = page - 1;
         } else if (direction === 'right') {
-            setPage(page + 1)
-            handleSearch()
+            nextPage = page + 1;
         }
+        setPage(nextPage);
+        handleSearch()
     }
 
     const handleApplyFilters = () => {
@@ -81,17 +86,18 @@ const EventSearch = () => {
     };
 
     const handleRefresh = async () => {
-        setRefreshing(true); // Activer le rafraîchissement
+        setRefreshing(true);
         try {
-            await handleSearch(); // Effectuer une nouvelle recherche
+            await handleSearch();
         } catch (error) {
             console.log(error);
         } finally {
-            setRefreshing(false); // Désactiver le rafraîchissement une fois terminé
+            setRefreshing(false);
         }
     };
 
     useEffect(() => {
+        setSearchTerm(params.id)
         handleSearch()
     }, [])
 
@@ -100,10 +106,7 @@ const EventSearch = () => {
 
 
     const handleResetFilters = () => {
-        // Réinitialiser les filtres
         console.log('Filters reset');
-        // setAnimationTypeFilter(checkedItems.map(item => { item.label, false }));
-
     };
 
     return (
@@ -142,8 +145,6 @@ const EventSearch = () => {
 
                             </TouchableOpacity>
 
-
-                            //<ScreenHeaderBtn iconUrl={icons.filter} dimension='60%' handlePress={() => setFilterModalVisible(true)} />
                         ),
                         headerTitle: "",
                     }}
@@ -153,8 +154,8 @@ const EventSearch = () => {
                     <View style={styles.searchWrapper}>
                         <TextInput
                             style={styles.searchInput}
-                            value={""}
-
+                            value={searchTerm}
+                            onChange={(text) => setSearchTerm(text)}
                             placeholder='Que recherchez vous ?'
                         />
                     </View>
@@ -173,20 +174,19 @@ const EventSearch = () => {
                         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
                     }
                     data={searchResult}
-                    renderItem={({ item }) => (
+                    renderItem={({ item, index }) => (
                         <PopularEventCard
-                            key={item?.id}
+                            key={index}
                             event={item}
                             onPress={() => router.push(`/event-details/${item?.id}`)}
                         />
                     )}
-                    keyExtractor={(item) => item.job_id}
+                    keyExtractor={(item) => item.id}
                     contentContainerStyle={{ padding: SIZES.medium, rowGap: SIZES.medium }}
                     ListHeaderComponent={() => (
                         <>
                             <View style={styles.container}>
                                 <Text style={styles.searchTitle}>Résultats: </Text>
-                                {/* <Text style={styles.noOfSearchedJobs}>Job Opportunities</Text> */}
                             </View>
                             <View style={styles.loaderContainer}>
                                 {searchLoader ? (

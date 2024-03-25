@@ -21,7 +21,7 @@ const PopularEvents = () => {
   useEffect(() => {
     (async () => {
       // Récupération des évennements populaires
-      const popularEvents = await firestoreService.fetchEvents({ limit: 20, minRating: 4.500 }, setIsLoading);
+      const popularEvents = await firestoreService.fetchEvents({ maxResults: 20, minRating: 4.500 , page: 1}, setIsLoading);
       setPopularEventsData(popularEvents);
 
       // Récupération de la position de l'utilisateur

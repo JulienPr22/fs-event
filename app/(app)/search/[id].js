@@ -25,6 +25,7 @@ const EventSearch = () => {
     const [filterModalVisible, setFilterModalVisible] = useState(false);
     const [animationTypeFilter, setAnimationTypeFilter] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [minRating, setMinRating] = useState("1")
 
     const animationTypes = [
         'Atelier',
@@ -49,7 +50,7 @@ const EventSearch = () => {
         // setSearchResult([])
 
         try {
-            const events = await firestoreService.fetchEvents({ maxResults: 20, minRating: 0.1, animationTypeFilter: animationTypeFilter, page: page }, setSearchLoader);
+            const events = await firestoreService.fetchEvents({ maxResults: 20, minRating: parseInt(minRating), animationTypeFilter: animationTypeFilter, page: page }, setSearchLoader);
             console.log('events', events);
             setSearchResult(events);
             setRefreshing(true)
@@ -235,6 +236,8 @@ const EventSearch = () => {
                 onReset={handleResetFilters}
                 checkedItems={checkedItems}
                 setCheckedItems={setCheckedItems}
+                minimumRating={minRating}
+                setMinimumRating={setMinRating}
             />
 
         </SafeAreaView>

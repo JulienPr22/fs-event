@@ -7,18 +7,33 @@ import {
   Button,
   SafeAreaView,
   StyleSheet,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
 } from 'react-native';
 import { COLORS, FONT, SIZES } from '../../constants';
 
-const FilterModal = ({ visible, onClose, onApply, onReset, checkedItems, setCheckedItems }) => {
-
+const FilterModal = ({
+  visible,
+  onClose,
+  onApply,
+  onReset,
+  checkedItems,
+  setCheckedItems,
+  minimumRating,
+  setMinimumRating
+}) => {
   const handleApply = () => {
     onApply();
     onClose();
   };
 
   const handleReset = () => {
-    const updatedItems = checkedItems.map(item => ({ ...item, checked: false }));
+    const updatedItems = checkedItems.map((item) => ({
+      ...item,
+      checked: false,
+    }));
     setCheckedItems(updatedItems);
     onReset();
   };
@@ -35,11 +50,12 @@ const FilterModal = ({ visible, onClose, onApply, onReset, checkedItems, setChec
 
   return (
     <Modal visible={visible} onRequestClose={onClose}>
-      <SafeAreaView>
+      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+
         <View style={{ padding: SIZES.medium }}>
           <Text style={styles.headerTitle}>Filtres</Text>
           <Text style={styles.filterTitle}> Type d'animation: </Text>
-
+          {/* AnimationTypeFilter */}
           <View>
             {checkedItems.map((item, index) => (
               <View key={item.label}>
@@ -54,19 +70,39 @@ const FilterModal = ({ visible, onClose, onApply, onReset, checkedItems, setChec
             ))}
           </View>
 
+          {/* MinimumRatingFilter */}
+
+            <Text style={styles.filterTitle}>
+              Note minimale (entre 1 et 5):
+            </Text>
+            <TextInput
+              style={styles.input}
+              keyboardType='numeric'
+              placeholder='Saisir la note minimale'
+              value={minimumRating}
+              onChangeText={(num) => setMinimumRating(num)}
+              returnKeyType="done" // Ajoute cette prop pour afficher OK/Annuler
+              returnKeyLabel='Valider'
+              onSubmitEditing={() => Keyboard.dismiss()} // Ferme le clavier sur la soumission
+
+            />
+
           {/* Apply and Reset buttons */}
 
           <Button title='Apply' onPress={handleApply} />
           <Button title='Reset' onPress={handleReset} />
         </View>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    flex: 1,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    marginTop: SIZES.medium
   },
   headerTitle: {
     fontFamily: FONT.bold,
@@ -81,6 +117,16 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     marginVertical: 0,
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    width: 60,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingHorizontal: 10,
   },
 });
 

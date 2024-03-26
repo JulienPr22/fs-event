@@ -1,75 +1,84 @@
-## 📋 <a name="table">Table of Contents</a>
+## <a name="table">Table of Contents</a>
 
-1. 🤖 [Introduction](#introduction)
-2. ⚙️ [Tech Stack](#tech-stack)
-3. 🔋 [Features](#features)
-4. 🤸 [Quick Start](#quick-start)
-5. 🕸️ [Snippets](#snippets)
-6. 🔗 [Links](#links)
-7. 🚀 [More](#more)
+1. [Introduction](#introduction)
+2. [Tech Stack](#tech-stack)
+3. [Screens](#screens)
+4. [Features](#features)
+5. [Stockage](#stockage)
+6. [Quick Start](#quick-start)
 
-## 🚨 Tutorial
+## <a name="introduction">Introduction</a>
 
+Vous trouveverez ici les informations générales de notre projet comme les explications des différents écrans et fonctionnalités.
 
-<a href="https://youtu.be/mJ3bGvy0WAY?feature=shared" target="_blank"><img src="https://github.com/sujatagunale/EasyRead/assets/151519281/1736fca5-a031-4854-8c09-bc110e3bc16d" /></a>
+## <a name="tech-stack">Tech Stack</a>
 
-## <a name="introduction">🤖 Introduction</a>
-
-A hands-on experience in React Native development, from understanding the basics to building a feature-rich app with a focus on UI/UX, external data integration, and best practices.
-
-If you're getting started and need assistance or face any bugs, join our active Discord community with over 27k+ members. It's a place where people help each other out.
-
-<a href="https://discord.com/invite/n6EdbFJ" target="_blank"><img src="https://github.com/sujatagunale/EasyRead/assets/151519281/618f4872-1e10-42da-8213-1d69e486d02e" /></a>
-
-## <a name="tech-stack">⚙️ Tech Stack</a>
-
-- Node.js
 - React Native
-- Axios
 - Expo
-- Stylesheet
+- Expo Router
+- Firebase
 
-## <a name="features">🔋 Features</a>
+## <a name="screens"> Screens</a>
 
-👉 **Visually Appealing UI/UX Design**: Develop an aesthetically pleasing user interface using React Native components.
+**Login** : Écran de connexion /inscription permettant à l'utilisateur de s'authentifier
 
-👉 **Third Party API Integration**: Fetch data from an external API and seamlessly integrate it into the app.
+**Home** :
 
-👉 **Search & Pagination Functionality**: Implement search functionality and pagination for efficient data navigation.
+- Écran principale de l'application affichant une liste d'évennements populaires
+- Un clique sur un évennements permet d'accéder à l'écran de détail de l'évennement
+- Un clique long sur un évennement, affiche sa description
+- Un bouton "voir tous" permet d'accéder à l'écran recherche d'évennements
+- Une barre de recherche permet d'accéder à l'écran recherche d'évennements en lancant une recherche avec le texte saisi
 
-👉 **Custom API Data Fetching Hooks**:Create custom hooks for streamlined and reusable API data fetching.
+**Map** : Écran de permettant de visualiser les évennements sur une carte intéractive
 
-👉 **Dynamic Home Page**: Explore diverse jobs from popular and nearby locations across different categories.
+**Profil** : Écran de de profil, affichant les informations sur l'utilisateur connecté ainsi que les informations concernant son parcours. L'utilisateur peut également se déconnecter via cet écran
 
-👉 **Browse with Ease on Explore Page**: Page: Navigate through various jobs spanning different categories and types.
+**Détail événnemet** :
 
-👉 **Detailed Job Insights**: View comprehensive job details, including application links, salary info, responsibilities, and qualifications.
+- Écran affichant les informations sur l'évennement (image, type d'animation)
+- Onglet "A propos" affichant des informations générales sur l'événnement
+- Onglet "Adresse" affichant des informations sur le lieu de l'événnement
+- Onglet "Carte" affichant l'événnement sur une Map
 
-👉 **Tailored Job Exploration**: Find jobs specific to a particular title
+## <a name="features"> Features</a>
 
-👉 **Robust Loading and Error Management**: Ensure effective handling of loading processes and error scenarios.
+**Recherche**: La fonction recherche permet de récupérer des événnements en foction de plusieurs critères comme le type d'animation (visite, spectacle, jeu etc...) ou la note.
 
-👉 **Optimized for All Devices**: A responsive design for a seamless user experience across various devices.
+**Carte intéractive**: L'écran Carte permet de récupérer et d'afficher les évennements proches de l'utilisateur
 
-and many more, including code architecture and reusability
+**Authentification**: L'application permmet de s'authentifier en utilisant un service Firebase d'authentification (email / mot de passe). Si l'utilisateur est connecté, une session encapsule l'application à l'aide de Session Provider. Il n'est pas possible d'acceder aux écrans principaux si on est pas authentifié.
 
-## <a name="quick-start">🤸 Quick Start</a>
+**Noter un événnements**: Si l'utilisateur a le rôle "visitor" (Visiteur), il peut noter un évennements quand il est sur l'écran de détail. La note et le nombre de votes sont alors mis à jours en base de données.
+
+**Remplissage d'un l'évennement**: Si l'utilisateur a le rôle "contributor" (Contributeur), il peut noter mettre à jour le taux de remplissage d'un évennements. Le remplissage de l'évennementsvotes est alors mis à jour en base de données.
+
+**Ajout d'un évennement à un parcours**: Si l'utilisateur a le rôle "visitor" (Visiteur), il peut ajouter n évennements quand il est sur l'écran de détail. L'évennement est alors ajouter à la liste des évennements référencés dans la collection route dont le creatorId est l'id de l'utilisateur.
+
+**Ajout d'un évennement à son calendrier**: Il est possible d'ajouter un évenement à son calendrier en cliquant sur le menu burger dans l'écran détail d'un évennement. Un clique sur la ligne "Ajouter au calendrier" ouvre une boîe de dialogue proposant différents horaires. Au clique sur un horaire, l'évennements est ajouté au calendrier de l'utilisateur.
+
+**Réservation par téléphone**: Il est possible d'appeler pour réserver un évenement en cliquant sur le menu burger dans l'écran détail d'un évennement. Un clique sur la ligne "Appeler pour réserver" ouvre l'application téléphone du terminal avec le numéro de réservation
+
+**Réservation par mail**: Il est possible d'envoyer un mail pour réserver un évenement en cliquant sur le menu burger dans l'écran détail d'un évennement. Un clique sur la ligne "Mail de réservation" ouvre l'application mail du terminal avec le numéro de réservation en spécifiant le destinataire ainsi que l'objet du mail
+
+**Réservation par mail**: Il est possible de consulter le site internet d'un évenement en cliquant sur le menu burger dans l'écran détail d'un évennement. Un clique sur la ligne "Voir sur le site" ouvre le lien dans le navigateur
+
+## <a name="stockage"> Stockage</a>
+
+Utilisation d'une base de données Firestore pour gérer la persistence des données
+
+- Collection events (évennements), users (utilisateur) et routes (parcours)
+- Les données ont été insérées par un script (firestoreService.js) en ajoutant des valeurs aléatoires pour ajouter une note et un nombre de vote
+
+## <a name="quick-start">Quick Start</a>
 
 Follow these steps to set up the project locally on your machine.
-
-**Prerequisites**
-
-Make sure you have the following installed on your machine:
-
-- [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/en)
-- [npm](https://www.npmjs.com/) (Node Package Manager)
 
 **Cloning the Repository**
 
 ```bash
-git clone https://github.com/adrianhajdin/project_react_native_jobs.git
-cd project_react_native_jobs
+git
+cd
 ```
 
 **Installation**
@@ -80,169 +89,6 @@ Install the project dependencies using npm:
 npm install
 ```
 
-**Set Up Environment Variables**
-
-Create a new file named `.env` in the root of your project and add the following content:
-
-```env
-X-RapidAPI-Key=
-```
-
-Replace the placeholder values with your actual credentials. You can obtain these credentials by signing up on the [RapidAPI website](https://rapidapi.com/letscrape-6bRBa3QguO5/api/jsearch).
-
-**Running the Project**
-
 ```bash
-npm start
+npx expo
 ```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser to view the project.
-
-## <a name="snippets">🕸️ Snippets</a>
-
-<details>
-<summary><code>Search.js</code></summary>
-
-```javascript
-import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, FlatList, Image, TouchableOpacity, View } from 'react-native'
-import { Stack, useRouter, useSearchParams } from 'expo-router'
-import { Text, SafeAreaView } from 'react-native'
-import axios from 'axios'
-
-import { ScreenHeaderBtn, NearbyJobCard } from '../../components'
-import { COLORS, icons, SIZES } from '../../constants'
-import styles from '../../styles/search'
-
-const JobSearch = () => {
-    const params = useSearchParams();
-    const router = useRouter()
-
-    const [searchResult, setSearchResult] = useState([]);
-    const [searchLoader, setSearchLoader] = useState(false);
-    const [searchError, setSearchError] = useState(null);
-    const [page, setPage] = useState(1);
-
-    const handleSearch = async () => {
-        setSearchLoader(true);
-        setSearchResult([])
-
-        try {
-            const options = {
-                method: "GET",
-                url: `https://jsearch.p.rapidapi.com/search`,
-                headers: {
-                    "X-RapidAPI-Key": '',
-                    "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
-                },
-                params: {
-                    query: params.id,
-                    page: page.toString(),
-                },
-            };
-
-            const response = await axios.request(options);
-            setSearchResult(response.data.data);
-        } catch (error) {
-            setSearchError(error);
-            console.log(error);
-        } finally {
-            setSearchLoader(false);
-        }
-    };
-
-    const handlePagination = (direction) => {
-        if (direction === 'left' && page > 1) {
-            setPage(page - 1)
-            handleSearch()
-        } else if (direction === 'right') {
-            setPage(page + 1)
-            handleSearch()
-        }
-    }
-
-    useEffect(() => {
-        handleSearch()
-    }, [])
-
-    return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
-            <Stack.Screen
-                options={{
-                    headerStyle: { backgroundColor: COLORS.lightWhite },
-                    headerShadowVisible: false,
-                    headerLeft: () => (
-                        <ScreenHeaderBtn
-                            iconUrl={icons.left}
-                            dimension='60%'
-                            handlePress={() => router.back()}
-                        />
-                    ),
-                    headerTitle: "",
-                }}
-            />
-
-            <FlatList
-                data={searchResult}
-                renderItem={({ item }) => (
-                    <NearbyJobCard
-                        job={item}
-                        handleNavigate={() => router.push(`/job-details/${item.job_id}`)}
-                    />
-                )}
-                keyExtractor={(item) => item.job_id}
-                contentContainerStyle={{ padding: SIZES.medium, rowGap: SIZES.medium }}
-                ListHeaderComponent={() => (
-                    <>
-                        <View style={styles.container}>
-                            <Text style={styles.searchTitle}>{params.id}</Text>
-                            <Text style={styles.noOfSearchedJobs}>Job Opportunities</Text>
-                        </View>
-                        <View style={styles.loaderContainer}>
-                            {searchLoader ? (
-                                <ActivityIndicator size='large' color={COLORS.primary} />
-                            ) : searchError && (
-                                <Text>Oops something went wrong</Text>
-                            )}
-                        </View>
-                    </>
-                )}
-                ListFooterComponent={() => (
-                    <View style={styles.footerContainer}>
-                        <TouchableOpacity
-                            style={styles.paginationButton}
-                            onPress={() => handlePagination('left')}
-                        >
-                            <Image
-                                source={icons.chevronLeft}
-                                style={styles.paginationImage}
-                                resizeMode="contain"
-                            />
-                        </TouchableOpacity>
-                        <View style={styles.paginationTextBox}>
-                            <Text style={styles.paginationText}>{page}</Text>
-                        </View>
-                        <TouchableOpacity
-                            style={styles.paginationButton}
-                            onPress={() => handlePagination('right')}
-                        >
-                            <Image
-                                source={icons.chevronRight}
-                                style={styles.paginationImage}
-                                resizeMode="contain"
-                            />
-                        </TouchableOpacity>
-                    </View>
-                )}
-            />
-        </SafeAreaView>
-    )
-}
-
-export default JobSearch
-```
-</details>
-
-## <a name="links">🔗 Links</a>
-
-Models and Assets used in the project can be found [here](https://drive.google.com/file/d/1VGr3R-3uta9xNj17eRHMxTELhtE2LaCm/view)

@@ -85,6 +85,7 @@ class firestoreService {
         newEvent
       });
 
+      console.log("updated event", newEvent);
       return newEvent;
 
     } catch (error) {
@@ -93,18 +94,15 @@ class firestoreService {
     }
   }
 
-  static updateEventFilling = async (event, docId, userRating) => {
+  static updateEventFilling = async (event, docId, userFilling) => {
     try {
       const docRef = doc(FIRESTORE_DB, "events", docId);
-
-      const updatedRating = (event.rating * event.votes + userRating) / (event.votes + 1);
-      const updatedVotes = event.votes + 1;
-      const newEvent = { ...event, rating: updatedRating, votes: updatedVotes }
-
+      const newEvent = { ...event, filling: userFilling }
       await setDoc(docRef, {
         newEvent
       });
 
+      console.log("updated event", newEvent);
       return newEvent;
 
     } catch (error) {

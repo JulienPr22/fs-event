@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { Slider } from '@rneui/themed';
 import styles from '../../../styles/modals.style';
 
@@ -8,16 +8,16 @@ const FillingModal = ({
   setVisible,
   fillingValue,
   setFillingValue,
-  onClose,
   onApply,
 }) => {
+
+
   const handleApply = () => {
     onApply();
-    onClose();
   };
 
   const handleReset = () => {
-    onReset();
+    setVisible(false)
   };
 
   return (
@@ -45,7 +45,7 @@ const FillingModal = ({
         </View>
         <View style={styles.field}>
           <Text style={styles.infoLabel}>Remplissage: </Text>
-          <Text style={styles.infoValue}>{fillingValue}</Text>
+          <Text style={styles.infoValue}>{fillingValue} %</Text>
         </View>
 
         <View style={styles.buttons}>

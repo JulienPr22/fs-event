@@ -43,10 +43,6 @@ const Layout = () => {
     <UserProvider>
       <Stack >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="fillingModal"
-          options={{ presentation: 'modal' }}
-        />
       </Stack>
     </UserProvider>
 

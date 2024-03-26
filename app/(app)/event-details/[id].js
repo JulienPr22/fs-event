@@ -7,7 +7,7 @@ import {
   ScrollView,
   ActivityIndicator,
   RefreshControl,
-   Alert,
+  Alert,
 } from "react-native";
 
 import {
@@ -31,6 +31,7 @@ import routesService from "../services/routesService";
 import ActionModal from "../../components/eventdetails/modals/ActionModal";
 import RatingModal from "../../components/eventdetails/modals/RatingModal";
 import SlotPickerModal from "../../components/eventdetails/modals/SlotPickerModal";
+import FillingModal from "../../components/eventdetails/modals/FillingModal";
 
 const tabs = ["À Propos", "Adresse", "Carte"];
 
@@ -42,11 +43,13 @@ const EventDetails = () => {
 
   const [event, setEvent] = useState([]);
   const [userRating, setUserRating] = useState([]);
+  const [userFilling, setUserFilling] = useState([])
 
   const [slotOptions, setSlotOptions] = useState([]);
   const [isAdded, setIsAdded] = useState()
 
   const [ratingModalVisible, setRatingModalVisible] = useState(false);
+  const [fillingModalVisible, setFillingModalVisible] = useState(false)
   const [actionsModalVisible, setActionsModalVisible] = useState(false);
   const [slotPickerModalVisible, setSlotPickerModalVisible] = useState(false);
 
@@ -58,6 +61,7 @@ const EventDetails = () => {
     const fetchData = async () => {
       const eventData = await firestoreService.fetchEvents({ docId: params.id }, setIsLoading);
       setEvent(eventData);
+      setUserFilling(eventData.filling)
       console.log("event details", eventData);
 
       const userEventRouteData = await firestoreService.fetchUserEventsRouteIds(session.session, setIsLoading);
@@ -72,8 +76,14 @@ const EventDetails = () => {
   }, []);
 
   const validateRating = async () => {
-    setRatingModalVisible(!ratingModalVisible)
+    setRatingModalVisible(false)
     const updatedEvent = await firestoreService.updateEventRating(event, params.id, userRating)
+    setEvent(updatedEvent);
+  }
+
+  const validateFilling = async () => {
+    setFillingModalVisible(false)
+    const updatedEvent = await firestoreService.updateEventFilling(event, params.id, userFilling)
     setEvent(updatedEvent);
   }
 
@@ -266,6 +276,14 @@ const EventDetails = () => {
                   validateRating={validateRating}
                 />
 
+                <FillingModal
+                  visible={fillingModalVisible}
+                  setVisible={setFillingModalVisible}
+                  fillingValue={userFilling}
+                  setFillingValue={setUserFilling}
+                  onApply={validateFilling}
+                />
+
                 <ActionModal
                   visible={actionsModalVisible}
                   setVisible={setActionsModalVisible}
@@ -293,8 +311,8 @@ const EventDetails = () => {
           isAdded={isAdded}
           handleOnAdd={handleOnAdd}
           userRole={user?.role}
-          ratingModalVisible={ratingModalVisible}
-          setRatingModalVisible={setRatingModalVisible}
+          ratingVisible={user?.role == "visitor" ? ratingModalVisible : fillingModalVisible}
+          setModalVisible={user?.role == "visitor" ? setRatingModalVisible : setFillingModalVisible}
         />
 
       </>

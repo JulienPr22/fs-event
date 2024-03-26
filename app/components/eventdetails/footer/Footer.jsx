@@ -7,8 +7,8 @@ const Footer = ({
   isAdded,
   handleOnAdd,
   userRole,
-  ratingModalVisible,
-  setRatingModalVisible,
+  modalVisible,
+  setModalVisible,
 }) => {
   return (
     <View style={styles.actionBtnContainer}>
@@ -20,32 +20,16 @@ const Footer = ({
         />
       </TouchableOpacity>
 
-      {userRole == 'visitor' ? (
+
         <Pressable
           style={styles.ratingBtn}
           onPress={() => {
-            setRatingModalVisible(!ratingModalVisible);
+            setModalVisible(!modalVisible);
           }}
         >
-          <Text style={styles.openBtnText}>Noter l'évennement</Text>
+          <Text style={styles.openBtnText}>{userRole == 'visitor' ? "Noter l'évennement" : "Remplissage"}</Text>
         </Pressable>
-      ) : (
-        <Pressable
-          style={styles.ratingBtn}
-          /*  onPress={() => {
-          router.setParams({
-            eventId: event.id,
-            eventFilling: 60
-          })
-          router.navigate('/fillingModal/', {
-            eventId: event.id,
-            eventFilling: 60
-          })
-        }} */
-        >
-          <Text style={styles.openBtnText}>Remplissage</Text>
-        </Pressable>
-      )}
+
     </View>
   );
 };

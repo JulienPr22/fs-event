@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "../constants";
+import { COLORS, FONT, SIZES } from "../constants";
 
 
 const styles = StyleSheet.create({
@@ -110,6 +110,32 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
       },
+      contentView: {
+        padding: 20,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+    },
+    headerTitle: {
+        fontSize: SIZES.xLarge,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+    field: {
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        marginVertical: 5,
+    },
+
+    infoLabel: {
+        fontSize: SIZES.large,
+        color: COLORS.secondary,
+        fontFamily: FONT.bold,
+    },
+    infoValue: {
+        fontSize: SIZES.large,
+        color: COLORS.primary,
+    },
 });
 
 export default styles;

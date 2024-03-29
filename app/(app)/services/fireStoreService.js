@@ -3,6 +3,7 @@ import { GeoPoint, addDoc, collection, doc, endAt, getDoc, getDocs, limit, order
 import fakeData from "../../assets/fr-esr-fete-de-la-science-23.json";
 import ngeohash from "ngeohash";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
+import { distanceBetween, geohashQueryBounds } from "geofire-common";
 
 
 class firestoreService {
@@ -47,12 +48,12 @@ class firestoreService {
           );
         }
 
-          // Pagination
-          if (page && maxResults) {
-            const offset = (page - 1) * maxResults;
-            console.log("offset", offset);
-            collectionRef = query(collectionRef, orderBy("rating"), startAt(offset), limit(maxResults));
-          }
+        // Pagination
+        if (page && maxResults) {
+          const offset = (page - 1) * maxResults;
+          console.log("offset", offset);
+          collectionRef = query(collectionRef, orderBy("rating"), startAt(offset), limit(maxResults));
+        }
 
         const querySnapshot = await getDocs(collectionRef);
         querySnapshot.forEach((doc) => {
@@ -72,6 +73,49 @@ class firestoreService {
       throw error;
     }
   }
+
+  static getNearbyEvents = async (userLatitude, userLongitude, maxDistanceKm) => {
+    // Find cities within 50km of Paris
+    const center = [48.8666, 2.3333];
+    const radiusInM = maxDistanceKm * 1000;
+
+    // Each item in 'bounds' represents a startAt/endAt pair. We have to issue
+    // a separate query for each pair. There can be up to 9 pairs of bounds
+    // depending on overlap, but in most cases there are 4.
+    const bounds = geohashQueryBounds(center, radiusInM);
+    const promises = [];
+    for (const b of bounds) {
+      const q = query(
+        collection(FIRESTORE_DB, "events"),
+        orderBy('geohash'),
+        startAt(b[0]),
+        endAt(b[1]),
+        limit(20));
+
+      promises.push(getDocs(q));
+    }
+
+    // Collect all the query results together into a single list
+    const snapshots = await Promise.all(promises);
+
+    const nearbyEvents = [];
+    for (const snap of snapshots) {
+      for (const doc of snap.docs) {
+        const lat = doc.get('geolocalisation.lat');
+        const lng = doc.get('geolocalisation.lon');
+
+        // We have to filter out a few false positives due to GeoHash
+        // accuracy, but most will match
+        const distanceInKm = distanceBetween([lat, lng], center);
+        const distanceInM = distanceInKm * 1000;
+        if (distanceInM <= radiusInM) {
+          nearbyEvents.push({id: doc.id, ...doc.data()});
+        }
+      }
+    }
+    console.log("matchingDocs",nearbyEvents);
+  }
+
 
   static updateEventRating = async (event, docId, userRating) => {
     try {
@@ -237,41 +281,6 @@ class firestoreService {
       setLoading(false);
       throw error;
     }
-  }
-
-
-  static getNearbyEvents = async (latitude, longitude) => {
-
-    const bounds = geofire.geohashQueryBounds([latitude, longitude], 25000);
-    const promises = [];
-    for (const b of bounds) {
-      const q = query(
-        this.eventsCollectionRef,
-        orderBy('geohash'),
-        startAt(b[0]),
-        endAt(b[1]));
-
-      promises.push(getDocs(q));
-    }
-
-    // Collect all the query results together into a single list
-    const snapshots = await Promise.all(promises);
-
-    const matchingDocs = [];
-    for (const snap of snapshots) {
-      for (const doc of snap.docs) {
-        const { lat, lng } = doc.get("geolocalisation")
-
-        // We have to filter out a few false positives due to GeoHash
-        // accuracy, but most will match
-        const distanceInKm = geofire.distanceBetween([lat, lng], center);
-        const distanceInM = distanceInKm * 1000;
-        if (distanceInM <= radiusInM) {
-          matchingDocs.push(doc);
-        }
-      }
-    }
-    console.log("matchingDocs", matchingDocs);
   }
 }
 

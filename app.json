@@ -5,8 +5,8 @@
     "web": {
       "bundler": "metro"
     },
-    "name": "jobsift",
-    "slug": "jobsift",
+    "name": "fete-science-app",
+    "slug": "fete-science-app",
     "plugins": [
       "expo-router",
       [

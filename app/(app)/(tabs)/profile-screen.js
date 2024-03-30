@@ -4,9 +4,9 @@ import firestoreService from '../services/fireStoreService';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { COLORS, FONT, SIZES } from '../../constants';
 import { router } from 'expo-router';
-import { PopularEventCard } from '../../components';
 import { Switch } from 'react-native-gesture-handler';
 import { UserContext } from '../UserContext';
+import { EventCard } from '../../components';
 
 const ProfileScreen = () => {
   const { session, signOut } = useSession();
@@ -123,7 +123,7 @@ const ProfileScreen = () => {
                 {
 
                   relatedEvents?.map((event) => (
-                    <PopularEventCard
+                    <EventCard
                       event={event}
                       key={`popular-event-${event.id}`}
                       onPress={() => {

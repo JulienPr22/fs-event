@@ -10,7 +10,7 @@ import GeneralEventInfo from "./eventdetails/general-event-info/GeneralEventInfo
 import { default as JobTabs } from "./eventdetails/tabs/Tabs";
 import { default as EventAbout } from "./eventdetails/about/About";
 import { default as EventFooter } from "./eventdetails/footer/Footer";
-import PlaceDetails from "./eventdetails/place/PlaceDetails";
+import { default as PlaceDetails } from "./eventdetails/place/PlaceDetails";
 
 // common
 import EventCard from "./common/cards/event/EventCard";
@@ -24,6 +24,6 @@ export {
   JobTabs,
   EventAbout,
   EventFooter,
-  PlaceDetails as Specifics,
-  EventCard as PopularEventCard
+  PlaceDetails,
+  EventCard
 };

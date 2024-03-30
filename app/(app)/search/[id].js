@@ -4,7 +4,7 @@ import { Stack, useGlobalSearchParams, useRouter, useSearchParams } from 'expo-r
 import { Text, SafeAreaView } from 'react-native'
 
 
-import { ScreenHeaderBtn, NearbyJobCard, PopularEventCard } from '../../components'
+import { ScreenHeaderBtn, EventCard } from '../../components'
 import { COLORS, icons, SIZES } from '../../constants'
 import styles from '../../styles/search'
 import FilterModal from '../../components/search/FilterModal'
@@ -176,7 +176,7 @@ const EventSearch = () => {
                     }
                     data={searchResult}
                     renderItem={({ item, index }) => (
-                        <PopularEventCard
+                        <EventCard
                             key={index}
                             event={item}
                             onPress={() => router.push(`/event-details/${item?.id}`)}

@@ -5,7 +5,7 @@ import { COLORS, icons } from '../../../constants';
 import { MaterialIcons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-const EventTile = ({ event, getDirection, onClose }) => {
+const EventTile = ({ event, onPress, onClose }) => {
   const imageSource = checkImageURL(event.image)
     ? { uri: event.image }
     : checkImageURL(event.organisateur_logo)
@@ -70,7 +70,7 @@ const EventTile = ({ event, getDirection, onClose }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={getDirection}
+          onPress={onPress}
           style={{
             backgroundColor: COLORS.systemBlue,
             padding: 5,

@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.medium,
     fontFamily: "DMBold",
     color: COLORS.primary,
+
   },
   ratingContainer: {
     flex: 1,

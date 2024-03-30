@@ -9,7 +9,7 @@ import { ScreenHeaderBtn } from '../../components';
 import EventTile from '../../components/map-screen/event-tile/EventTile';
 import { UserContext } from '../UserContext';
 import { checkImageURL } from '../../utils';
-import { Button, Card, Icon } from '@rneui/themed';
+import { Button, Card, FAB, Icon } from '@rneui/themed';
 import { MaterialIcons } from '@expo/vector-icons';
 import EventCard from '../../components/common/cards/event/EventCard';
 
@@ -25,6 +25,7 @@ function MapScreen() {
   const router = useRouter();
   const mapRef = useRef();
   const { user, setUser } = useContext(UserContext);
+  const [regionLocation, setRegionLocation] = useState()
   const [tileVisible, setTileVisible] = useState(false)
 
   const [events, setEvents] = useState([])
@@ -34,12 +35,9 @@ function MapScreen() {
 
   useEffect(() => {
     (async () => {
-      // console.log("user Location", user?.location);
-
-
-
+      setRegionLocation({ latitude: INITIAL_REGION.latitude, longitude: INITIAL_REGION.longitude })
       // Récupération des évennements proches
-      const eventsData = await firestoreService.getNearbyEvents(48.08, 1.68, 10)
+      const eventsData = await firestoreService.getNearbyEvents(INITIAL_REGION.latitude, INITIAL_REGION.longitude, 10)
       setEvents(eventsData)
       console.log("eventsData", eventsData);
       setIsDataLoaded(true)
@@ -47,18 +45,27 @@ function MapScreen() {
 
   }, []);
 
-  const focusMap = () => {
-    const GreenBayStadium = {
-      latitude: 48.11,
-      longitude: -1.68,
+
+  const searchNearbyEvents = async () => {
+    setIsDataLoaded(false)
+    const eventsData = await firestoreService.getNearbyEvents(regionLocation.latitude, regionLocation.longitude, 50)
+    setEvents(eventsData)
+    console.log("nearbyEvents", eventsData);
+    setIsDataLoaded(true)
+  }
+
+  const focusMap = (lat, lon) => {
+    const center = {
+      latitude: lat,
+      longitude: lon,
       latitudeDelta: 2,
       longitudeDelta: 2
     };
-    mapRef.current?.animateCamera({ center: GreenBayStadium, zoom: 10 }, { duration: 30 })
+    mapRef.current?.animateCamera({ center: center, zoom: 10 }, { duration: 1000 })
   }
 
   const onRegionChange = (region) => {
-    console.log(region);
+    setRegionLocation({ latitude: region.latitude, longitude: region.longitude })
   }
 
   const onMarkerSelected = (marker) => {
@@ -107,11 +114,9 @@ function MapScreen() {
         provider={PROVIDER_GOOGLE}
         initialRegion={INITIAL_REGION}
         showsUserLocation
-        showsMyLocationButton
         onRegionChangeComplete={onRegionChange}
         ref={mapRef}
       >
-
 
         {(events && events.length > 0) && (
           events.map((event, index) => (
@@ -126,16 +131,53 @@ function MapScreen() {
           )))
         }
 
-
-
-
         <View style={styles.tileContainer}>
           {selectedEvent && (
-            <EventTile event={selectedEvent} getDirection={getDirection} onClose={() => setSelectedEvent(null)} ></EventTile>
+            <EventTile
+              event={selectedEvent}
+              onPress={() => {
+                router.push(`/event-details/${selectedEvent.id}`);
+              }}
+              onClose={() => setSelectedEvent(null)} ></EventTile>
           )}
         </View>
 
+
       </MapView>
+
+
+      <FAB
+        style={{ width: "5%", marginBottom: 315, marginLeft: 25 }}
+        placement="left"
+        color={COLORS.systemBlue}
+        size="large"
+        icon={{ name: "directions", color: COLORS.white }}
+        onPress={getDirection}
+        disabled={!selectedEvent}
+      />
+
+
+      <FAB
+        style={{ width: "5%", marginBottom: 245, marginLeft: 25 }}
+        placement="left"
+        color={COLORS.systemBlue}
+        size="large"
+        icon={{ name: "search", color: COLORS.white }}
+        onPress={searchNearbyEvents}
+      />
+
+      <FAB
+        style={{ width: "5%", marginBottom: 175, marginLeft: 25 }}
+        placement="left"
+        color={COLORS.systemBlue}
+        size="large"
+        icon={{ name: "my-location", color: COLORS.white }}
+        onPress={() => focusMap(
+          user.location.coords.latitude,
+          user.location.coords.longitude
+        )}
+      />
+
 
     </View>
   );

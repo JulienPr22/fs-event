@@ -74,9 +74,9 @@ class firestoreService {
     }
   }
 
-  static getNearbyEvents = async (userLatitude, userLongitude, maxDistanceKm) => {
+  static getNearbyEvents = async (latitude, longitude, maxDistanceKm) => {
     // Find cities within 50km of Paris
-    const center = [48.8666, 2.3333];
+    const center = [latitude, longitude];
     const radiusInM = maxDistanceKm * 1000;
 
     // Each item in 'bounds' represents a startAt/endAt pair. We have to issue

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import {
   View,
@@ -8,17 +8,29 @@ import {
   ActivityIndicator,
 } from "react-native";
 
-import styles from "./popularjobs.style";
+import styles from "./popularroutes.style";
 import { COLORS, SIZES } from "../../../constants";
-import PopularJobCard from "../../common/cards/popular/PopularJobCard";
+import routesService from "../../../(app)/services/routesService";
+import RouteCard from "../../common/cards/route/RouteCard";
 
-const Popularjobs = () => {
+const PopularRoutes = () => {
   const router = useRouter();
-  const [selectedJob, setSelectedJob] = useState();
+  const [selectedRoute, setSelectedRoute] = useState();
+
+  const [popularRoutesData, setPopularRoutesData] = useState([]);
+  const [isLoading, setIsLoading] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      // Récupération des évennements populaires
+      const popularRoutes = await routesService.getRoutes(setIsLoading);
+      setPopularRoutesData(popularRoutes);
+    })();
+  }, []);
 
   const handleCardPress = (item) => {
     router.push(`/job-details/${item.job_id}`);
-    setSelectedJob(item.job_id);
+    setSelectedRoute(item.id);
   };
 
   return (
@@ -30,29 +42,28 @@ const Popularjobs = () => {
         </TouchableOpacity>
       </View>
 
-     {/*  <View style={styles.cardsContainer}>
+      <View style={styles.cardsContainer}>
         {isLoading ? (
           <ActivityIndicator size='large' color={COLORS.primary} />
         ) : error ? (
           <Text>Something went wrong</Text>
         ) : (
           <FlatList
-            data={data}
+            data={popularRoutesData}
             renderItem={({ item }) => (
-              <PopularJobCard
-                item={item}
-                selectedJob={selectedJob}
+              <RouteCard
+                route={item}
                 handleCardPress={handleCardPress}
               />
             )}
-            keyExtractor={(item) => item.job_id}
+            keyExtractor={(item) => item.id}
             contentContainerStyle={{ columnGap: SIZES.medium }}
             horizontal
           />
         )}
-      </View> */}
+      </View>
     </View>
   );
 };
 
-export default Popularjobs;
+export default PopularRoutes;

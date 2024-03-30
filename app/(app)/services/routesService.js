@@ -28,6 +28,36 @@ class routesService {
     }
   }
 
+  static getRoutes = async (setLoading) => {
+    setLoading(true);
+    const items = [];
+
+    try {
+      let collectionRef = collection(FIRESTORE_DB, "routes");
+      collectionRef = query(
+        collectionRef,
+        where("published", "==", 1)
+      );
+      const querySnapshot = await getDocs(collectionRef);
+      querySnapshot.forEach((doc) => {
+        const e = { id: doc.id, ...doc.data() };
+        items.push(e);
+      });
+      setLoading(false)
+      console.log("fetched routes", items);
+      return items
+
+    } catch (error) {
+      setLoading(false)
+
+      throw error;
+
+    } finally {
+      setLoading(false)
+
+    }
+  }
+
   static fetchRoute = async (userId) => {
     const items = []
     try {

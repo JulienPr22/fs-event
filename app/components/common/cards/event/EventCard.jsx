@@ -1,10 +1,10 @@
 import { View, Text, TouchableOpacity, Image, Pressable } from 'react-native';
-import styles from './populareventcard.style';
+import styles from './eventcard.style';
 import { checkImageURL } from '../../../../utils';
 import { icons } from '../../../../constants';
 import { useState } from 'react';
 
-const PopularEventCard = ({ event, onPress }) => {
+const EventCard = ({ event, onPress }) => {
   const [isDescriptionVisible, setIsDescriptionVisible] = useState(false);
 
   const imageSource = checkImageURL(event.image)
@@ -70,4 +70,4 @@ const PopularEventCard = ({ event, onPress }) => {
   );
 };
 
-export default PopularEventCard;
+export default EventCard;

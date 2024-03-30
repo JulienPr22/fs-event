@@ -13,7 +13,7 @@ import { default as EventFooter } from "./eventdetails/footer/Footer";
 import PlaceDetails from "./eventdetails/place/PlaceDetails";
 
 // common
-import PopularEventCard from "./common/cards/event/PopularEventCard";
+import EventCard from "./common/cards/event/EventCard";
 
 export {
   ScreenHeaderBtn,
@@ -25,5 +25,5 @@ export {
   EventAbout,
   EventFooter,
   PlaceDetails as Specifics,
-  PopularEventCard
+  EventCard as PopularEventCard
 };

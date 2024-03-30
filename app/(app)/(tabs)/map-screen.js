@@ -1,11 +1,13 @@
 import { Alert, Text, View, } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import firestoreService from '../services/fireStoreService';
-import * as Location from 'expo-location';
-import { Tabs, useRouter } from 'expo-router';
-import { SIZES } from '../../constants';
+import { Stack, Tabs, useRouter } from 'expo-router';
+import { COLORS, SIZES, icons } from '../../constants';
+import { ScreenHeaderBtn } from '../../components';
+import EventTile from '../../components/map-screen/event-tile/EventTile';
+import { UserContext } from '../UserContext';
 
 
 const INITIAL_REGION = {
@@ -18,38 +20,25 @@ const INITIAL_REGION = {
 function MapScreen() {
   const router = useRouter();
   const mapRef = useRef();
+  const { user, setUser } = useContext(UserContext);
 
-  const [userLocation, setUserLocation] = useState(null);
-  const [events, setEvents] = useState({})
+  const [events, setEvents] = useState([])
+  const [isDataLoaded, setIsDataLoaded] = useState(false)
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg("L'autorisation d'accéder à la position a été refusée");
-        return;
-      }
+      console.log("user Location", user.location);
 
-      let location = await Location.getCurrentPositionAsync({});
-      setUserLocation(location);
-
-      console.log("userLocation", location);
       // Récupération des évennements proches
       const eventsData = await firestoreService.getNearbyEvents(48.08, 1.68, 10)
-      setEvents(eventsData);
-
+      setEvents(eventsData)
+      console.log("eventsData", eventsData);
+      setIsDataLoaded(true)
     })();
 
   }, []);
-
-  const markers = [
-    {
-      name: "Paris",
-      latitude: 48.8666,
-      longitude: 2.3333
-    }
-  ]
-
 
   const focusMap = () => {
     const GreenBayStadium = {
@@ -66,25 +55,26 @@ function MapScreen() {
   }
 
   const onMarkerSelected = (marker) => {
-    Alert.alert(marker.name)
+    setSelectedEvent(marker);
+    //Alert.alert(marker.name)
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <Tabs.Screen options={{
+        visible: false,
+        headerStyle: { backgroundColor: COLORS.lightWhite },
         headerLeft: () => (
           <ScreenHeaderBtn
             iconUrl={icons.left}
             dimension='60%'
             handlePress={() => router.back()}
           />
-        ),
-        headerRight: () => (
-          <ScreenHeaderBtn iconUrl={icons.signOut} dimension='60%' handlePress={signOut} />
         )
-      }}></Tabs.Screen>
-      <Text> Map Screen</Text>
-      <MapView style={StyleSheet.absoluteFill}
+      }} />
+
+      <MapView
+        style={StyleSheet.absoluteFill}
         provider={PROVIDER_GOOGLE}
         initialRegion={INITIAL_REGION}
         showsUserLocation
@@ -94,34 +84,63 @@ function MapScreen() {
       >
 
 
-        {markers.map((marker, index) => (
-          <Marker key={index} coordinate={marker} onPress={() => onMarkerSelected(marker)}>
-          </Marker>
-        ))}
+        {(events && events.length > 0) && (
+          events.map((event, index) => (
+            <Marker
+              key={`nearby-event-${event.id}`}
+              coordinate={{
+                latitude: event.geolocalisation.lat,
+                longitude: event.geolocalisation.lon
+              }}
+              onPress={() => onMarkerSelected(event)}>
+            </Marker>
+          )))
+        }
 
-        <View style={styles.tile}>
-          <Text>Paris</Text>
-          {/* Add more information here as needed */}
-        </View>
+
+        {selectedEvent && (
+          <View style={styles.tileContainer}>
+            <EventTile event={selectedEvent} />
+          </View>
+        )}
+
+        {/* {selectedEvent && (
+          <View style={styles.tileContainer}>
+            <Text style={styles.eventTitle}>{selectedEvent.titre_fr}</Text>
+          </View>)} */}
+
 
       </MapView>
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  tile: {
+  container: {
+    flex: 1,
+
+  },
+  tileContainer: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: 100,
+    height: 150,
     margin: 10,
-    borderRadius: SIZES.medium,
-    backgroundColor: 'white',
     padding: 10,
-    alignItems: 'center',
+    backgroundColor: 'white',
+    // alignItems: 'center',
+    // justifyContent: 'flex-start', // Utilise Flexbox pour les éléments à l'intérieur
+    borderRadius: SIZES.medium,
   },
+  eventTitle: {
+    fontSize: SIZES.medium,
+    fontFamily: "DMBold",
+    color: COLORS.primary,
+  },
+
+
 });
 
 export default MapScreen;

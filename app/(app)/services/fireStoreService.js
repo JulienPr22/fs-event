@@ -114,6 +114,7 @@ class firestoreService {
       }
     }
     console.log("matchingDocs",nearbyEvents);
+    return nearbyEvents;
   }
 
 
@@ -160,8 +161,6 @@ class firestoreService {
     try {
       const docRef = doc(FIRESTORE_DB, "users", userId);
       const user = await getDoc(docRef);
-      console.log("fetched user", user.data());
-
       return user.data();
     } catch (error) {
       console.log(error);

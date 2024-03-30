@@ -3,47 +3,32 @@ import { useRouter } from 'expo-router';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import styles from './popularevents.style';
 
-import PopularEventCard from '../../common/cards/event/PopularEventCard';
+import EventCard from '../../common/cards/event/EventCard';
 
-import * as Location from 'expo-location';
 import { COLORS } from '../../../constants';
 import firestoreService from '../../../(app)/services/fireStoreService';
-
 
 const PopularEvents = () => {
   const router = useRouter();
   const [popularEventsData, setPopularEventsData] = useState([]);
-  const [nearbyEventsData, setNearbyEventsData] = useState([]);
   const [isLoading, setIsLoading] = useState([]);
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
     (async () => {
       // Récupération des évennements populaires
-      const popularEvents = await firestoreService.fetchEvents({ maxResults: 20, minRating: 4.500 , page: 1}, setIsLoading);
+      const popularEvents = await firestoreService.fetchEvents(
+        { maxResults: 20, minRating: 4.5, page: 1 },
+        setIsLoading
+      );
       setPopularEventsData(popularEvents);
-
-      // Récupération de la position de l'utilisateur
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg("L'autorisation d'accéder à la position a été refusée");
-        return;
-      }
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-
-    /*   const nearbyEvents = await fireStoreService.getNearbyEvents(location.coords.latitude, location.coords.longitude)
-      setNearbyEventsData(nearbyEvents) */
     })();
-
   }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Évennements populaires</Text>
-        <TouchableOpacity onPress={ () => router.push(`/search/all`)}>
+        <TouchableOpacity onPress={() => router.push(`/search/all`)}>
           <Text style={styles.headerBtn}>Voir tous</Text>
         </TouchableOpacity>
       </View>
@@ -53,7 +38,7 @@ const PopularEvents = () => {
           <ActivityIndicator size='large' color={COLORS.primary} />
         ) : (
           popularEventsData?.map((event) => (
-            <PopularEventCard
+            <EventCard
               event={event}
               key={`popular-event-${event.id}`}
               onPress={() => {
@@ -62,7 +47,6 @@ const PopularEvents = () => {
             />
           ))
         )}
-
       </View>
     </View>
   );

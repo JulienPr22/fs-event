@@ -1,6 +1,8 @@
 import React, { createContext, useEffect, useState } from 'react';
 import firestoreService from './services/fireStoreService';
 import { useSession } from '../ctx';
+import * as Location from 'expo-location';
+
 
 const UserContext = createContext();
 
@@ -12,7 +14,16 @@ const UserProvider = ({ children }) => {
     const fetchData = async () => {
       try {
         const userData = await firestoreService.fetchUser(session);
-        setUser(userData);
+
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          setErrorMsg("L'autorisation d'accéder à la position a été refusée");
+          return;
+        }
+        let location = await Location.getCurrentPositionAsync({});
+        setUser({ ...userData, location });
+
+        console.log("user data", { ...userData, location });
       } catch (error) {
         console.error('Erreur lors de la récupération des données de l\'utilisateur:', error);
       }

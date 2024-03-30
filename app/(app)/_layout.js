@@ -34,11 +34,6 @@ const Layout = () => {
     return <Redirect href="/sign-in" />;
   }
 
-
-  /*   const docRef = doc(FIRESTORE_DB, "users", session);
-    const userData = await getDoc(docRef);
-    setUser(userData.data()); */
-
   return (
     <UserProvider>
       <Stack >

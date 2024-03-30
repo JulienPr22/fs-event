@@ -36,7 +36,7 @@ class routesService {
       let collectionRef = collection(FIRESTORE_DB, "routes");
       collectionRef = query(
         collectionRef,
-        where("published", "==", 1)
+        where("published", "==", true)
       );
       const querySnapshot = await getDocs(collectionRef);
       querySnapshot.forEach((doc) => {

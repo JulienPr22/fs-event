@@ -6,7 +6,9 @@ const styles = StyleSheet.create({
   container: (selectedJob, item) => ({
     width: 250,
     padding: SIZES.xLarge,
-    backgroundColor: selectedJob === item.job_id ? COLORS.primary : "#FFF",
+    // backgroundColor: selectedJob === item.id ? COLORS.primary : "#FFF",
+    backgroundColor:  "#FFF",
+
     borderRadius: SIZES.medium,
     justifyContent: "space-between",
     ...SHADOWS.medium,
@@ -15,7 +17,10 @@ const styles = StyleSheet.create({
   logoContainer: (selectedJob, item) => ({
     width: 50,
     height: 50,
-    backgroundColor: selectedJob === item.job_id ? "#FFF" : COLORS.white,
+    // backgroundColor: selectedJob === item.id ? "#FFF" : COLORS.white,
+    backgroundColor: COLORS.white,
+
+
     borderRadius: SIZES.medium,
     justifyContent: "center",
     alignItems: "center",
@@ -33,22 +38,22 @@ const styles = StyleSheet.create({
   infoContainer: {
     marginTop: SIZES.large,
   },
-  jobName: (selectedJob, item) => ({
-    fontSize: SIZES.large,
-    fontFamily: FONT.medium,
-    color: selectedJob === item.job_id ? COLORS.white : COLORS.primary,
-  }),
+  // jobName: (selectedJob, item) => ({
+  //   fontSize: SIZES.large,
+  //   fontFamily: FONT.medium,
+  //   color: selectedJob === item.id ? COLORS.white : COLORS.primary,
+  // }),
   infoWrapper: {
     flexDirection: "row",
     marginTop: 5,
     justifyContent: "flex-start",
     alignItems: "center",
   },
-  publisher: (selectedJob, item) => ({
-    fontSize: SIZES.medium - 2,
-    fontFamily: FONT.regular,
-    color: selectedJob === item.job_id ? COLORS.white : COLORS.primary,
-  }),
+  // publisher: (selectedJob, item) => ({
+  //   fontSize: SIZES.medium - 2,
+  //   fontFamily: FONT.regular,
+  //   color: selectedJob === item.id ? COLORS.white : COLORS.primary,
+  // }),
   location: {
     fontSize: SIZES.medium - 2,
     fontFamily: FONT.regular,

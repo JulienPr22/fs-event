@@ -4,7 +4,7 @@ import { Tabs, useRouter } from "expo-router";
 import { COLORS, SIZES } from "../../constants";
 import {
   PopularEvents,
-  Popularjobs,
+  PopularRoutes,
   ScreenHeaderBtn,
   Welcome,
 
@@ -41,7 +41,7 @@ const HomeScreen = () => {
             }}
           />
 
-          <Popularjobs />
+          <PopularRoutes/>
           <PopularEvents />
         </View>
       </ScrollView>

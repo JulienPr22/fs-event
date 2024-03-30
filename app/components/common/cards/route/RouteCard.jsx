@@ -1,9 +1,8 @@
 
-import { View, Text, TouchableOpacity, Image, Pressable } from 'react-native';
+import { View, Text, Image, Pressable } from 'react-native';
 import styles from './routecard.style';
-import { checkImageURL } from '../../../../utils';
-import { icons } from '../../../../constants';
-import { useState } from 'react';
+
+
 
 const RouteCard = ({ route, onPress }) => {
   return (

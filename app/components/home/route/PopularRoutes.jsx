@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "expo-router";
+import { useEffect, useState } from 'react';
+import { useRouter } from 'expo-router';
 import {
   View,
   Text,
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
-} from "react-native";
+} from 'react-native';
 
-import styles from "./popularroutes.style";
-import { COLORS, SIZES } from "../../../constants";
-import routesService from "../../../(app)/services/routesService";
-import RouteCard from "../../common/cards/route/RouteCard";
+import { COLORS, SIZES } from '../../../constants';
+import routesService from '../../../(app)/services/routesService';
+import RouteCard from '../../common/cards/route/RouteCard';
+import styles from './popularoutes.style';
 
 const PopularRoutes = () => {
   const router = useRouter();
@@ -29,7 +29,6 @@ const PopularRoutes = () => {
   }, []);
 
   const handleCardPress = (item) => {
-    router.push(`/job-details/${item.job_id}`);
     setSelectedRoute(item.id);
   };
 
@@ -45,16 +44,11 @@ const PopularRoutes = () => {
       <View style={styles.cardsContainer}>
         {isLoading ? (
           <ActivityIndicator size='large' color={COLORS.primary} />
-        ) : error ? (
-          <Text>Something went wrong</Text>
         ) : (
           <FlatList
             data={popularRoutesData}
             renderItem={({ item }) => (
-              <RouteCard
-                route={item}
-                handleCardPress={handleCardPress}
-              />
+              <RouteCard route={item} onPress={handleCardPress} />
             )}
             keyExtractor={(item) => item.id}
             contentContainerStyle={{ columnGap: SIZES.medium }}

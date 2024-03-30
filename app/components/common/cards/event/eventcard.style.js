@@ -30,20 +30,16 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: SIZES.medium,
   },
-
   eventTitle: {
     fontSize: SIZES.medium,
     fontFamily: "DMBold",
     color: COLORS.primary,
   },
-
   ratingContainer: {
     flex: 1,
     alignItems: "center",
-    gap: 5,
     flexDirection: "row",
   },
-
   eventDescription: {
     fontSize: SIZES.small + 2,
     fontFamily: "DMRegular",
@@ -56,7 +52,6 @@ const styles = StyleSheet.create({
     width: SIZES.medium,
     height: SIZES.medium,
   },
-
   InfoBox: {
     marginTop: SIZES.small / 2,
     flexDirection: "row",
@@ -65,7 +60,6 @@ const styles = StyleSheet.create({
   },
   locationBox: {
     flexDirection: "row",
-    // justifyContent: "center",
     alignItems: "flex-start",
   },
   locationImage: {

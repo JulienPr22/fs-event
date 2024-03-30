@@ -5,10 +5,9 @@ import { COLORS, FONT, SHADOWS, SIZES } from "../../../constants";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-
-    // justifyContent: "space-between",
+    flexDirection: "row",
     padding: SIZES.medium,
     borderRadius: SIZES.small,
     backgroundColor: "#FFF",
@@ -37,14 +36,11 @@ const styles = StyleSheet.create({
     fontFamily: "DMBold",
     color: COLORS.primary,
   },
-
   ratingContainer: {
     flex: 1,
     alignItems: "center",
-    gap: 5,
     flexDirection: "row",
   },
-
   eventDescription: {
     fontSize: SIZES.small + 2,
     fontFamily: "DMRegular",
@@ -57,16 +53,13 @@ const styles = StyleSheet.create({
     width: SIZES.medium,
     height: SIZES.medium,
   },
-
   InfoBox: {
     marginTop: SIZES.small / 2,
     flexDirection: "row",
-    ustifyContent: "center",
     alignItems: "flex-start",
   },
   locationBox: {
     flexDirection: "row",
-    // justifyContent: "center",
     alignItems: "flex-start",
   },
   locationImage: {
@@ -80,6 +73,10 @@ const styles = StyleSheet.create({
     fontFamily: FONT.regular,
     marginLeft: 2,
   },
+  actionButtons: {
+
+    gap: 50
+  }
 });
 
 export default styles;

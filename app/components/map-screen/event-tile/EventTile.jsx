@@ -1,10 +1,11 @@
 import { View, Text, TouchableOpacity, Image, Pressable } from 'react-native';
 import styles from './event-tile.style';
-import { useState } from 'react';
 import { checkImageURL } from '../../../utils';
-import { icons } from '../../../constants';
+import { COLORS, icons } from '../../../constants';
+import { MaterialIcons } from '@expo/vector-icons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-const EventTile = ({ event, onPress }) => {
+const EventTile = ({ event, getDirection, onClose }) => {
   const imageSource = checkImageURL(event.image)
     ? { uri: event.image }
     : checkImageURL(event.organisateur_logo)
@@ -50,6 +51,38 @@ const EventTile = ({ event, onPress }) => {
           />
           <Text style={styles.eventDescription}>({event?.votes})</Text>
         </View>
+      </View>
+
+      <View style={styles.actionButtons}>
+        <TouchableOpacity
+          onPress={onClose}
+          style={{
+            backgroundColor: "red",
+            padding: 5,
+            borderRadius: '50%',
+          }}
+        >
+          <MaterialIcons
+            name='close'
+            size={24}
+            color={COLORS.white}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={getDirection}
+          style={{
+            backgroundColor: COLORS.systemBlue,
+            padding: 5,
+            borderRadius: '50%',
+          }}
+        >
+          <MaterialIcons
+            name='arrow-right-alt'
+            size={24}
+            color={COLORS.white}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );

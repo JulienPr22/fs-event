@@ -98,17 +98,6 @@ function MapScreen() {
 
   return (
     <View style={styles.container}>
-      <Tabs.Screen options={{
-        visible: false,
-        headerStyle: { backgroundColor: COLORS.lightWhite },
-        headerLeft: () => (
-          <ScreenHeaderBtn
-            iconUrl={icons.left}
-            dimension='60%'
-            handlePress={() => router.back()}
-          />
-        )
-      }} />
 
       <MapView
         style={{ flex: 1 }}

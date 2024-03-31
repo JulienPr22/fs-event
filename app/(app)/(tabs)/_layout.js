@@ -29,8 +29,8 @@ function MyTabs() {
                 name="map-screen"
                 options={{
                     title: 'Carte',
-                    // headerShadowVisible: false,
-                    // headerShown: false,
+                    headerShadowVisible: false,
+                    headerShown: false,
                     headerTitle: "",
                     tabBarIcon: ({ color }) => (
                         <MaterialIcons

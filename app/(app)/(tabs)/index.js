@@ -1,26 +1,38 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import { RefreshControl, SafeAreaView, ScrollView, Text, View } from "react-native";
-import { Tabs, useRouter } from "expo-router";
+import { RefreshControl, SafeAreaView, ScrollView, View } from "react-native";
+import { useRouter } from "expo-router";
 import { COLORS, SIZES } from "../../constants";
 import {
   PopularEvents,
   PopularRoutes,
-  ScreenHeaderBtn,
   Welcome,
 
 } from "../../components";
-
-import { MaterialIcons } from "@expo/vector-icons";
-import firestoreService from "../services/fireStoreService";
-import { useSession } from "../../ctx";
-import { UserContext } from "../UserContext";
+import { useCallback, useEffect, useState } from "react";
 
 const HomeScreen = () => {
   const router = useRouter()
+  const [refreshing, setRefreshing] = useState(false)
+
+
+  useEffect(() => {
+    ( () => {
+      onRefresh
+    })();
+  }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
         <View
           style={{
             flex: 1,
@@ -28,10 +40,8 @@ const HomeScreen = () => {
           }}
         >
 
-
           <Welcome
             handleClick={(searchTerm) => {
-              // firestoreService.exportData()
               if (searchTerm) {
                 router.push(`/search/${searchTerm}`)
               } else {
@@ -41,7 +51,7 @@ const HomeScreen = () => {
             }}
           />
 
-          <PopularRoutes/>
+          <PopularRoutes refreshing={refreshing}/>
           <PopularEvents />
         </View>
       </ScrollView>

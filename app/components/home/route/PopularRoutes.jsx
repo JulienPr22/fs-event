@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import {
   View,
@@ -13,25 +13,28 @@ import routesService from '../../../(app)/services/routesService';
 import RouteCard from '../../common/cards/route/RouteCard';
 import styles from './popularoutes.style';
 
-const PopularRoutes = () => {
+const PopularRoutes = ({ refreshing }) => {
   const router = useRouter();
-  const [selectedRoute, setSelectedRoute] = useState();
 
   const [popularRoutesData, setPopularRoutesData] = useState([]);
-  const [isLoading, setIsLoading] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      // Récupération des évennements populaires
-      const popularRoutes = await routesService.getRoutes(setIsLoading);
-      setPopularRoutesData(popularRoutes);
+      if (refreshing || isLoading) {
+        // Récupération des évennements populaires
+        const popularRoutes = await routesService.getRoutes(setIsLoading);
+        setPopularRoutesData(popularRoutes);
+      }
     })();
-  }, []);
+  }, [refreshing]);
 
-  const handleCardPress = (item) => {
-    router.push(`/route-details/${item.id}`);
-    setSelectedRoute(item.id);
-  };
+  // const onRefresh = useCallback(async () => {
+  //   const popularRoutes = await routesService.getRoutes(setIsLoading);
+  //   setPopularRoutesData(popularRoutes);
+
+  // }, [refreshing]);
+
 
   return (
     <View style={styles.container}>

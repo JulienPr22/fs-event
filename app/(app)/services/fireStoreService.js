@@ -35,10 +35,9 @@ class firestoreService {
 
       const querySnapshot = await getDocs(routesRef);
       querySnapshot.forEach((doc) => {
-        items.push(doc.data());
+        items.push({ ...doc.data(), id: doc.id });
       });
       const route = items[0]
-
       // Récupération des parcours associés (par référence)
       let refEvents = []
       if (route) {

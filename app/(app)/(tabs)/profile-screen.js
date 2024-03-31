@@ -7,6 +7,7 @@ import { router } from 'expo-router';
 import { Switch } from 'react-native-gesture-handler';
 import { UserContext } from '../UserContext';
 import { EventCard } from '../../components';
+import routesService from '../services/routesService';
 
 const ProfileScreen = () => {
   const { session, signOut } = useSession();
@@ -52,6 +53,18 @@ const ProfileScreen = () => {
     setRefreshing(false)
   }, []);
 
+  const onPressPublishedYes = async () => {
+    await routesService.setRoutePublished(relatedRoute.id, true);
+    setPublished(true);
+    console.log("published", published);
+  }
+
+  const onPressPublishedNo = async () => {
+    await routesService.setRoutePublished(relatedRoute.id, false);
+    setPublished(false);
+    console.log("published", published);
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite, justifyContent: "center" }}>
 
@@ -67,10 +80,15 @@ const ProfileScreen = () => {
             <Text style={styles.infoLabel}>Mail: </Text>
             <Text style={styles.infoValue}>{user.email}</Text>
           </View>
+
+
           <View style={styles.field}>
             <Text style={styles.infoLabel}>Rôle: </Text>
             <Text style={styles.infoValue}>{user.role == "visitor" ? "Visiteur" : "Contributeur"}</Text>
           </View>
+
+
+
         </View>
       </View>
 
@@ -91,23 +109,26 @@ const ProfileScreen = () => {
                 </View>
 
                 <View style={styles.field}>
-                  <Text style={styles.infoLabel} >Publié:  </Text>
-                  <Text style={styles.infoValue}>{published ? "Oui" : "Non"}</Text>
+                  <View style={styles.tabsContainer}>
+                    <Text style={styles.infoLabel}>Publié:</Text>
+
+                    <TouchableOpacity
+                      style={styles.tab(published)}
+                      onPress={onPressPublishedYes}
+                    >
+                      <Text style={styles.tabText(published, true)}>Oui</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.tab(published)}
+                      onPress={onPressPublishedNo}
+                    >
+                      <Text style={styles.tabText(published, false)}>Non</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
 
-                {/* <View tyle={styles.field}>
-                  <Text tyle={styles.infoLabel}>Publié: </Text>
-                  <Switch
-                  trackColor={{false: COLORS.gray, true: COLORS.primary}}
-                  thumbColor={published ? '#f5dd4b' : '#f4f3f4'}
-                  value={published}
-                  onValueChange={() => setPublished(!published)}></Switch>
-                </View> */}
 
-                {/* <View style={styles.field}>
-              <Text style={styles.infoLabel} >Description: </Text>
-              <Text style={styles.infoValue}>{relatedRoute.description}</Text>
-            </View> */}
 
               </View>
             </View>
@@ -208,14 +229,16 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: 'center'
   },
-  tab: (activeRole, switchRole) => ({
+  tab: (activeValue, switchValue) => ({
+
     paddingVertical: SIZES.small / 2,
     paddingLeft: SIZES.small,
-    borderColor: activeRole === switchRole ? COLORS.tertiary : COLORS.gray2,
+    borderColor: activeValue === switchValue ? COLORS.tertiary : COLORS.gray2,
   }),
-  tabText: (activeJobType, switchRole) => ({
-    fontFamily: FONT.medium,
-    color: activeJobType === switchRole ? COLORS.tertiary : COLORS.gray2,
+  tabText: (activeValue, switchValue) => ({
+    fontSize: SIZES.large,
+    fontFamily: FONT.bold,
+    color: activeValue === switchValue ? COLORS.tertiary : COLORS.gray2,
   }),
 });
 

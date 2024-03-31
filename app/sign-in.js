@@ -2,10 +2,8 @@ import { Stack, router } from 'expo-router';
 import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { useSession } from './ctx';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, FONT, SIZES } from './constants';
 import { useState } from 'react';
-
 
 export default function SignIn() {
   const { signIn, signUp } = useSession();
@@ -51,7 +49,6 @@ export default function SignIn() {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-
       <Stack.Screen options={{ headerShown: false }} />
 
           <Text style={styles.title}>

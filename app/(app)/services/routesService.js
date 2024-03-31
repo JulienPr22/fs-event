@@ -149,7 +149,6 @@ class routesService {
     }
   }
 
-
   static fetchUserRouteData = async (userId) => {
     const items = [];
 
@@ -227,6 +226,18 @@ class routesService {
     } catch (error) {
 
       throw error;
+    }
+  }
+
+  static setRoutePublished = async (routeId, published) => {
+    console.log("published", routeId, published);
+    try {
+      const docRef = doc(FIRESTORE_DB, "routes", routeId);
+      await updateDoc(docRef, { published: published });
+
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour du parcours :', error);
+
     }
   }
 }

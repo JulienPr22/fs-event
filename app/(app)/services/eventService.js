@@ -33,7 +33,7 @@ class eventService {
         dataToFetch = await getDoc(docRef);
         setLoading(false);
         setLoading(false);
-        return dataToFetch.data();
+        return { id: dataToFetch.id, ...dataToFetch.data() };
       } else { // fetch some
         const items = [];
         let collectionRef = collection(FIRESTORE_DB, "events");
@@ -130,9 +130,9 @@ class eventService {
     return nearbyEvents;
   }
 
-  static updateEventRating = async (event, docId, userRating) => {
+  static updateEventRating = async (event, userRating) => {
     try {
-      const docRef = doc(FIRESTORE_DB, "events", docId);
+      const docRef = doc(FIRESTORE_DB, "events", event.id);
 
       const updatedRating = (event.rating * event.votes + userRating) / (event.votes + 1);
       const updatedVotes = event.votes + 1;
@@ -151,9 +151,9 @@ class eventService {
     }
   }
 
-  static updateEventFilling = async (event, docId, userFilling) => {
+  static updateEventFilling = async (event, userFilling) => {
     try {
-      const docRef = doc(FIRESTORE_DB, "events", docId);
+      const docRef = doc(FIRESTORE_DB, "events", event.id);
       const newEvent = { ...event, filling: userFilling }
       await setDoc(docRef, {
         newEvent

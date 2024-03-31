@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { useRouter } from 'expo-router';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import styles from './popularevents.style';
@@ -8,12 +8,14 @@ import EventCard from '../../common/cards/event/EventCard';
 import { COLORS } from '../../../constants';
 import firestoreService from '../../../(app)/services/fireStoreService';
 import eventService from '../../../(app)/services/eventService';
+import { EventsContext } from '../../../(app)/EventsContext';
 
 const PopularEvents = () => {
   const router = useRouter();
   const [popularEventsData, setPopularEventsData] = useState([]);
   const [isLoading, setIsLoading] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  // const { events, isLoading } = useContext(EventsContext);
 
   useEffect(() => {
     (async () => {

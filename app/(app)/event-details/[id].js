@@ -78,13 +78,13 @@ const EventDetails = () => {
 
   const validateRating = async () => {
     setRatingModalVisible(false)
-    const updatedEvent = await eventService.updateEventRating(event, params.id, userRating)
+    const updatedEvent = await eventService.updateEventRating(event, userRating)
     setEvent(updatedEvent);
   }
 
   const validateFilling = async () => {
     setFillingModalVisible(false)
-    const updatedEvent = await eventService.updateEventFilling(event, params.id, userFilling)
+    const updatedEvent = await eventService.updateEventFilling(event, userFilling)
     setEvent(updatedEvent);
   }
 

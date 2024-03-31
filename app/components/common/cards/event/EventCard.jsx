@@ -66,7 +66,7 @@ const EventCard = ({ event, onPress }) => {
           <View>
             {event.filling >= 50 && (
               <MaterialIcons
-                size={28}
+                size={20}
                 style={{ marginBottom: -3 }}
                 name='warning'
                 color={event.filling >= 75 ? 'red' : 'orange'}

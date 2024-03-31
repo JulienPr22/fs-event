@@ -1,9 +1,8 @@
 import { Redirect, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useSession } from "../ctx";
-import { UserContext, UserProvider } from "./UserContext";
-import firestoreService from "./services/fireStoreService";
-import { useContext } from "react";
+import { UserProvider } from "./UserContext";
+import { EventsProvider } from "./EventsContext";
 
 export const unstable_settings = {
   initialRouteName: "home",
@@ -36,12 +35,12 @@ const Layout = () => {
 
   return (
     <UserProvider>
-      <Stack >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
+      {/* <EventsProvider> */}
+        <Stack >
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      {/* </EventsProvider> */}
     </UserProvider>
-
-
   )
 };
 

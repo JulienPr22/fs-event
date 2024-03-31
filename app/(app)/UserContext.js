@@ -3,7 +3,6 @@ import firestoreService from './services/fireStoreService';
 import { useSession } from '../ctx';
 import * as Location from 'expo-location';
 
-
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {

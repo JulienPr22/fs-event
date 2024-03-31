@@ -10,33 +10,23 @@ import firestoreService from '../../../(app)/services/fireStoreService';
 import eventService from '../../../(app)/services/eventService';
 import { EventsContext } from '../../../(app)/EventsContext';
 
-const PopularEvents = () => {
+const PopularEvents = ({ refreshing }) => {
   const router = useRouter();
   const [popularEventsData, setPopularEventsData] = useState([]);
   const [isLoading, setIsLoading] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
-  // const { events, isLoading } = useContext(EventsContext);
 
   useEffect(() => {
     (async () => {
-      // Récupération des évennements populaires
-      const popularEvents = await eventService.fetchEvents(
-        { maxResults: 20, minRating: 4.5, page: 1 },
-        setIsLoading
-      );
-      setPopularEventsData(popularEvents);
+      if (refreshing || isLoading) {
+        // Récupération des évennements populaires
+        const popularEvents = await eventService.fetchEvents(
+          { maxResults: 20, minRating: 4.5, page: 1 },
+          setIsLoading
+        );
+        setPopularEventsData(popularEvents);
+      }
     })();
-  }, []);
-
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    const popularEvents = await eventService.fetchEvents(
-      { maxResults: 20, minRating: 4.5, page: 1 },
-      setIsLoading
-    );
-    setPopularEventsData(popularEvents);
-    setRefreshing(false);
-  }, []);
+  }, [refreshing]);
 
   return (
     <View style={styles.container}>

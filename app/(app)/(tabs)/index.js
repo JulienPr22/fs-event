@@ -24,7 +24,7 @@ const HomeScreen = () => {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
-    }, 2000);
+    }, 1500);
   };
 
   return (
@@ -52,7 +52,7 @@ const HomeScreen = () => {
           />
 
           <PopularRoutes refreshing={refreshing}/>
-          <PopularEvents />
+          <PopularEvents refreshing={refreshing} />
         </View>
       </ScrollView>
     </SafeAreaView>

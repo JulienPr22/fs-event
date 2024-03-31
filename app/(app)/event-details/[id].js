@@ -78,8 +78,8 @@ const EventDetails = () => {
 
   const validateRating = async () => {
     setRatingModalVisible(false)
-    const updatedEvent = await eventService.updateEventRating(event, userRating)
-    setEvent(updatedEvent);
+    await eventService.updateEventRating(event, userRating)
+
   }
 
   const validateFilling = async () => {
@@ -115,8 +115,10 @@ const EventDetails = () => {
     setIsAdded(!isAdded)
   }
 
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
+    const eventData = await eventService.fetchEvents({ docId: params.id }, setIsLoading);
+    setEvent(eventData);
     setRefreshing(false)
   }, []);
 
@@ -198,7 +200,7 @@ const EventDetails = () => {
         );
 
       case "Carte":
-        // router.push(`/event-details/${event.id}`);
+      // router.push(`/event-details/${event.id}`);
 
       default:
         return null;

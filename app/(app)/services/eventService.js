@@ -1,6 +1,6 @@
 import { FIRESTORE_DB } from "../../../firebaseConfig";
 
-import { GeoPoint, addDoc, collection, doc, endAt, getDoc, getDocs, limit, orderBy, query, setDoc, startAt, where } from "firebase/firestore";
+import { GeoPoint, addDoc, collection, doc, endAt, getDoc, getDocs, limit, orderBy, query, setDoc, startAt, updateDoc, where } from "firebase/firestore";
 import fakeData from "../../assets/fr-esr-fete-de-la-science-23.json";
 import ngeohash from "ngeohash";
 import { distanceBetween, geohashQueryBounds } from "geofire-common";
@@ -136,14 +136,8 @@ class eventService {
 
       const updatedRating = (event.rating * event.votes + userRating) / (event.votes + 1);
       const updatedVotes = event.votes + 1;
-      const newEvent = { ...event, rating: updatedRating, votes: updatedVotes }
 
-      await setDoc(docRef, {
-        newEvent
-      });
-
-      console.log("updated event", newEvent);
-      return newEvent;
+      await updateDoc(docRef, { rating: updatedRating, votes: updatedVotes });
 
     } catch (error) {
       console.error('Erreur lors de la mise à jour de la note de l\'événement :', error);
@@ -154,13 +148,7 @@ class eventService {
   static updateEventFilling = async (event, userFilling) => {
     try {
       const docRef = doc(FIRESTORE_DB, "events", event.id);
-      const newEvent = { ...event, filling: userFilling }
-      await setDoc(docRef, {
-        newEvent
-      });
-
-      console.log("updated event", newEvent);
-      return newEvent;
+      await updateDoc(docRef, { filling: userFilling });
 
     } catch (error) {
       console.error('Erreur lors de la mise à jour de la note de l\'événement :', error);

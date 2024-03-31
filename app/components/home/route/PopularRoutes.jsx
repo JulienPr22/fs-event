@@ -29,13 +29,6 @@ const PopularRoutes = ({ refreshing }) => {
     })();
   }, [refreshing]);
 
-  // const onRefresh = useCallback(async () => {
-  //   const popularRoutes = await routesService.getRoutes(setIsLoading);
-  //   setPopularRoutesData(popularRoutes);
-
-  // }, [refreshing]);
-
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>

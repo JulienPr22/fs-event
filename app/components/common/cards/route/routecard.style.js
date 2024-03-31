@@ -3,62 +3,32 @@ import { StyleSheet } from "react-native";
 import { COLORS, FONT, SHADOWS, SIZES } from "../../../../constants";
 
 const styles = StyleSheet.create({
-  container: (selectedJob, item) => ({
-    width: 250,
-    padding: SIZES.xLarge,
-    // backgroundColor: selectedJob === item.id ? COLORS.primary : "#FFF",
-    backgroundColor:  "#FFF",
+  container: (index) => {
+    let opacity = 0.3; // Opacité par défaut
+    // Ajuster l'opacité en fonction de l'index
+    if (index === 0) {
+      opacity = 1; // Opacité pour la place numéro 1
+    } else if (index === 1) {
+      opacity = 0.7; // Opacité pour la place numéro 2
+    } else if (index === 2) {
+      opacity = 0.5; // Opacité pour la place numéro 3
+    }
 
-    borderRadius: SIZES.medium,
-    justifyContent: "space-between",
-    ...SHADOWS.medium,
-    shadowColor: COLORS.white,
-  }),
-  logoContainer: (selectedJob, item) => ({
-    width: 50,
-    height: 50,
-    // backgroundColor: selectedJob === item.id ? "#FFF" : COLORS.white,
-    backgroundColor: COLORS.white,
+    return {
+      width: 75,
+      height: 75,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: `rgba(185, 176, 252, ${opacity})`, // Opacité diminuée en fonction de l'index
+      borderRadius: SIZES.medium,
+    }
+  },
+  rank: {
+    fontSize: SIZES.xxLarge,
+    fontFamily: FONT.bold,
+    color: COLORS.primary,
+  },
 
-
-    borderRadius: SIZES.medium,
-    justifyContent: "center",
-    alignItems: "center",
-  }),
-  logoImage: {
-    width: "70%",
-    height: "70%",
-  },
-  companyName: {
-    fontSize: SIZES.medium,
-    fontFamily: FONT.regular,
-    color: "#B3AEC6",
-    marginTop: SIZES.small / 1.5,
-  },
-  infoContainer: {
-    marginTop: SIZES.large,
-  },
-  // jobName: (selectedJob, item) => ({
-  //   fontSize: SIZES.large,
-  //   fontFamily: FONT.medium,
-  //   color: selectedJob === item.id ? COLORS.white : COLORS.primary,
-  // }),
-  infoWrapper: {
-    flexDirection: "row",
-    marginTop: 5,
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-  // publisher: (selectedJob, item) => ({
-  //   fontSize: SIZES.medium - 2,
-  //   fontFamily: FONT.regular,
-  //   color: selectedJob === item.id ? COLORS.white : COLORS.primary,
-  // }),
-  location: {
-    fontSize: SIZES.medium - 2,
-    fontFamily: FONT.regular,
-    color: "#B3AEC6",
-  },
 });
 
 export default styles;

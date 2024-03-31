@@ -48,9 +48,10 @@ const PopularRoutes = () => {
         ) : (
           <FlatList
             data={popularRoutesData}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <RouteCard
                 route={item}
+                index={index}
                 onPress={() => {
                   router.push(`/route-details/${item.id}`);
                 }}

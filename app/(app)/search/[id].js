@@ -10,6 +10,7 @@ import styles from '../../styles/search'
 import FilterModal from '../../components/search/FilterModal'
 import firestoreService from '../services/fireStoreService'
 import { Avatar, Badge } from '@rneui/themed'
+import eventService from '../services/eventService'
 
 const EventSearch = () => {
     const params = useGlobalSearchParams();
@@ -50,7 +51,7 @@ const EventSearch = () => {
         // setSearchResult([])
 
         try {
-            const events = await firestoreService.fetchEvents({ maxResults: 20, minRating: parseInt(minRating), animationTypeFilter: animationTypeFilter, page: page }, setSearchLoader);
+            const events = await eventService.fetchEvents({ maxResults: 20, minRating: parseInt(minRating), animationTypeFilter: animationTypeFilter, page: page }, setSearchLoader);
             console.log('events', events);
             setSearchResult(events);
             setRefreshing(true)

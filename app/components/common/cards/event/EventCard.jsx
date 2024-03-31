@@ -3,6 +3,7 @@ import styles from './eventcard.style';
 import { checkImageURL } from '../../../../utils';
 import { icons } from '../../../../constants';
 import { useState } from 'react';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const EventCard = ({ event, onPress }) => {
   const [isDescriptionVisible, setIsDescriptionVisible] = useState(false);
@@ -47,9 +48,7 @@ const EventCard = ({ event, onPress }) => {
         </View>
 
         {isDescriptionVisible ? (
-          <Text style={styles.eventDescription} >
-            {event?.description_fr}
-          </Text>
+          <Text style={styles.eventDescription}>{event?.description_fr}</Text>
         ) : (
           <></>
         )}
@@ -64,6 +63,16 @@ const EventCard = ({ event, onPress }) => {
             style={styles.starIcon}
           />
           <Text style={styles.eventDescription}>({event?.votes})</Text>
+          <View>
+            {event.filling >= 50 && (
+              <MaterialIcons
+                size={28}
+                style={{ marginBottom: -3 }}
+                name='warning'
+                color={event.filling >= 75 ? 'red' : 'orange'}
+              />
+            )}
+          </View>
         </View>
       </View>
     </Pressable>

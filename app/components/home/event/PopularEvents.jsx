@@ -7,21 +7,33 @@ import EventCard from '../../common/cards/event/EventCard';
 
 import { COLORS } from '../../../constants';
 import firestoreService from '../../../(app)/services/fireStoreService';
+import eventService from '../../../(app)/services/eventService';
 
 const PopularEvents = () => {
   const router = useRouter();
   const [popularEventsData, setPopularEventsData] = useState([]);
   const [isLoading, setIsLoading] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     (async () => {
       // Récupération des évennements populaires
-      const popularEvents = await firestoreService.fetchEvents(
+      const popularEvents = await eventService.fetchEvents(
         { maxResults: 20, minRating: 4.5, page: 1 },
         setIsLoading
       );
       setPopularEventsData(popularEvents);
     })();
+  }, []);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    const popularEvents = await eventService.fetchEvents(
+      { maxResults: 20, minRating: 4.5, page: 1 },
+      setIsLoading
+    );
+    setPopularEventsData(popularEvents);
+    setRefreshing(false);
   }, []);
 
   return (

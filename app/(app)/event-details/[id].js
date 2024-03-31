@@ -32,6 +32,7 @@ import ActionModal from "../../components/eventdetails/modals/ActionModal";
 import RatingModal from "../../components/eventdetails/modals/RatingModal";
 import SlotPickerModal from "../../components/eventdetails/modals/SlotPickerModal";
 import FillingModal from "../../components/eventdetails/modals/FillingModal";
+import eventService from "../services/eventService";
 
 const tabs = ["À Propos", "Adresse", "Carte"];
 
@@ -59,7 +60,7 @@ const EventDetails = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const eventData = await firestoreService.fetchEvents({ docId: params.id }, setIsLoading);
+      const eventData = await eventService.fetchEvents({ docId: params.id }, setIsLoading);
       setEvent(eventData);
       setUserFilling(eventData.filling)
       console.log("event details", eventData);
@@ -77,13 +78,13 @@ const EventDetails = () => {
 
   const validateRating = async () => {
     setRatingModalVisible(false)
-    const updatedEvent = await firestoreService.updateEventRating(event, params.id, userRating)
+    const updatedEvent = await eventService.updateEventRating(event, params.id, userRating)
     setEvent(updatedEvent);
   }
 
   const validateFilling = async () => {
     setFillingModalVisible(false)
-    const updatedEvent = await firestoreService.updateEventFilling(event, params.id, userFilling)
+    const updatedEvent = await eventService.updateEventFilling(event, params.id, userFilling)
     setEvent(updatedEvent);
   }
 

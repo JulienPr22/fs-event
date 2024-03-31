@@ -152,7 +152,7 @@ const EventDetails = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite,  /* paddingBottom: 100 */ }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite}}>
       <Stack.Screen
         options={{
           visible: false,
@@ -165,12 +165,6 @@ const EventDetails = () => {
               dimension='60%'
               handlePress={() => router.back()}
             />
-          ),
-          headerRight: () => (
-            <ScreenHeaderBtn
-              iconUrl={icons.menu}
-              dimension='60%'
-              handlePress={() => setActionsModalVisible(true)} />
           ),
           headerTitle: "",
         }}

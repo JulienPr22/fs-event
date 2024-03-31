@@ -12,6 +12,7 @@ import { checkImageURL } from '../../utils';
 import { Button, Card, FAB, Icon } from '@rneui/themed';
 import { MaterialIcons } from '@expo/vector-icons';
 import EventCard from '../../components/common/cards/event/EventCard';
+import eventService from '../services/eventService';
 
 
 const INITIAL_REGION = {
@@ -37,7 +38,7 @@ function MapScreen() {
     (async () => {
       setRegionLocation({ latitude: INITIAL_REGION.latitude, longitude: INITIAL_REGION.longitude })
       // Récupération des évennements proches
-      const eventsData = await firestoreService.getNearbyEvents(INITIAL_REGION.latitude, INITIAL_REGION.longitude, 10)
+      const eventsData = await eventService.getNearbyEvents(INITIAL_REGION.latitude, INITIAL_REGION.longitude, 10)
       setEvents(eventsData)
       console.log("eventsData", eventsData);
       setIsDataLoaded(true)
@@ -48,7 +49,7 @@ function MapScreen() {
 
   const searchNearbyEvents = async () => {
     setIsDataLoaded(false)
-    const eventsData = await firestoreService.getNearbyEvents(regionLocation.latitude, regionLocation.longitude, 50)
+    const eventsData = await eventService.getNearbyEvents(regionLocation.latitude, regionLocation.longitude, 50)
     setEvents(eventsData)
     console.log("nearbyEvents", eventsData);
     setIsDataLoaded(true)

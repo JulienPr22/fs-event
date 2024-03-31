@@ -58,7 +58,8 @@ class routesService {
     }
   }
 
-  static fetchRoute = async (userId) => {
+
+  static getRouteByUserId = async (userId) => {
     const items = []
     try {
 
@@ -87,7 +88,7 @@ class routesService {
   static addEventToUserRoute = async (userId, eventId) => {
 
     try {
-      let userRoute = await this.fetchRoute(userId)
+      let userRoute = await this.getRouteByUserId(userId)
 
       if (userRoute == null) {
         userRoute = await this.createRoute(userId, "Nouveau parcours", "", true)
@@ -109,6 +110,45 @@ class routesService {
       throw error;
     }
   }
+
+  static fetchRouteData = async (routeId, setLoading) => {
+    console.log("fetchRouteData", routeId);
+    setLoading(true);
+
+    try {
+      // Récupération du parcours
+      const routeRef = doc(FIRESTORE_DB, "routes", routeId);
+      const routeSnap = await getDoc(routeRef);
+      const route = { id: routeSnap.id, ...routeSnap.data() }
+      console.log("route", route);
+
+      // Récupération du créateur du parcours
+      const userRef = doc(FIRESTORE_DB, "users", route.creatorId);
+      const userSnap = await getDoc(userRef);
+      const user = { id: userSnap.id, ...userSnap.data() }
+
+      // Récupération des événements associés (par référence)
+      let refEvents = []
+      if (route) {
+        refEvents = route.relatedEvents || [];
+      }
+      const eventsPromises = refEvents.map(async (eventRef) => {
+        const eventDoc = await getDoc(eventRef)
+        return { id: eventDoc.id, ...eventDoc.data() };
+      });
+
+      const eventsData = await Promise.all(eventsPromises);
+
+      setLoading(false);
+      return ({ route: route, user: user, events: eventsData });
+
+
+    } catch (error) {
+      setLoading(false);
+      throw error;
+    }
+  }
+
 
   static fetchUserRouteData = async (userId) => {
     const items = [];

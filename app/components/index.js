@@ -7,7 +7,7 @@ import PopularRoutes from "./home/route/PopularRoutes";
 
 // event details screen
 import GeneralEventInfo from "./eventdetails/general-event-info/GeneralEventInfo";
-import { default as JobTabs } from "./eventdetails/tabs/Tabs";
+import Tabs from "./eventdetails/tabs/Tabs";
 import { default as EventAbout } from "./eventdetails/about/About";
 import { default as EventFooter } from "./eventdetails/footer/Footer";
 import { default as PlaceDetails } from "./eventdetails/place/PlaceDetails";
@@ -23,7 +23,7 @@ export {
   PopularEvents,
   PopularRoutes,
   GeneralEventInfo as EventInfo,
-  JobTabs,
+  Tabs,
   EventAbout,
   EventFooter,
   PlaceDetails,

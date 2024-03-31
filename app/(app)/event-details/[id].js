@@ -13,9 +13,9 @@ import {
 import {
   EventAbout,
   EventFooter,
-  JobTabs,
   PlaceDetails,
   ScreenHeaderBtn,
+  Tabs,
 } from "../../components";
 import { COLORS, icons, SIZES } from "../../constants";
 import GeneralEventInfo from "../../components/eventdetails/general-event-info/GeneralEventInfo";
@@ -197,14 +197,7 @@ const EventDetails = () => {
         );
 
       case "Carte":
-        return (
-          <MapInfo
-            coordinate={{
-              latitude: event.geolocalisation.lat, longitude: event.geolocalisation.lon, latitudeDelta: 0.01,
-              longitudeDelta: 0.01, name: event.title
-            }}
-          />
-        );
+        // router.push(`/event-details/${event.id}`);
 
       default:
         return null;
@@ -247,6 +240,7 @@ const EventDetails = () => {
             : !event ? (
               <Text>No data available</Text>
             ) : (
+
               <View style={{ padding: SIZES.medium, paddingBottom: 100 }}>
 
                 <GeneralEventInfo
@@ -262,7 +256,7 @@ const EventDetails = () => {
                   votes={event.votes}
                 />
 
-                <JobTabs
+                <Tabs
                   tabs={tabs}
                   activeTab={activeTab}
                   setActiveTab={setActiveTab}

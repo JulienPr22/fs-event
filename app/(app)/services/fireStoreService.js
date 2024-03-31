@@ -109,11 +109,11 @@ class firestoreService {
         const distanceInKm = distanceBetween([lat, lng], center);
         const distanceInM = distanceInKm * 1000;
         if (distanceInM <= radiusInM) {
-          nearbyEvents.push({id: doc.id, ...doc.data()});
+          nearbyEvents.push({ id: doc.id, ...doc.data() });
         }
       }
     }
-    console.log("matchingDocs",nearbyEvents);
+    console.log("matchingDocs", nearbyEvents);
     return nearbyEvents;
   }
 
@@ -168,8 +168,7 @@ class firestoreService {
     }
   }
 
-
-  static fetchUserRouteData = async (userId, setLoading) => {
+  static fetchRouteData = async (userId, setLoading) => {
     const items = [];
 
     setLoading(true);
@@ -254,33 +253,6 @@ class firestoreService {
     }
   }
 
-  static fetchRoute = async (userId, setLoading) => {
-    setLoading(true);
-    const items = []
-    try {
-
-      let routesRef = collection(FIRESTORE_DB, "routes");
-      routesRef = query(
-        routesRef,
-        where("creatorId", "==", userId),
-        limit(1)
-      );
-
-      const querySnapshot = await getDocs(routesRef);
-      querySnapshot.forEach((route) => {
-        items.push(route.data());
-      });
-
-      setLoading(false);
-      console.log("items[0]", items[0]);
-      return items[0];
-
-    } catch (error) {
-
-      setLoading(false);
-      throw error;
-    }
-  }
 }
 
 

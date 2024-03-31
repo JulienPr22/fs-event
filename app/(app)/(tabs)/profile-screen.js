@@ -24,7 +24,7 @@ const ProfileScreen = () => {
     console.log("Profile Screen", user);
     (async () => {
 
-      const { route, events } = await firestoreService.fetchUserRouteData(session, setIsLoading);
+      const { route, events } = await firestoreService.fetchRouteData(session, setIsLoading);
 
       if (route) {
         setRelatedRoute(route)
@@ -40,7 +40,7 @@ const ProfileScreen = () => {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    const { route, events } = await firestoreService.fetchUserRouteData(session, setIsLoading);
+    const { route, events } = await firestoreService.fetchRouteData(session, setIsLoading);
 
     if (route) {
       setRelatedRoute(route)

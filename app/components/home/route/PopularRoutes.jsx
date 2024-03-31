@@ -29,6 +29,7 @@ const PopularRoutes = () => {
   }, []);
 
   const handleCardPress = (item) => {
+    router.push(`/route-details/${item.id}`);
     setSelectedRoute(item.id);
   };
 
@@ -48,7 +49,12 @@ const PopularRoutes = () => {
           <FlatList
             data={popularRoutesData}
             renderItem={({ item }) => (
-              <RouteCard route={item} onPress={handleCardPress} />
+              <RouteCard
+                route={item}
+                onPress={() => {
+                  router.push(`/route-details/${item.id}`);
+                }}
+              />
             )}
             keyExtractor={(item) => item.id}
             contentContainerStyle={{ columnGap: SIZES.medium }}

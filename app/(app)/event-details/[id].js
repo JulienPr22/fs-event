@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   Alert,
+  Platform,
 } from "react-native";
 
 import {
@@ -33,6 +34,8 @@ import SlotPickerModal from "../../components/eventdetails/modals/SlotPickerModa
 import FillingModal from "../../components/eventdetails/modals/FillingModal";
 import eventService from "../services/eventService";
 import MapInfo from "../../components/eventdetails/map/MapInfo";
+import * as Calendar from 'expo-calendar';
+
 
 const tabs = ["À Propos", "Adresse", "Carte"];
 
@@ -59,21 +62,22 @@ const EventDetails = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       const eventData = await eventService.fetchEvents({ docId: params.id }, setIsLoading);
       setEvent(eventData);
       setUserFilling(eventData.filling)
-      console.log("event details", eventData);
 
       const userEventRouteData = await userService.fetchUserEventsRouteIds(session.session, setIsLoading);
       setIsAdded(userEventRouteData.includes(params.id));
-      console.log("eventId", params.id);
 
-      console.log("userEventRouteData", userEventRouteData);
+      const { status } = await Calendar.requestCalendarPermissionsAsync();
+      if (status === 'granted') {
+        const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+        console.log('Here are all your calendars:');
+        console.log({ calendars });
+      }
 
-    };
-
-    fetchData();
+    })();
   }, []);
 
   const validateRating = async () => {
@@ -128,9 +132,13 @@ const EventDetails = () => {
     setSlotPickerModalVisible(true)
 
     if (event.dates && event.dates.length > 0) {
-      const slots = event.dates.map(date => (
-        convertToIso(date)
-      ))
+      const slots = event.dates.map(date => {
+        const dateObj = new Date(convertToIso(date));
+        dateObj.setFullYear(dateObj.getFullYear() + 1);
+        const dateString = dateObj.toISOString()
+        console.log("dateString", dateString);
+        return dateString;
+      })
 
       setSlotOptions(slots);
       console.log("slotOptions", slotOptions);
@@ -144,14 +152,13 @@ const EventDetails = () => {
     const eventDetails = {
       title: event.titre_fr,
       startDate: slot,
+      endDate: slot,
       allDay: true,
       location: event.lib_commune,
       timeZone: 'Europe/Paris',
       notes: event.description_fr,
       url: event.lien
     };
-
-    console.log("eventDetails", eventDetails);
 
     Alert.alert('Ajouter ce créneau au calendrier ?', '', [
 
@@ -160,16 +167,34 @@ const EventDetails = () => {
         onPress: () => console.log('Cancel Pressed'),
         style: 'destructive',
       },
-      { text: 'Oui', onPress: () => this.handleAddEventConfirmed(eventDetails) },
+      { text: 'Oui', onPress: async () => handleAddEventConfirmed(eventDetails) },
     ]);
 
   };
 
-  handleAddEventConfirmed = async (eventDetails) => {
+  const getDefaultCalendarSource = async () => {
+    const defaultCalendar = await Calendar.getDefaultCalendarAsync();
+    return defaultCalendar.id;
+  }
+
+  const addEvent = async (eventData) => {
+    try {
+      const calendarId =
+        Platform.OS === 'ios'
+          ? await getDefaultCalendarSource()
+          : { isLocalAccount: true, name: 'Expo Calendar' };
+
+      await Calendar.createEventAsync(calendarId, eventData);
+
+    } catch (error) {
+      console.error('Erreur lors de l\'ajout de l\'événement au calendrier:', error);
+    }
+  }
+
+  const handleAddEventConfirmed = async (eventDetails) => {
     setSlotPickerModalVisible(false)
     try {
-      console.log("eventData", eventDetails);
-      await calendarService.addEvent(eventDetails)
+      await addEvent(eventDetails)
       Alert.alert('Succès', `L'événement "${eventDetails.title}" a été ajouté au calendrier.`);
 
     } catch (error) {

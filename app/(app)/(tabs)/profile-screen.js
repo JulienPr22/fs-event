@@ -21,7 +21,6 @@ const ProfileScreen = () => {
   const [published, setPublished] = useState()
 
   useEffect(() => {
-    console.log("Profile Screen", user);
     (async () => {
 
       const { route, events } = await userService.fetchRouteData(session, setIsLoading);

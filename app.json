@@ -12,7 +12,7 @@
       [
         "expo-calendar",
         {
-          "calendarPermission": "The app needs to access your calendar."
+          "calendarPermission": "Allow $(PRODUCT_NAME) to access your calendar"
         }
       ],
       [

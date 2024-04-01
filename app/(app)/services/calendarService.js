@@ -8,17 +8,25 @@ class calendarService {
 
   static getDefaultCalendarSource = async () => {
     const defaultCalendar = await Calendar.getDefaultCalendarAsync();
-    return defaultCalendar.id;
+    return defaultCalendar.source;
   }
+
+
 
   static addEvent = async (eventData) => {
 
+    await this.getCalendars()
+
+    console.log("addEvent", eventData);
     try {
       const { status } = await Calendar.requestCalendarPermissionsAsync();
+      console.log("status", status);
       if (status === 'granted') {
+
+
         const calendarId =
           Platform.OS === 'ios'
-            ? await this.getDefaultCalendarSource()
+            ? (await this.getDefaultCalendarSource()).id
             : { isLocalAccount: true, name: 'Expo Calendar' };
 
         await Calendar.createEventAsync(calendarId, eventData);

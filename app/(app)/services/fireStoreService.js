@@ -38,7 +38,7 @@ class firestoreService {
         items.push({ ...doc.data(), id: doc.id });
       });
       const route = items[0]
-      // Récupération des parcours associés (par référence)
+       // Récupération des parcours associés (par référence)
       let refEvents = []
       if (route) {
         refEvents = route.relatedEvents || [];

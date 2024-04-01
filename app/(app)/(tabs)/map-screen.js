@@ -1,17 +1,13 @@
-import { Alert, Image, Linking, Modal, Platform, Text, TouchableOpacity, View, } from 'react-native';
+import { Linking, Platform, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { useContext, useEffect, useRef, useState } from 'react';
-import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
-import firestoreService from '../services/fireStoreService';
-import { Stack, Tabs, useRouter } from 'expo-router';
-import { COLORS, SIZES, icons } from '../../constants';
-import { ScreenHeaderBtn } from '../../components';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { useRouter } from 'expo-router';
+import { COLORS, SIZES } from '../../constants';
 import EventTile from '../../components/map-screen/event-tile/EventTile';
 import { UserContext } from '../UserContext';
 import { checkImageURL } from '../../utils';
-import { Button, Card, FAB, Icon } from '@rneui/themed';
-import { MaterialIcons } from '@expo/vector-icons';
-import EventCard from '../../components/common/cards/event/EventCard';
+import { FAB } from '@rneui/themed';
 import eventService from '../services/eventService';
 
 
@@ -66,13 +62,13 @@ function MapScreen() {
   }
 
   const onRegionChange = (region) => {
+    console.log(region);
     setRegionLocation({ latitude: region.latitude, longitude: region.longitude })
   }
 
   const onMarkerSelected = (marker) => {
     setTileVisible(true)
     setSelectedEvent(marker);
-    //Alert.alert(marker.name)
   }
 
   const getDirection = () => {

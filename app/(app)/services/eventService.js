@@ -1,10 +1,6 @@
 import { FIRESTORE_DB } from "../../../firebaseConfig";
-
 import { GeoPoint, addDoc, collection, doc, endAt, getDoc, getDocs, limit, orderBy, query, setDoc, startAt, updateDoc, where } from "firebase/firestore";
-import fakeData from "../../assets/fr-esr-fete-de-la-science-23.json";
-import ngeohash from "ngeohash";
 import { distanceBetween, geohashQueryBounds } from "geofire-common";
-
 
 /**
  * classe de service pour gérer les évennements
@@ -103,7 +99,7 @@ class eventService {
         orderBy('geohash'),
         startAt(b[0]),
         endAt(b[1]),
-        limit(20));
+        limit(250));
 
       promises.push(getDocs(q));
     }

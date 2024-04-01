@@ -1,5 +1,5 @@
 import { FIRESTORE_DB } from "../../../firebaseConfig";
-import { GeoPoint, addDoc, collection, doc, endAt, getDoc, getDocs, limit, orderBy, query, setDoc, startAt, updateDoc, where } from "firebase/firestore";
+import { collection, doc, endAt, getDoc, getDocs, limit, orderBy, query, startAt, updateDoc, where } from "firebase/firestore";
 import { distanceBetween, geohashQueryBounds } from "geofire-common";
 
 /**

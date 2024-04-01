@@ -1,11 +1,10 @@
 import { CheckBox } from '@rneui/base';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Modal,
   View,
   Text,
   Button,
-  SafeAreaView,
   StyleSheet,
   TextInput,
   KeyboardAvoidingView,
@@ -22,7 +21,7 @@ const FilterModal = ({
   checkedItems,
   setCheckedItems,
   minimumRating,
-  setMinimumRating
+  setMinimumRating,
 }) => {
   const handleApply = () => {
     onApply();
@@ -50,8 +49,10 @@ const FilterModal = ({
 
   return (
     <Modal visible={visible} onRequestClose={onClose}>
-      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
         <View style={{ padding: SIZES.medium }}>
           <Text style={styles.headerTitle}>Filtres</Text>
           <Text style={styles.filterTitle}> Type d'animation: </Text>
@@ -72,20 +73,17 @@ const FilterModal = ({
 
           {/* MinimumRatingFilter */}
 
-            <Text style={styles.filterTitle}>
-              Note minimale (entre 1 et 5):
-            </Text>
-            <TextInput
-              style={styles.input}
-              keyboardType='numeric'
-              placeholder='Saisir la note minimale'
-              value={minimumRating}
-              onChangeText={(num) => setMinimumRating(num)}
-              returnKeyType="done" // Ajoute cette prop pour afficher OK/Annuler
-              returnKeyLabel='Valider'
-              onSubmitEditing={() => Keyboard.dismiss()} // Ferme le clavier sur la soumission
-
-            />
+          <Text style={styles.filterTitle}>Note minimale (entre 1 et 5):</Text>
+          <TextInput
+            style={styles.input}
+            keyboardType='numeric'
+            placeholder='Saisir la note minimale'
+            value={minimumRating}
+            onChangeText={(num) => setMinimumRating(num)}
+            returnKeyType='done' // Ajoute cette prop pour afficher OK/Annuler
+            returnKeyLabel='Valider'
+            onSubmitEditing={() => Keyboard.dismiss()} // Ferme le clavier sur la soumission
+          />
 
           {/* Apply and Reset buttons */}
 
@@ -102,7 +100,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // justifyContent: 'center',
     // alignItems: 'center',
-    marginTop: SIZES.medium
+    marginTop: SIZES.medium,
   },
   headerTitle: {
     fontFamily: FONT.bold,

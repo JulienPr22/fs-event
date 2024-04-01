@@ -1,7 +1,7 @@
-import { View, Text, Image, Pressable } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import styles from './routecard.style';
 
-const RouteCard = ({ route, index, onPress }) => {
+const RouteCard = ({index, onPress }) => {
 
   return (
     <Pressable style={styles.container(index)} onPress={onPress}>

@@ -19,8 +19,7 @@ import {
 } from "../../components";
 import { COLORS, icons, SIZES } from "../../constants";
 import GeneralEventInfo from "../../components/eventdetails/general-event-info/GeneralEventInfo";
-import firestoreService from "../services/fireStoreService";
-import MapInfo from "../../components/eventdetails/map/MapInfo";
+import userService from "../services/userService";
 import { checkImageURL } from "../../utils";
 import { convertToIso } from "../../utils";
 import calendarService from "../services/calendarService";
@@ -65,7 +64,7 @@ const EventDetails = () => {
       setUserFilling(eventData.filling)
       console.log("event details", eventData);
 
-      const userEventRouteData = await firestoreService.fetchUserEventsRouteIds(session.session, setIsLoading);
+      const userEventRouteData = await userService.fetchUserEventsRouteIds(session.session, setIsLoading);
       setIsAdded(userEventRouteData.includes(params.id));
       console.log("eventId", params.id);
 

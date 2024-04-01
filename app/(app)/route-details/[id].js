@@ -5,8 +5,7 @@ import {
   Text,
   SafeAreaView,
   ScrollView,
-  ActivityIndicator,
-  RefreshControl,
+  ActivityIndicator
 } from "react-native";
 
 import {
@@ -17,7 +16,6 @@ import {
 } from "../../components";
 import { COLORS, icons, SIZES } from "../../constants";
 
-import { checkImageURL } from "../../utils";
 
 import { useSession } from "../../ctx";
 import routesService from "../services/routesService";
@@ -152,7 +150,7 @@ const EventDetails = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
       <Stack.Screen
         options={{
           visible: false,

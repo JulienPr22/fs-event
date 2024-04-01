@@ -1,9 +1,8 @@
-import { View, Text, TouchableOpacity, Image, Pressable } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import styles from './event-tile.style';
 import { checkImageURL } from '../../../utils';
 import { COLORS, icons } from '../../../constants';
 import { MaterialIcons } from '@expo/vector-icons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const EventTile = ({ event, onPress, onClose }) => {
   const imageSource = checkImageURL(event.image)
@@ -57,16 +56,12 @@ const EventTile = ({ event, onPress, onClose }) => {
         <TouchableOpacity
           onPress={onClose}
           style={{
-            backgroundColor: "red",
+            backgroundColor: 'red',
             padding: 5,
             borderRadius: '50%',
           }}
         >
-          <MaterialIcons
-            name='close'
-            size={24}
-            color={COLORS.white}
-          />
+          <MaterialIcons name='close' size={24} color={COLORS.white} />
         </TouchableOpacity>
 
         <TouchableOpacity

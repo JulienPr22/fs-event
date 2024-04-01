@@ -3,7 +3,6 @@ import {
   Text,
   TextInput,
   ActivityIndicator,
-  Button,
   KeyboardAvoidingView,
   TouchableOpacity,
 } from 'react-native';

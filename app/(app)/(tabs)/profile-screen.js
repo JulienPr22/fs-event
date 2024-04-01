@@ -1,10 +1,9 @@
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
 import { useSession } from '../../ctx';
-import firestoreService from '../services/fireStoreService';
+import userService from '../services/userService';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { COLORS, FONT, SIZES } from '../../constants';
 import { router } from 'expo-router';
-import { Switch } from 'react-native-gesture-handler';
 import { UserContext } from '../UserContext';
 import { EventCard } from '../../components';
 import routesService from '../services/routesService';
@@ -25,7 +24,7 @@ const ProfileScreen = () => {
     console.log("Profile Screen", user);
     (async () => {
 
-      const { route, events } = await firestoreService.fetchRouteData(session, setIsLoading);
+      const { route, events } = await userService.fetchRouteData(session, setIsLoading);
 
       if (route) {
         setRelatedRoute(route)
@@ -41,7 +40,7 @@ const ProfileScreen = () => {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    const { route, events } = await firestoreService.fetchRouteData(session, setIsLoading);
+    const { route, events } = await userService.fetchRouteData(session, setIsLoading);
 
     if (route) {
       setRelatedRoute(route)

@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { ActivityIndicator, FlatList, Image, RefreshControl, ScrollView, TextInput, TouchableOpacity, View } from 'react-native'
-import { Stack, useGlobalSearchParams, useRouter, useSearchParams } from 'expo-router'
+import React, { useEffect, useState } from 'react'
+import { ActivityIndicator, FlatList, Image, RefreshControl, TextInput, TouchableOpacity, View } from 'react-native'
+import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
 import { Text, SafeAreaView } from 'react-native'
 
 
@@ -8,8 +8,7 @@ import { ScreenHeaderBtn, EventCard } from '../../components'
 import { COLORS, icons, SIZES } from '../../constants'
 import styles from '../../styles/search'
 import FilterModal from '../../components/search/FilterModal'
-import firestoreService from '../services/fireStoreService'
-import { Avatar, Badge } from '@rneui/themed'
+import { Badge } from '@rneui/themed'
 import eventService from '../services/eventService'
 
 const EventSearch = () => {

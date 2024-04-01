@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import {
   View,
@@ -46,7 +46,6 @@ const PopularRoutes = ({ refreshing }) => {
             data={popularRoutesData}
             renderItem={({ item, index }) => (
               <RouteCard
-                route={item}
                 index={index}
                 onPress={() => {
                   router.push(`/route-details/${item.id}`);

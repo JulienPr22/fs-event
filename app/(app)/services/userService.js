@@ -1,12 +1,11 @@
 
-import { GeoPoint, addDoc, collection, doc, endAt, getDoc, getDocs, limit, orderBy, query, setDoc, startAt, where } from "firebase/firestore";
-import fakeData from "../../assets/fr-esr-fete-de-la-science-23.json";
-import ngeohash from "ngeohash";
+import { collection, doc, getDoc, getDocs, limit, query, where } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
-import { distanceBetween, geohashQueryBounds } from "geofire-common";
 
-
-class firestoreService {
+/**
+ * classe de service pour gérer les utilisateurs
+ */
+class userService {
 
   static fetchUser = async (userId) => {
 
@@ -107,4 +106,4 @@ class firestoreService {
 }
 
 
-export default firestoreService;
+export default userService;

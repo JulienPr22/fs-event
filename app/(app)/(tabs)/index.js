@@ -7,7 +7,7 @@ import {
   Welcome,
 
 } from "../../components";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const HomeScreen = () => {
   const router = useRouter()

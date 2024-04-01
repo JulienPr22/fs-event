@@ -111,27 +111,10 @@ class exportService {
         console.log("n = ", n);
         const eventRef = doc(FIRESTORE_DB, 'events', e.identifiant)
         setDoc(eventRef, e);
-        n = n + 1;
-        // addDoc(collection(FIRESTORE_DB, 'events'), event, id: event.identifiant })
       } catch (error) {
         console.error('Erreur lors de l\'exportation des données :', error);
       }
     });
-
-
-
-
-
-    /*    updatedData.map(event => {
-         try {
-           console.log("Ajout de ", event.titre_fr);
-           const eventRef = doc(FIRESTORE_DB, 'events', event.identifiant)
-           //setDoc(eventRef, event);
-           // addDoc(collection(FIRESTORE_DB, 'events'), event, id: event.identifiant })
-         } catch (error) {
-           console.error('Erreur lors de l\'exportation des données :', error);
-         }
-       }); */
   }
 }
 

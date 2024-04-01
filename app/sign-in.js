@@ -1,5 +1,5 @@
 import { Stack, router } from 'expo-router';
-import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { useSession } from './ctx';
 import { COLORS, FONT, SIZES } from './constants';

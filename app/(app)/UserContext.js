@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import firestoreService from './services/fireStoreService';
+import userService from './services/userService';
 import { useSession } from '../ctx';
 import * as Location from 'expo-location';
 
@@ -12,7 +12,7 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userData = await firestoreService.fetchUser(session);
+        const userData = await userService.fetchUser(session);
 
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {

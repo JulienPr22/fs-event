@@ -1,6 +1,9 @@
 import { Platform } from 'react-native';
 import * as Calendar from 'expo-calendar';
 
+/**
+ * classe de service pour gérer l'ajout d'événements au calendrier
+ */
 class calendarService {
 
   static getDefaultCalendarSource = async () => {

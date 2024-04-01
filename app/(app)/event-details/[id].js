@@ -70,12 +70,8 @@ const EventDetails = () => {
       const userEventRouteData = await userService.fetchUserEventsRouteIds(session.session, setIsLoading);
       setIsAdded(userEventRouteData.includes(params.id));
 
-      const { status } = await Calendar.requestCalendarPermissionsAsync();
-      if (status === 'granted') {
-        const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
-        console.log('Here are all your calendars:');
-        console.log({ calendars });
-      }
+      await Calendar.requestCalendarPermissionsAsync();
+
 
     })();
   }, []);
@@ -203,6 +199,16 @@ const EventDetails = () => {
     }
   };
 
+  const imageSource = () => {
+    /*  const source = {
+       uri: checkImageURL(event.image)
+         ? event.image
+         : event.organisateur_logo
+     }
+     console.log("source", source);
+     return source */
+  }
+
   const displayTabContent = () => {
     switch (activeTab) {
 
@@ -279,11 +285,9 @@ const EventDetails = () => {
               <View style={{ padding: SIZES.medium, paddingBottom: 100 }}>
 
                 <GeneralEventInfo
-                  image={{
-                    uri: checkImageURL(event.image)
-                      ? event.image
-                      : event.organisateur_logo
-                  }}
+                  image={checkImageURL(event.image)
+                    ? event.image
+                    : event.organisateur_logo}
                   title={event.titre_fr}
                   animationType={event.type_animation_project}
                   city={event.lib_commune}

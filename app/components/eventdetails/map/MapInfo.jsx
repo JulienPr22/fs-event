@@ -17,7 +17,6 @@ const MapInfo = ({ coordinate }) => {
         provider={PROVIDER_GOOGLE}
         initialRegion={INITIAL_REGION}
         showsUserLocation
-        showsMyLocationButton
       >
         <Marker coordinate={coordinate}></Marker>
       </MapView>

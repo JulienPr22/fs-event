@@ -20,7 +20,6 @@ import { COLORS, icons, SIZES } from "../../constants";
 import { useSession } from "../../ctx";
 import routesService from "../services/routesService";
 import styles from "./routedetails.style";
-import MapInfo from "../../components/eventdetails/map/MapInfo";
 
 
 const tabs = ["À Propos", "Carte"];
@@ -135,14 +134,7 @@ const EventDetails = () => {
 
 
       case "Carte":
-        return (
-          <MapInfo
-            coordinate={{
-              latitude: event.geolocalisation.lat, longitude: event.geolocalisation.lon, latitudeDelta: 0.01,
-              longitudeDelta: 0.01, name: event.title
-            }}
-          />
-        );
+      // router.push(`/event-details/${event.id}`);
 
       default:
         return null;

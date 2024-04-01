@@ -32,6 +32,7 @@ import RatingModal from "../../components/eventdetails/modals/RatingModal";
 import SlotPickerModal from "../../components/eventdetails/modals/SlotPickerModal";
 import FillingModal from "../../components/eventdetails/modals/FillingModal";
 import eventService from "../services/eventService";
+import MapInfo from "../../components/eventdetails/map/MapInfo";
 
 const tabs = ["À Propos", "Adresse", "Carte"];
 
@@ -199,7 +200,14 @@ const EventDetails = () => {
         );
 
       case "Carte":
-      // router.push(`/event-details/${event.id}`);
+        return (
+          <MapInfo
+            coordinate={{
+              latitude: event.geolocalisation.lat, longitude: event.geolocalisation.lon, latitudeDelta: 0.01,
+              longitudeDelta: 0.01, name: event.title
+            }}
+          />
+        );
 
       default:
         return null;

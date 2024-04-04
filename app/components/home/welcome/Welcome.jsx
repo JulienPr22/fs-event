@@ -13,7 +13,7 @@ const Welcome = ({ handleClick }) => {
     <View>
       <View style={styles.container}>
         {user && <Text style={styles.userName}>Bonjour {user.name}</Text>}
-        <Text style={styles.welcomeMessage}>Trouvez un évennement</Text>
+        <Text style={styles.welcomeMessage}>Trouvez un événement</Text>
       </View>
 
       <View style={styles.searchContainer}>

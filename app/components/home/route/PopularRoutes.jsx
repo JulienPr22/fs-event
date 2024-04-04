@@ -22,7 +22,7 @@ const PopularRoutes = ({ refreshing }) => {
   useEffect(() => {
     (async () => {
       if (refreshing || isLoading) {
-        // Récupération des évennements populaires
+        // Récupération des parcours populaires
         const popularRoutes = await routesService.getRoutes(setIsLoading);
         setPopularRoutesData(popularRoutes);
       }

@@ -26,7 +26,7 @@ const FillingModal = ({
         style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }}
       >
         <Text style={styles.headerTitle}>
-          Définir le remplissage de l'évennement
+          Définir le remplissage de l'événement
         </Text>
         <View style={styles.contentView}>
           <Slider

@@ -27,7 +27,7 @@ const Footer = ({
             setModalVisible(!modalVisible);
           }}
         >
-          <Text style={styles.openBtnText}>{userRole == 'visitor' ? "Noter l'évennement" : "Remplissage"}</Text>
+          <Text style={styles.openBtnText}>{userRole == 'visitor' ? "Noter l'événement" : "Remplissage"}</Text>
         </Pressable>
 
     </View>

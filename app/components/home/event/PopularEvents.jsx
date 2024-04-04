@@ -16,7 +16,7 @@ const PopularEvents = ({ refreshing }) => {
   useEffect(() => {
     (async () => {
       if (refreshing || isLoading) {
-        // Récupération des évennements populaires
+        // Récupération des événements populaires
         const popularEvents = await eventService.fetchPopularEvents(setIsLoading);
         setPopularEventsData(popularEvents);
       }
@@ -26,7 +26,7 @@ const PopularEvents = ({ refreshing }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Évennements populaires</Text>
+        <Text style={styles.headerTitle}>événements populaires</Text>
         <TouchableOpacity onPress={() => router.push(`/search/all`)}>
           <Text style={styles.headerBtn}>Voir tous</Text>
         </TouchableOpacity>

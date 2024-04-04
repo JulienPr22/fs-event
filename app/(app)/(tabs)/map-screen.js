@@ -33,7 +33,7 @@ function MapScreen() {
   useEffect(() => {
     (async () => {
       setRegionLocation({ latitude: INITIAL_REGION.latitude, longitude: INITIAL_REGION.longitude })
-      // Récupération des évennements proches
+      // Récupération des événements proches
       const eventsData = await eventService.getNearbyEvents(INITIAL_REGION.latitude, INITIAL_REGION.longitude, 10)
       setEvents(eventsData)
       console.log("eventsData", eventsData);

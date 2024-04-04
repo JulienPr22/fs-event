@@ -53,7 +53,7 @@ Vous trouverez ici les informations générales de notre projet comme les explic
 **Détail parcours** :
 
 - Écran affichant les informations sur un parcours (titre, description, liste des événements)
-- Il est possible d'accéder aux détailx d'un événement en cliquant dessus
+- Il est possible d'accéder aux détails d'un événement en cliquant dessus
 
 ## <a name="features"> Features</a>
 

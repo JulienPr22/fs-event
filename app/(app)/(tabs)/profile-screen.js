@@ -64,11 +64,11 @@ const ProfileScreen = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite, justifyContent: "center" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite, justifyContent: "flex-start" }}>
 
       <View style={styles.container}>
         <Text style={styles.title}>Mes Informations</Text>
-        <View style={styles.infosContainer}>
+        <View>
 
           <View style={styles.field}>
             <Text style={styles.infoLabel} >Nom: </Text>
@@ -79,13 +79,10 @@ const ProfileScreen = () => {
             <Text style={styles.infoValue}>{user.email}</Text>
           </View>
 
-
           <View style={styles.field}>
             <Text style={styles.infoLabel}>Rôle: </Text>
             <Text style={styles.infoValue}>{user.role == "visitor" ? "Visiteur" : "Contributeur"}</Text>
           </View>
-
-
 
         </View>
       </View>
@@ -99,11 +96,10 @@ const ProfileScreen = () => {
 
 
               <Text style={styles.title}>Mon Parcours</Text>
-              <View style={styles.infosContainer}>
+              <View>
 
                 <View style={styles.field}>
-                  <Text style={styles.infoLabel} >Titre:  </Text>
-                  <Text style={styles.infoValue}>{relatedRoute.title}</Text>
+                  <Text style={styles.infoValue}>{relatedRoute.description}</Text>
                 </View>
 
                 <View style={styles.field}>
@@ -130,15 +126,14 @@ const ProfileScreen = () => {
 
               </View>
             </View>
-            <View style={{ height: 350 }}>
-              <ScrollView
-                style={styles.cardsContainer}
-                showsVerticalScrollIndicator={false}
-                refreshControl={
-                  <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                }
-              >
 
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+            >
+              <View style={styles.cardsContainer} >
                 {
 
                   relatedEvents?.map((event) => (
@@ -151,9 +146,9 @@ const ProfileScreen = () => {
                     />
                   ))
                 }
+              </View>
 
-              </ScrollView>
-            </View>
+            </ScrollView>
           </View>
 
 
@@ -162,6 +157,7 @@ const ProfileScreen = () => {
             <Text style={{ color: COLORS.tertiary, marginTop: SIZES.medium }}>Aucun parcours n'a été créé</Text>
           </View>
         ))}
+
     </SafeAreaView >
   );
 }
@@ -179,7 +175,6 @@ const styles = StyleSheet.create({
   },
   field: {
     flexDirection: "row",
-    justifyContent: "flex-start",
     marginVertical: 5,
   },
 

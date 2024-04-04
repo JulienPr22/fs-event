@@ -7,7 +7,7 @@ import { FIRESTORE_DB } from "../../../firebaseConfig";
  */
 class routesService {
 
-  static createRoute = async (userId, routeTitle, routeDescription, publishRoute) => {
+  static createRoute = async (userId, routeDescription, publishRoute) => {
     try {
       const routesRef = collection(FIRESTORE_DB, "routes");
       const newRouteDoc = await addDoc(routesRef, {
@@ -16,7 +16,6 @@ class routesService {
       const newRouteId = newRouteDoc.id;
       const newRoute = {
         id: newRouteId,
-        title: routeTitle,
         creatorId: userId,
         description: routeDescription,
         published: publishRoute
@@ -91,7 +90,7 @@ class routesService {
       let userRoute = await this.getRouteByUserId(userId)
 
       if (userRoute == null) {
-        userRoute = await this.createRoute(userId, "Nouveau parcours", "", true)
+        userRoute = await this.createRoute(userId, "", true)
       }
 
       let events = []

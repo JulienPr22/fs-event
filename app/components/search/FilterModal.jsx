@@ -53,9 +53,10 @@ const FilterModal = ({
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View style={{ padding: SIZES.medium }}>
+        <View style={{ padding: SIZES.medium, marginTop: SIZES.large }}>
           <Text style={styles.headerTitle}>Filtres</Text>
           <Text style={styles.filterTitle}> Type d'animation: </Text>
+
           {/* AnimationTypeFilter */}
           <View>
             {checkedItems.map((item, index) => (
@@ -80,15 +81,22 @@ const FilterModal = ({
             placeholder='Saisir la note minimale'
             value={minimumRating}
             onChangeText={(num) => setMinimumRating(num)}
-            returnKeyType='done' // Ajoute cette prop pour afficher OK/Annuler
+            returnKeyType='done'
             returnKeyLabel='Valider'
-            onSubmitEditing={() => Keyboard.dismiss()} // Ferme le clavier sur la soumission
+            onSubmitEditing={() => Keyboard.dismiss()}
           />
 
           {/* Apply and Reset buttons */}
-
-          <Button title='Apply' onPress={handleApply} />
-          <Button title='Reset' onPress={handleReset} />
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Button title='Appliquer' onPress={handleApply} />
+            <Button title='Réinitialiser' onPress={handleReset} />
+          </View>
         </View>
       </KeyboardAvoidingView>
     </Modal>

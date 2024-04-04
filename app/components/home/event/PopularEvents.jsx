@@ -17,10 +17,7 @@ const PopularEvents = ({ refreshing }) => {
     (async () => {
       if (refreshing || isLoading) {
         // Récupération des évennements populaires
-        const popularEvents = await eventService.fetchEvents(
-          { maxResults: 20, minRating: 4.5, page: 1 },
-          setIsLoading
-        );
+        const popularEvents = await eventService.fetchPopularEvents(setIsLoading);
         setPopularEventsData(popularEvents);
       }
     })();

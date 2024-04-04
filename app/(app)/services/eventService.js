@@ -8,12 +8,37 @@ import { distanceBetween, geohashQueryBounds } from "geofire-common";
 class eventService {
 
   static getEventById = async (eventId) => {
+    const docRef = doc(FIRESTORE_DB, "events", eventId);
+    dataToFetch = await getDoc(docRef);
+    return { id: dataToFetch.id, ...dataToFetch.data() };
+  }
+
+  static fetchPopularEvents = async (setLoading) => {
+    setLoading(true);
     try {
-      const eventRef = doc(FIRESTORE_DB, "events", eventId);
-      const eventSnap = await getDoc(eventRef);
-      return eventSnap;
+
+      const items = [];
+      let collectionRef = collection(FIRESTORE_DB, "events");
+
+      collectionRef = query(
+        collectionRef,
+        where("rating", ">=", 4),
+        orderBy("identifiant", "desc"),
+        limit(50));
+
+
+      const querySnapshot = await getDocs(collectionRef);
+      querySnapshot.forEach((doc) => {
+        const e = { id: doc.id, ...doc.data() };
+        items.push(e);
+      });
+
+      setLoading(false);
+      return items;
 
     } catch (error) {
+
+      setLoading(false);
       throw error;
     }
   }
@@ -23,60 +48,55 @@ class eventService {
     setLoading(true);
     try {
 
-      let dataToFetch;
-      if (queryOptions.docId) { // fetch one
-        const docRef = doc(FIRESTORE_DB, "events", queryOptions.docId);
-        dataToFetch = await getDoc(docRef);
-        setLoading(false);
-        setLoading(false);
-        return { id: dataToFetch.id, ...dataToFetch.data() };
-      } else { // fetch some
-        const items = [];
-        let collectionRef = collection(FIRESTORE_DB, "events");
+      const items = [];
+      let collectionRef = collection(FIRESTORE_DB, "events");
+      const { maxResults, page } = queryOptions
 
-        const { maxResults, page } = queryOptions
-
-        /* if (queryOptions.searchTerm) {
-          collectionRef = query(
-            collectionRef,
-            where("titre_fr", ">=", queryOptions.searchTerm),
-            where("titre_fr", "<=", queryOptions.searchTerm + "\uf8ff")
-          );
-        }
- */
-        if (queryOptions.minRating) {
-          collectionRef = query(
-            collectionRef,
-            where("rating", ">", queryOptions.minRating)
-          );
-        }
-
-        if (queryOptions.animationTypeFilter && queryOptions.animationTypeFilter.length > 0) {
-          collectionRef = query(
-            collectionRef,
-            where("type_animation_project", "in", queryOptions.animationTypeFilter)
-          );
-        }
-
-        // Pagination
-        if (page && maxResults) {
-          const offset = (page - 1) * maxResults;
-          console.log("offset", offset);
-          collectionRef = query(collectionRef, orderBy("rating"), startAt(offset), limit(maxResults));
-        }
-
-        const querySnapshot = await getDocs(collectionRef);
-        querySnapshot.forEach((doc) => {
-          const e = { id: doc.id, ...doc.data() };
-          items.push(e);
-        });
-
-        setLoading(false);
-        if (queryOptions.page) {
-          console.log("events", items);
-        }
-        return items;
+      /* if (queryOptions.searchTerm) {
+        collectionRef = query(
+          collectionRef,
+          where("titre_fr", ">=", queryOptions.searchTerm),
+          where("titre_fr", "<=", queryOptions.searchTerm + "\uf8ff")
+        );
       }
+*/
+
+      // Filtre sue une note minimale
+      if (queryOptions.minRating) {
+        collectionRef = query(
+          collectionRef,
+          where("rating", ">", queryOptions.minRating),
+          orderBy("votes")
+        );
+      }
+
+      // Filtre sur le type d'animation
+      if (queryOptions.animationTypeFilter && queryOptions.animationTypeFilter.length > 0) {
+        collectionRef = query(
+          collectionRef,
+          where("type_animation_project", "in", queryOptions.animationTypeFilter)
+        );
+      }
+
+      // Pagination
+      if (page && maxResults) {
+        const offset = (page - 1) * maxResults;
+        console.log("offset", offset);
+        collectionRef = query(collectionRef, orderBy("rating"), startAt(offset), limit(maxResults));
+      }
+
+      const querySnapshot = await getDocs(collectionRef);
+      querySnapshot.forEach((doc) => {
+        const e = { id: doc.id, ...doc.data() };
+        items.push(e);
+      });
+
+      setLoading(false);
+      if (queryOptions.page) {
+        console.log("events", items);
+      }
+      return items;
+
     } catch (error) {
 
       setLoading(false);

@@ -63,7 +63,7 @@ const EventDetails = () => {
 
   useEffect(() => {
     (async () => {
-      const eventData = await eventService.fetchEvents({ docId: params.id }, setIsLoading);
+      const eventData = await eventService.getEventById( params.id );
       setEvent(eventData);
       setUserFilling(eventData.filling)
 
@@ -117,7 +117,7 @@ const EventDetails = () => {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    const eventData = await eventService.fetchEvents({ docId: params.id }, setIsLoading);
+    const eventData = await eventService.getEventById(  params.id );
     setEvent(eventData);
     setRefreshing(false)
   }, []);

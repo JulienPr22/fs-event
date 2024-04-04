@@ -100,7 +100,7 @@ const EventDetails = () => {
   const mailReservation = async () => {
     setActionsModalVisible(false)
     if (event.grandpublic_reservation_email) {
-      Linking.openURL(`mailto:${event.grandpublic_reservation_email}?subject=réservation pour l'évennement "${event.titre_fr}"`)
+      Linking.openURL(`mailto:${event.grandpublic_reservation_email}?subject=réservation pour l'événement "${event.titre_fr}"`)
     } else {
       // TODO: Message d'erreur: pas de mail
     }
@@ -215,7 +215,7 @@ const EventDetails = () => {
       case "À Propos":
         return (
           <EventAbout
-            description={event.description_longue_fr ?? "Cet évennement n'a pas de description"}
+            description={event.description_longue_fr ?? "Cet événement n'a pas de description"}
             dates={event.date_debut}
             capacite={event.capacite ?? "Non renseigné"} />
         );

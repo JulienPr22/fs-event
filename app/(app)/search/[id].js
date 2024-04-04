@@ -158,6 +158,8 @@ const EventSearch = () => {
                             value={searchTerm}
                             onChange={(text) => setSearchTerm(text)}
                             placeholder='Que recherchez vous ?'
+                            returnKeyType='search'
+                            onSubmitEditing={handleSearch}
                         />
                     </View>
 

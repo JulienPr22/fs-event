@@ -65,13 +65,14 @@ class eventService {
       if (queryOptions.minRating) {
         collectionRef = query(
           collectionRef,
-          where("rating", ">", queryOptions.minRating),
-          orderBy("votes")
+          where("rating", ">=", queryOptions.minRating),
+          orderBy("identifiant", "desc"),
+          limit(25)
         );
       }
 
       // Filtre sur le type d'animation
-      if (queryOptions.animationTypeFilter && queryOptions.animationTypeFilter.length > 0) {
+      if (queryOptions.animationTypeFilter?.length > 0) {
         collectionRef = query(
           collectionRef,
           where("type_animation_project", "in", queryOptions.animationTypeFilter)
@@ -79,11 +80,11 @@ class eventService {
       }
 
       // Pagination
-      if (page && maxResults) {
-        const offset = (page - 1) * maxResults;
-        console.log("offset", offset);
-        collectionRef = query(collectionRef, orderBy("rating"), startAt(offset), limit(maxResults));
-      }
+      /*  if (page && maxResults) {
+         const offset = (page - 1) * maxResults;
+         console.log("offset", offset);
+         collectionRef = query(collectionRef, orderBy("rating"), startAt(offset), limit(maxResults));
+       } */
 
       const querySnapshot = await getDocs(collectionRef);
       querySnapshot.forEach((doc) => {
@@ -98,7 +99,6 @@ class eventService {
       return items;
 
     } catch (error) {
-
       setLoading(false);
       throw error;
     }

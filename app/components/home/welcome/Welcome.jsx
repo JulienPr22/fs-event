@@ -23,6 +23,8 @@ const Welcome = ({ handleClick }) => {
             value={text}
             onChangeText={(text) => setText(text)}
             placeholder='Que recherchez vous ?'
+            returnKeyType='search'
+            onSubmitEditing={() => handleClick(text) }
           />
         </View>
 

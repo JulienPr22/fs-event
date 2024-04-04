@@ -1,5 +1,5 @@
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,34 +9,23 @@ import {
 } from "react-native";
 
 import {
-
   EventCard,
   ScreenHeaderBtn,
-  Tabs,
 } from "../../components";
 import { COLORS, icons, SIZES } from "../../constants";
-
-
-import { useSession } from "../../ctx";
 import routesService from "../services/routesService";
 import styles from "./routedetails.style";
-
-
-const tabs = ["À Propos", "Carte"];
 
 const EventDetails = () => {
   const params = useGlobalSearchParams();
   const router = useRouter();
-  const session = useSession();
 
   const [route, setRoute] = useState([])
   const [routeCreator, setRouteCreator] = useState({})
   const [relatedEvents, setRelatedEvents] = useState([]);
   const [numberOfSteps, setNumberOfSteps] = useState(0)
 
-  const [activeTab, setActiveTab] = useState(tabs[0]);
   const [isLoading, setIsLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -55,94 +44,8 @@ const EventDetails = () => {
 
   }, []);
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setRefreshing(false)
-  }, []);
-
-
-  const displayTabContent = () => {
-    switch (activeTab) {
-
-      case "À Propos":
-        return (
-          <View>
-            {isLoading ? (
-              <ActivityIndicator />
-            ) : (
-              relatedEvents && relatedEvents.length > 0 ? (
-                <View style={{ padding: SIZES.medium, paddingBottom: 100 }}>
-                  <View style={styles.container}>
-
-                    <Text style={styles.title}>Parcours de {routeCreator.name}</Text>
-
-                    <View style={{ width: 350 }}>
-                      <View style={styles.field}>
-                        <Text style={styles.infoLabel} >Titre:  </Text>
-                        <Text style={styles.infoValue}>{route.title}</Text>
-                      </View>
-
-                      <View style={styles.field}>
-                        <Text style={styles.infoLabel} >Description:  </Text>
-                        <Text style={styles.infoValue}>{route.description}</Text>
-                      </View>
-                    </View>
-
-                  </View>
-
-
-                  <View style={styles.eventsContainer}>
-                    <Text style={styles.title}>{numberOfSteps} étapes:</Text>
-
-                    <ScrollView
-                      style={styles.cardsContainer}
-                      showsVerticalScrollIndicator={false}
-                    >
-
-                      {
-                        relatedEvents?.map((event) => (
-                          <EventCard
-                            event={event}
-                            key={`popular-event-${event.id}`}
-                            onPress={() => {
-                              router.push(`/event-details/${event.id}`);
-                            }}
-                          />
-                        ))
-                      }
-
-                    </ScrollView>
-                  </View>
-
-                  <Tabs
-                    tabs={tabs}
-                    activeTab={activeTab}
-                    setActiveTab={setActiveTab}
-                  />
-
-                </View>
-
-
-              ) : (
-                <View style={{ alignItems: "center" }}>
-                  <Text style={{ color: COLORS.tertiary, marginTop: SIZES.medium }}>Aucun parcours n'a été créé</Text>
-                </View>
-              ))}
-          </View>
-        );
-
-
-
-      case "Carte":
-      // router.push(`/event-details/${event.id}`);
-
-      default:
-        return null;
-    }
-  };
-
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite, justifyContent: "flex-start" }}>
       <Stack.Screen
         options={{
           visible: false,
@@ -160,20 +63,57 @@ const EventDetails = () => {
         }}
       />
 
+      <View>
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          relatedEvents && relatedEvents.length > 0 ? (
+            <View >
+              <View style={styles.container}>
+
+                <Text style={styles.title}>Parcours de {routeCreator.name}</Text>
+
+                <View style={styles.field}>
+                  <Text style={styles.infoValue}>{route.description}</Text>
+                </View>
+              </View>
 
 
+              <View style={styles.eventsContainer}>
+                <View style={{ alignItems: "center" }}>
+                  <Text style={styles.title}>{numberOfSteps} étapes:</Text>
+                </View>
 
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                >
+                  <View style={styles.cardsContainer}
+                  >
+                    {
+                      relatedEvents?.map((event) => (
+                        <EventCard
+                          event={event}
+                          key={`popular-event-${event.id}`}
+                          onPress={() => {
+                            router.push(`/event-details/${event.id}`);
+                          }}
+                        />
+                      ))
+                    }
+                  </View>
+                </ScrollView>
+              </View>
+            </View>
 
+          ) : (
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ color: COLORS.tertiary, marginTop: SIZES.medium }}>Aucun parcours n'a été créé</Text>
+            </View>
+          ))}
+      </View>
 
-
-      {displayTabContent()}
     </SafeAreaView >
   )
-
-
-
-
-
 };
 
 export default EventDetails;

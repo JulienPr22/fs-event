@@ -47,7 +47,11 @@ const EventSearch = () => {
 
         (async () => {
             console.log(params.id);
-            setSearchTerm((params.id).toString())
+            if (params.id == "all") {
+                setSearchTerm("")
+            } else {
+                setSearchTerm((params.id).toString())
+            }
             const { lastVisible, items } = await eventService.fetchEvents({ maxResults: 20, minRating: parseInt(minRating), animationTypeFilter: animationTypeFilter, lastVisible: lastEventVisible, searchTerm: params.id }, setSearchLoader);
             setSearchResult(items);
             setLastEventVisible(lastVisible)
@@ -167,6 +171,7 @@ const EventSearch = () => {
                         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
                     }
                     data={searchResult}
+                    showsVerticalScrollIndicator={false}
                     renderItem={({ item, index }) => (
                         <EventCard
                             key={index}

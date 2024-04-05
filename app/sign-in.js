@@ -36,7 +36,7 @@ export default function SignIn() {
     setLoading(true);
     try {
       await signUp(email, password, name, role);
-      Alert.alert("Succès",'Inscription réussie!');
+      Alert.alert("Succès", 'Inscription réussie!');
       router.push('/(app)')
     } catch (error) {
       console.log(error);
@@ -48,86 +48,87 @@ export default function SignIn() {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <KeyboardAvoidingView style={styles.container} behavior={'height'}>
       <Stack.Screen options={{ headerShown: false }} />
 
-          <Text style={styles.title}>
-            {isLogin ? 'Connexion' : 'Inscription'}
-          </Text>
+      <Text style={styles.title}>
+        {isLogin ? 'Connexion' : 'Inscription'}
+      </Text>
+
+      <TextInput
+        style={styles.input}
+        value={email}
+        placeholder='Email'
+        autoCapitalize='none'
+        inputMode='email'
+        onChangeText={setEmail}
+      />
+      <TextInput
+        style={styles.input}
+        value={password}
+        secureTextEntry={true}
+        placeholder='Mot de passe'
+        autoCapitalize='none'
+        onChangeText={setPassword}
+      />
+
+      {!isLogin && (
+        <>
           <TextInput
             style={styles.input}
-            value={email}
-            placeholder='Email'
-            autoCapitalize='none'
-            inputMode='email'
-            onChangeText={setEmail}
-          />
-          <TextInput
-            style={styles.input}
-            value={password}
-            secureTextEntry={true}
-            placeholder='Mot de passe'
-            autoCapitalize='none'
-            onChangeText={setPassword}
+            value={name}
+            placeholder='Nom'
+            autoCapitalize='words'
+            onChangeText={(text) => setName(text)}
           />
 
-          {!isLogin && (
-            <>
-              <TextInput
-                style={styles.input}
-                value={name}
-                placeholder='Nom'
-                autoCapitalize='words'
-                onChangeText={(text) => setName(text)}
-              />
+          <View style={styles.tabsContainer}>
+            <Text style={styles.switchText}>Rôle:</Text>
 
-              <View style={styles.tabsContainer}>
-                <Text style={styles.switchText}>Rôle:</Text>
+            <TouchableOpacity
+              style={styles.tab(role)}
+              onPress={() => {
+                setRole("visitor");
+              }}
+            >
+              <Text style={styles.tabText(role, 'visitor')}>Visiteur</Text>
+            </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={styles.tab(role)}
-                  onPress={() => {
-                    setRole("visitor");
-                  }}
-                >
-                  <Text style={styles.tabText(role, 'visitor')}>Visiteur</Text>
-                </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.tab(role)}
+              onPress={() => {
+                setRole("contributor");
+              }}
+            >
+              <Text style={styles.tabText(role, 'contributor')}>Contributeur</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
 
-                <TouchableOpacity
-                  style={styles.tab(role)}
-                  onPress={() => {
-                    setRole("contributor");
-                  }}
-                >
-                  <Text style={styles.tabText(role, 'contributor')}>Contributeur</Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
+      {loading ? (
+        <ActivityIndicator size='large' />
+      ) : (
+        <>
+          <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+            <Text style={styles.buttonText}>
+              {isLogin ? 'Se connecter' : "S'inscrire"}
+            </Text>
+          </TouchableOpacity>
 
-          {loading ? (
-            <ActivityIndicator size='large' />
-          ) : (
-            <>
-              <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-                <Text style={styles.buttonText}>
-                  {isLogin ? 'Se connecter' : "S'inscrire"}
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.switchText}
-                onPress={() => setIsLogin(!isLogin)}
-              >
-                <Text style={{color: COLORS.secondary, marginTop: 10}}>
-                  {isLogin
-                    ? "Pas encore de compte ? S'inscrire"
-                    : 'Déjà inscrit ? Se connecter'}
-                </Text>
-              </TouchableOpacity>
-            </>
-          )}
-        </KeyboardAvoidingView>
+          <TouchableOpacity
+            style={styles.switchText}
+            onPress={() => setIsLogin(!isLogin)}
+          >
+            <Text style={{ color: COLORS.secondary, marginTop: 10 }}>
+              {isLogin
+                ? "Pas encore de compte ? S'inscrire"
+                : 'Déjà inscrit ? Se connecter'}
+            </Text>
+          </TouchableOpacity>
+        </>
+      )}
+    </KeyboardAvoidingView>
 
   );
 };
@@ -157,7 +158,6 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: COLORS.primary,
-    // width: '100%',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',

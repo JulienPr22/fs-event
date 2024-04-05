@@ -33,9 +33,6 @@ const PopularRoutes = ({ refreshing }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Parcours populaires</Text>
-        <TouchableOpacity>
-          <Text style={styles.headerBtn}>Voir tous</Text>
-        </TouchableOpacity>
       </View>
 
       <View style={styles.cardsContainer}>
@@ -55,6 +52,7 @@ const PopularRoutes = ({ refreshing }) => {
             keyExtractor={(item) => item.id}
             contentContainerStyle={{ columnGap: SIZES.medium }}
             horizontal
+            showsHorizontalScrollIndicator={false}
           />
         )}
       </View>

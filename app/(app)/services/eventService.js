@@ -60,13 +60,13 @@ class eventService {
 
 
       // Recherche par mot clé
-        if (searchTerm) {
+      /*   if (searchTerm) {
           collectionRef = query(
             collectionRef,
             where("titre_fr", ">=", searchTerm),
             where("titre_fr", "<=", searchTerm + "\uf8ff")
           );
-        }
+        } */
 
       // Filtre sur une note minimale
       if (minRating) {

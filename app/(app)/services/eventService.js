@@ -59,14 +59,14 @@ class eventService {
       let collectionRef = collection(FIRESTORE_DB, "events");
 
       // Recherche par mot clé
-      /* if (queryOptions.searchTerm) {
+      /* if (searchTerm) {
         collectionRef = query(
           collectionRef,
-          where("titre_fr", ">=", queryOptions.searchTerm),
-          where("titre_fr", "<=", queryOptions.searchTerm + "\uf8ff")
+          where("titre_fr", ">=", searchTerm),
+          where("titre_fr", "<=", searchTerm + "\uf8ff")
         );
-      }
-      */
+      } */
+
 
       // Filtre sue une note minimale
       if (minRating) {

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, FlatList, Image, RefreshControl, TextInput, TouchableOpacity, View } from 'react-native'
 import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
 import { Text, SafeAreaView } from 'react-native'
-
-
 import { ScreenHeaderBtn, EventCard } from '../../components'
 import { COLORS, icons, SIZES } from '../../constants'
 import styles from '../../styles/search'
@@ -45,11 +43,14 @@ const EventSearch = () => {
         animationTypes.map((type) => ({ label: type, checked: false }))
     );
 
+    useEffect(() => {
+        setSearchTerm(params.id)
+        handleSearch()
+    }, [])
 
-    const handleSearch = async (page) => {
+    const handleSearch = async () => {
         try {
-            const { lastVisible, items } = await eventService.fetchEvents({ maxResults: 20, minRating: parseInt(minRating), animationTypeFilter: animationTypeFilter, lastVisible: lastEventVisible }, setSearchLoader);
-            console.log('lastVisible', lastVisible);
+            const { lastVisible, items } = await eventService.fetchEvents({ maxResults: 20, minRating: parseInt(minRating), animationTypeFilter: animationTypeFilter, lastVisible: lastEventVisible, searchTerm: searchTerm }, setSearchLoader);
             setSearchResult(items);
             setLastEventVisible(lastVisible)
         } catch (error) {
@@ -66,12 +67,11 @@ const EventSearch = () => {
             nextPage = currentPage + 1;
         }
         setCurrentPage(nextPage);
-        handleSearch(nextPage)
+        handleSearch()
     }
 
     const handleApplyFilters = () => {
         setAnimationTypeFilter(checkedItems.filter(item => item.checked).map(item => item.label))
-
     };
 
     const handleOnClose = async () => {
@@ -89,15 +89,6 @@ const EventSearch = () => {
             setRefreshing(false);
         }
     };
-
-    useEffect(() => {
-        setSearchTerm(params.id)
-        handleSearch(1)
-    }, [])
-
-
-
-
 
     const handleResetFilters = () => {
         console.log('Filters reset');

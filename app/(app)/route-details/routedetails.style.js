@@ -7,10 +7,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: SIZES.xSmall,
         marginTop: SIZES.xLarge
     },
-    eventsContainer: {
-        marginTop: SIZES.xLarge,
-        height: 450,
-    },
     title: {
         justifyContent: "center",
         fontSize: SIZES.xLarge,
@@ -21,6 +17,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "flex-start",
         marginVertical: 5,
+        marginBottom: 20,
+
     },
     infoLabel: {
         fontSize: SIZES.large,
@@ -33,7 +31,7 @@ const styles = StyleSheet.create({
     },
     cardsContainer: {
         marginTop: SIZES.medium,
-        marginHorizontal: SIZES.medium,
+        marginBottom: SIZES.xLarge,
         gap: SIZES.small
     },
 

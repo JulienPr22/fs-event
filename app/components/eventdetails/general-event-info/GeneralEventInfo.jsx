@@ -33,7 +33,7 @@ const GeneralEventInfo = ({ image, title, animationType, city, rating, votes }) 
       </View>
 
       <View style={styles.ratingContainer}>
-          <Text style={styles.eventDetail}>{rating?.toFixed(3)}</Text>
+          <Text style={styles.eventDetail}>{rating?.toFixed(1)}</Text>
           <Image
             source={icons.star}
             resizeMode='contain'

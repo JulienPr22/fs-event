@@ -143,7 +143,7 @@ const EventSearch = () => {
                         <TextInput
                             style={styles.searchInput}
                             value={searchTerm}
-                            onChange={(text) => setSearchTerm(text)}
+                            onChange={setSearchTerm}
                             placeholder='Que recherchez vous ?'
                             returnKeyType='search'
                             onSubmitEditing={handleSearch}

@@ -79,7 +79,6 @@ const EventDetails = () => {
               </View>
 
 
-              <View style={styles.eventsContainer}>
                 <View style={{ alignItems: "center" }}>
                   <Text style={styles.title}>{numberOfSteps} étapes:</Text>
                 </View>
@@ -103,7 +102,6 @@ const EventDetails = () => {
                   </View>
                 </ScrollView>
               </View>
-            </View>
 
           ) : (
             <View style={{ alignItems: "center" }}>

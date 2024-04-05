@@ -59,6 +59,7 @@ export default function SignIn() {
             value={email}
             placeholder='Email'
             autoCapitalize='none'
+            inputMode='email'
             onChangeText={setEmail}
           />
           <TextInput
@@ -156,13 +157,13 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: COLORS.primary,
-    width: '100%',
+    // width: '100%',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 24,
     marginTop: 10,
-    paddingHorizontal: 10
+    paddingHorizontal: 20
   },
   buttonText: {
     color: 'white',

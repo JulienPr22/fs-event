@@ -59,7 +59,7 @@ const FilterModal = ({
 
           {/* AnimationTypeFilter */}
           <View>
-            {checkedItems.map((item, index) => (
+            {checkedItems.map((item) => (
               <View key={item.label}>
                 <CheckBox
                   style={styles.checkbox}
@@ -73,7 +73,6 @@ const FilterModal = ({
           </View>
 
           {/* MinimumRatingFilter */}
-
           <Text style={styles.filterTitle}>Note minimale (entre 1 et 5):</Text>
           <TextInput
             style={styles.input}
@@ -86,7 +85,6 @@ const FilterModal = ({
             onSubmitEditing={() => Keyboard.dismiss()}
           />
 
-          {/* Apply and Reset buttons */}
           <View
             style={{
               flexDirection: 'row',
@@ -94,8 +92,8 @@ const FilterModal = ({
               justifyContent: 'center',
             }}
           >
-            <Button title='Appliquer' onPress={handleApply} />
             <Button title='Réinitialiser' onPress={handleReset} />
+            <Button title='Appliquer' onPress={handleApply} />
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -106,8 +104,6 @@ const FilterModal = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     marginTop: SIZES.medium,
   },
   headerTitle: {

@@ -44,7 +44,10 @@ const EventSearch = () => {
     );
 
     useEffect(() => {
+
         (async () => {
+            console.log(params.id);
+            setSearchTerm((params.id).toString())
             const { lastVisible, items } = await eventService.fetchEvents({ maxResults: 20, minRating: parseInt(minRating), animationTypeFilter: animationTypeFilter, lastVisible: lastEventVisible, searchTerm: params.id }, setSearchLoader);
             setSearchResult(items);
             setLastEventVisible(lastVisible)
@@ -143,7 +146,7 @@ const EventSearch = () => {
                         <TextInput
                             style={styles.searchInput}
                             value={searchTerm}
-                            onChange={setSearchTerm}
+                            onChangeText={setSearchTerm}
                             placeholder='Que recherchez vous ?'
                             returnKeyType='search'
                             onSubmitEditing={handleSearch}

@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView, RefreshControl, Pressable, TextInput } from 'react-native';
 import { useSession } from '../../ctx';
 import userService from '../services/userService';
 import { useCallback, useContext, useEffect, useState } from 'react';
@@ -7,6 +7,8 @@ import { router } from 'expo-router';
 import { UserContext } from '../UserContext';
 import { EventCard } from '../../components';
 import routesService from '../services/routesService';
+import { Input } from '@rneui/themed';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const ProfileScreen = () => {
   const { session, signOut } = useSession();
@@ -14,7 +16,8 @@ const ProfileScreen = () => {
   const [isLoading, setIsLoading] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const [editing, setEditing] = useState(false)
+  const [editing, setEditing] = useState(false);
+  const [description, setDescription] = useState('');
 
   const [relatedRoute, setRelatedRoute] = useState([])
   const [relatedEvents, setRelatedEvents] = useState()
@@ -28,6 +31,7 @@ const ProfileScreen = () => {
       if (route) {
         setRelatedRoute(route)
         setPublished(route.published)
+        setDescription(route.description);
       }
       if (events) {
         setRelatedEvents(events)
@@ -94,13 +98,39 @@ const ProfileScreen = () => {
           <View>
             <View style={styles.container}>
 
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "center" }}>
+                <Text style={styles.title}>Mon Parcours</Text>
+                <Pressable onPress={() => setEditing(true)} style={{ marginBottom: 15, marginLeft: 10 }} >
+                  <MaterialIcons name='edit' size={24} color={COLORS.primary} />
 
-              <Text style={styles.title}>Mon Parcours</Text>
+                </Pressable>
+              </View>
+
               <View>
 
-                <View style={styles.field}>
-                  <Text style={styles.infoValue}>{relatedRoute.description}</Text>
-                </View>
+                {
+                  relatedRoute && editing ? (
+                    <TextInput
+                      multiline
+                      numberOfLines={5}
+                      style={styles.input}
+                      value={description}
+                      onChangeText={setDescription}
+                      placeholder='Décrivez votre parcours'
+                      autoCapitalize='none'
+                      enterKeyHint='done'
+                      returnKeyType='none'
+                      inputMode="text"
+                      onSubmitEditing={() => setEditing(false)}
+
+                    />
+                  ) : (
+
+                    <View style={styles.field}>
+                      <Text style={styles.infoValue}>{relatedRoute.description}</Text>
+                    </View>)
+                }
+
 
                 <View style={styles.field}>
                   <View style={styles.tabsContainer}>
@@ -193,9 +223,7 @@ const styles = StyleSheet.create({
     gap: SIZES.small,
   },
   input: {
-    width: '100%',
-    height: 40,
-    width: 300,
+    height: 100,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,

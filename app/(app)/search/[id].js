@@ -20,7 +20,8 @@ const EventSearch = () => {
     const [refreshing, setRefreshing] = useState(false);
 
     const [searchError, setSearchError] = useState(null);
-    const [page, setPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [lastEventVisible, setLastEventVisible] = useState(null)
 
     const [filterModalVisible, setFilterModalVisible] = useState(false);
     const [animationTypeFilter, setAnimationTypeFilter] = useState([]);
@@ -45,35 +46,27 @@ const EventSearch = () => {
     );
 
 
-    const handleSearch = async () => {
-        setSearchLoader(true);
-        // setSearchResult([])
-
+    const handleSearch = async (page) => {
         try {
-            const events = await eventService.fetchEvents({ maxResults: 20, minRating: parseInt(minRating), animationTypeFilter: animationTypeFilter, page: page }, setSearchLoader);
-            console.log('events', events);
-            setSearchResult(events);
-            setRefreshing(true)
-            setRefreshing(false)
-
+            const { lastVisible, items } = await eventService.fetchEvents({ maxResults: 20, minRating: parseInt(minRating), animationTypeFilter: animationTypeFilter, lastVisible: lastEventVisible }, setSearchLoader);
+            console.log('lastVisible', lastVisible);
+            setSearchResult(items);
+            setLastEventVisible(lastVisible)
         } catch (error) {
             console.log(error);
-        } finally {
-            setSearchLoader(false);
         }
-
     };
 
     const handlePagination = (direction) => {
-        let nextPage = page;
+        let nextPage = currentPage;
 
-        if (direction === 'left' && page > 1) {
-            nextPage = page - 1;
+        if (direction === 'left' && currentPage > 1) {
+            nextPage = currentPage - 1;
         } else if (direction === 'right') {
-            nextPage = page + 1;
+            nextPage = currentPage + 1;
         }
-        setPage(nextPage);
-        handleSearch()
+        setCurrentPage(nextPage);
+        handleSearch(nextPage)
     }
 
     const handleApplyFilters = () => {
@@ -89,7 +82,7 @@ const EventSearch = () => {
     const handleRefresh = async () => {
         setRefreshing(true);
         try {
-            await handleSearch();
+            await handleSearch(currentPage);
         } catch (error) {
             console.log(error);
         } finally {
@@ -99,7 +92,7 @@ const EventSearch = () => {
 
     useEffect(() => {
         setSearchTerm(params.id)
-        handleSearch()
+        handleSearch(1)
     }, [])
 
 
@@ -213,7 +206,7 @@ const EventSearch = () => {
                                 />
                             </TouchableOpacity>
                             <View style={styles.paginationTextBox}>
-                                <Text style={styles.paginationText}>{page}</Text>
+                                <Text style={styles.paginationText}>{currentPage}</Text>
                             </View>
                             <TouchableOpacity
                                 style={styles.paginationButton}

@@ -1,9 +1,9 @@
 import { FIRESTORE_DB } from "../../../firebaseConfig";
-import { collection, doc, endAt, getDoc, getDocs, limit, orderBy, query, startAt, updateDoc, where } from "firebase/firestore";
+import { collection, doc, endAt, getDoc, getDocs, limit, orderBy, query, startAfter, startAt, updateDoc, where } from "firebase/firestore";
 import { distanceBetween, geohashQueryBounds } from "geofire-common";
 
 /**
- * classe de service pour gérer les évennements
+ * classe de service pour gérer les événements
  */
 class eventService {
 
@@ -42,16 +42,23 @@ class eventService {
       throw error;
     }
   }
-
+  /**
+   * Récupère les événements selon différents critères
+   *
+   * @param  queryOptions un object contenant différentes option de recherche
+   * @param  setLoading référence de méthode pour mettre à jour l'état de chargement
+   * @returns un tableau d'événements  correspondants aux critères de recherche ainsi que la référence du dernier objet affiché
+   */
   static fetchEvents = async (queryOptions, setLoading) => {
     console.log("queryOptions", queryOptions);
     setLoading(true);
+    const items = [];
+    const { minRating, animationTypeFilter, searchTerm, lastVisible, maxResults } = queryOptions
+
     try {
-
-      const items = [];
       let collectionRef = collection(FIRESTORE_DB, "events");
-      const { maxResults, page } = queryOptions
 
+      // Recherche par mot clé
       /* if (queryOptions.searchTerm) {
         collectionRef = query(
           collectionRef,
@@ -59,44 +66,44 @@ class eventService {
           where("titre_fr", "<=", queryOptions.searchTerm + "\uf8ff")
         );
       }
-*/
+      */
 
       // Filtre sue une note minimale
-      if (queryOptions.minRating) {
+      if (minRating) {
         collectionRef = query(
           collectionRef,
-          where("rating", ">=", queryOptions.minRating),
-          orderBy("identifiant", "desc"),
-          limit(25)
+          where("rating", ">=", minRating),
         );
       }
 
       // Filtre sur le type d'animation
-      if (queryOptions.animationTypeFilter?.length > 0) {
+      if (animationTypeFilter?.length > 0) {
         collectionRef = query(
           collectionRef,
-          where("type_animation_project", "in", queryOptions.animationTypeFilter)
+          where("type_animation_project", "in", animationTypeFilter)
         );
       }
 
       // Pagination
-      /*  if (page && maxResults) {
-         const offset = (page - 1) * maxResults;
-         console.log("offset", offset);
-         collectionRef = query(collectionRef, orderBy("rating"), startAt(offset), limit(maxResults));
-       } */
+      if (lastVisible) {
+        console.log("Next Page");
+        collectionRef = query(collectionRef, orderBy("identifiant", "desc"), startAfter(lastVisible), limit(maxResults));
+
+      } else {
+        console.log("First Page");
+        collectionRef = query(collectionRef, orderBy("identifiant", "desc"), limit(maxResults));
+      }
 
       const querySnapshot = await getDocs(collectionRef);
+      const newLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+
       querySnapshot.forEach((doc) => {
         const e = { id: doc.id, ...doc.data() };
         items.push(e);
       });
 
       setLoading(false);
-      if (queryOptions.page) {
-        console.log("events", items);
-      }
-      return items;
+      return { lastVisible: newLastVisible, items };
 
     } catch (error) {
       setLoading(false);
@@ -104,6 +111,14 @@ class eventService {
     }
   }
 
+  /**
+   * Recherche tous les événements situé dans une zone
+   *
+   * @param latitude la latitude du centre de la zone
+   * @param longitude la longitude du centre de la zone
+   * @param maxDistanceKm le rayon de la zone
+   * @returns
+   */
   static getNearbyEvents = async (latitude, longitude, maxDistanceKm) => {
     const center = [latitude, longitude];
     const radiusInM = maxDistanceKm * 1000;

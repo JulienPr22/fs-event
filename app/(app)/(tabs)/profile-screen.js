@@ -2,10 +2,10 @@ import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, ActivityIndicat
 import { useSession } from '../../ctx';
 import userService from '../services/userService';
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { COLORS, FONT, SIZES } from '../../constants';
-import { router } from 'expo-router';
+import { COLORS, FONT, SIZES, icons } from '../../constants';
+import { Stack, router } from 'expo-router';
 import { UserContext } from '../UserContext';
-import { EventCard } from '../../components';
+import { EventCard, ScreenHeaderBtn, ScreenMaterialHeaderBtn } from '../../components';
 import routesService from '../services/routesService';
 import { Input } from '@rneui/themed';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -67,8 +67,21 @@ const ProfileScreen = () => {
     console.log("published", published);
   }
 
+  const handleSave = async () => {
+    console.log("handleSave", description);
+    await routesService.setRouteDescription(relatedRoute.id, description)
+    setEditing(false)
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite, justifyContent: "flex-start" }}>
+      <Stack.Screen options={{
+
+        headerRight: () => (
+          <ScreenMaterialHeaderBtn iconName={editing ? "save" : "logout"} handlePress={editing ? handleSave : signOut} />
+        ),
+      }}></Stack.Screen>
+
 
       <View style={styles.container}>
         <Text style={styles.title}>Mes Informations</Text>
@@ -115,19 +128,19 @@ const ProfileScreen = () => {
                       numberOfLines={5}
                       style={styles.input}
                       value={description}
-                      onChangeText={setDescription}
+                      onChangeText={(text) => setDescription(text)}
                       placeholder='Décrivez votre parcours'
                       autoCapitalize='none'
-                      enterKeyHint='done'
-                      returnKeyType='none'
+                      returnKeyType='done'
                       inputMode="text"
-                      onSubmitEditing={() => setEditing(false)}
+                      blurOnSubmit
+                      onSubmitEditing={handleSave}
 
                     />
                   ) : (
 
                     <View style={styles.field}>
-                      <Text style={styles.infoValue}>{relatedRoute.description}</Text>
+                      <Text style={styles.infoValue}>{description}</Text>
                     </View>)
                 }
 

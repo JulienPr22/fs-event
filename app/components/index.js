@@ -1,4 +1,5 @@
 import ScreenHeaderBtn from "./common/header/ScreenHeaderBtn";
+import ScreenMaterialHeaderBtn from "./common/header/ScreenMaterialHeaderBtn"
 
 // home screen
 import Welcome from "./home/welcome/Welcome";
@@ -19,6 +20,7 @@ import RouteCard from "./common/cards/route/RouteCard";
 
 export {
   ScreenHeaderBtn,
+  ScreenMaterialHeaderBtn,
   Welcome,
   PopularEvents,
   PopularRoutes,

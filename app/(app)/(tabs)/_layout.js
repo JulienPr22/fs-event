@@ -44,6 +44,7 @@ function MyTabs() {
             />
             <Tabs.Screen
                 name="profile-screen"
+
                 options={{
                     title: 'Profil',
                     visible: false,
@@ -57,9 +58,6 @@ function MyTabs() {
                             name="person"
                             color={color}
                         />
-                    ),
-                    headerRight: () => (
-                        <ScreenHeaderBtn iconUrl={icons.signOut} dimension='60%' handlePress={signOut} />
                     ),
                 }}
             />

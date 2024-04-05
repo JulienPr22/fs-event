@@ -11,7 +11,7 @@ class routesService {
     try {
       const routesRef = collection(FIRESTORE_DB, "routes");
       const newRouteDoc = await addDoc(routesRef, {
-        title: routeTitle, creatorId: userId, description: routeDescription, published: publishRoute
+        creatorId: userId, description: routeDescription, published: publishRoute
       })
       const newRouteId = newRouteDoc.id;
       const newRoute = {
@@ -237,7 +237,7 @@ class routesService {
     }
   }
 
-  static setRouteDescription= async (routeId, description) => {
+  static setRouteDescription = async (routeId, description) => {
     try {
       const docRef = doc(FIRESTORE_DB, "routes", routeId);
       await updateDoc(docRef, { description: description });

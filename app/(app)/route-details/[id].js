@@ -68,7 +68,7 @@ const EventDetails = () => {
           <ActivityIndicator />
         ) : (
           relatedEvents && relatedEvents.length > 0 ? (
-            <View >
+            <View>
               <View style={styles.container}>
 
                 <Text style={styles.title}>Parcours de {routeCreator.name}</Text>
@@ -79,15 +79,14 @@ const EventDetails = () => {
               </View>
 
 
-                <View style={{ alignItems: "center" }}>
-                  <Text style={styles.title}>{numberOfSteps} étapes:</Text>
-                </View>
+              <View style={{ alignItems: "center" }}>
+                <Text style={styles.title}>{numberOfSteps} étapes:</Text>
+              </View>
 
+              <View style={{maxHeight:500}}>
                 <ScrollView
-                  showsVerticalScrollIndicator={false}
-                >
-                  <View style={styles.cardsContainer}
-                  >
+                  showsVerticalScrollIndicator={false}>
+                  <View style={styles.cardsContainer}>
                     {
                       relatedEvents?.map((event) => (
                         <EventCard
@@ -102,6 +101,7 @@ const EventDetails = () => {
                   </View>
                 </ScrollView>
               </View>
+            </View>
 
           ) : (
             <View style={{ alignItems: "center" }}>

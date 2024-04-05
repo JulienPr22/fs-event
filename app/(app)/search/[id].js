@@ -147,7 +147,7 @@ const EventSearch = () => {
                             style={styles.searchInput}
                             value={searchTerm}
                             onChangeText={setSearchTerm}
-                            placeholder='Que recherchez vous ?'
+                            placeholder='Saisissez un mot clé'
                             returnKeyType='search'
                             onSubmitEditing={handleSearch}
                         />

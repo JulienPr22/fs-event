@@ -22,7 +22,7 @@ const Welcome = ({ handleClick }) => {
             style={styles.searchInput}
             value={text}
             onChangeText={(text) => setText(text)}
-            placeholder='Que recherchez vous ?'
+            placeholder='Saisissez un mot clé'
             returnKeyType='search'
             onSubmitEditing={() => handleClick(text) }
           />

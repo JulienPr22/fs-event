@@ -44,8 +44,11 @@ const EventSearch = () => {
     );
 
     useEffect(() => {
-        setSearchTerm(params.id)
-        handleSearch()
+        (async () => {
+            const { lastVisible, items } = await eventService.fetchEvents({ maxResults: 20, minRating: parseInt(minRating), animationTypeFilter: animationTypeFilter, lastVisible: lastEventVisible, searchTerm: params.id }, setSearchLoader);
+            setSearchResult(items);
+            setLastEventVisible(lastVisible)
+        })();
     }, [])
 
     const handleSearch = async () => {

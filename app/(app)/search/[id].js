@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ActivityIndicator, FlatList, Image, RefreshControl, TextInput, TouchableOpacity, View } from 'react-native'
 import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
 import { Text, SafeAreaView } from 'react-native'
@@ -14,17 +14,23 @@ const EventSearch = () => {
     const router = useRouter()
 
     const [searchResult, setSearchResult] = useState([]);
+    const [displayedResult, setDisplayedResult] = useState([]);
+
     const [searchLoader, setSearchLoader] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
     const [searchError, setSearchError] = useState(null);
+
     const [currentPage, setCurrentPage] = useState(1);
+    const [maxReachedPage, setMaxReachedPage] = useState(1);
+
     const [lastEventVisible, setLastEventVisible] = useState(null)
 
     const [filterModalVisible, setFilterModalVisible] = useState(false);
     const [animationTypeFilter, setAnimationTypeFilter] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [minRating, setMinRating] = useState("1")
+    const flatListRef = useRef(null);
 
     const animationTypes = [
         'Atelier',
@@ -43,41 +49,98 @@ const EventSearch = () => {
         animationTypes.map((type) => ({ label: type, checked: false }))
     );
 
-    useEffect(() => {
+    const fetchEvents = async (keyword) => {
+        const { newLastVisible, items } = await eventService.fetchEvents(
+            {
+                maxResults: 20,
+                searchTerm: keyword,
+                minRating: parseInt(minRating),
+                animationTypeFilter: animationTypeFilter,
+                lastVisible: lastEventVisible,
+                page: currentPage
+            },
+            setSearchLoader);
 
+        return { newLastVisible, items };
+    }
+
+
+    useEffect(() => {
         (async () => {
-            console.log(params.id);
-            if (params.id == "all") {
-                setSearchTerm("")
-            } else {
-                setSearchTerm((params.id).toString())
+            if (params.id !== "all") {
+                 setSearchTerm(params.id)
             }
-            const { lastVisible, items } = await eventService.fetchEvents({ maxResults: 20, minRating: parseInt(minRating), animationTypeFilter: animationTypeFilter, lastVisible: lastEventVisible, searchTerm: params.id }, setSearchLoader);
+
+            const { items, newLastVisible } = await fetchEvents(params.id);
             setSearchResult(items);
-            setLastEventVisible(lastVisible)
+            setDisplayedResult(items)
+            setLastEventVisible(newLastVisible);
+
         })();
     }, [])
 
+    // Nouvelle recherche, on vide le tableau de résultat et on remet la page à 1
+    const handleNewSearch = async () => {
+        console.log("lastEventVisible", lastEventVisible);
+        const { items, newLastVisible } = await fetchEvents();
+        setSearchResult(items);
+        setDisplayedResult(items);
+
+        setCurrentPage(1)
+        setMaxReachedPage(1)
+        setLastEventVisible(newLastVisible)
+        flatListRef.current.scrollToOffset({ offset: 0, animated: true });
+
+    }
+
+    // Recherche des événement d'une nouvelle page
     const handleSearch = async () => {
         try {
-            const { lastVisible, items } = await eventService.fetchEvents({ maxResults: 20, minRating: parseInt(minRating), animationTypeFilter: animationTypeFilter, lastVisible: lastEventVisible, searchTerm: searchTerm }, setSearchLoader);
-            setSearchResult(items);
-            setLastEventVisible(lastVisible)
+            const { items, newLastVisible } = await fetchEvents();
+            setSearchResult(prevEvents => [...prevEvents, ...items]);
+            setDisplayedResult(items);
+            setLastEventVisible(newLastVisible)
+            setMaxReachedPage(maxReachedPage + 1)
+            flatListRef.current.scrollToOffset({ offset: 0, animated: true });
+
         } catch (error) {
             console.log(error);
         }
     };
 
-    const handlePagination = (direction) => {
+    const handlePagination = async (direction) => {
         let nextPage = currentPage;
 
         if (direction === 'left' && currentPage > 1) {
             nextPage = currentPage - 1;
+
+            // On affiche les résultats de la page précedente
+            if (nextPage <= maxReachedPage) {
+                const start = nextPage * 20
+                const end = start + 20
+                const resultTodisplay = searchResult.slice(start, end)
+                setDisplayedResult(resultTodisplay)
+            }
         } else if (direction === 'right') {
             nextPage = currentPage + 1;
+
+            // si on a déjà charger cette page, on  affiche directement le contenu stocké
+            if (nextPage <= maxReachedPage) {
+                console.log("page already reached")
+                const start = nextPage * 20
+                const end = start + 20
+                const resultTodisplay = searchResult.slice(start, end)
+                setDisplayedResult(resultTodisplay)
+            } else {
+                console.log("new page to load")
+                console.log(lastEventVisible.data());
+                await handleSearch(searchTerm)
+
+            }
         }
         setCurrentPage(nextPage);
-        handleSearch()
+        flatListRef.current.scrollToOffset({ offset: 0, animated: true });
+
     }
 
     const handleApplyFilters = () => {
@@ -92,7 +155,7 @@ const EventSearch = () => {
     const handleRefresh = async () => {
         setRefreshing(true);
         try {
-            await handleSearch(currentPage);
+            await handleSearch();
         } catch (error) {
             console.log(error);
         } finally {
@@ -150,14 +213,14 @@ const EventSearch = () => {
                         <TextInput
                             style={styles.searchInput}
                             value={searchTerm}
-                            onChangeText={setSearchTerm}
+                            onChangeText={(text) => setSearchTerm(text)}
                             placeholder='Saisissez un mot clé'
                             returnKeyType='search'
-                            onSubmitEditing={handleSearch}
+                            onSubmitEditing={handleNewSearch}
                         />
                     </View>
 
-                    <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
+                    <TouchableOpacity style={styles.searchBtn} onPress={handleNewSearch}>
                         <Image
                             source={icons.search}
                             resizeMode='contain'
@@ -167,10 +230,11 @@ const EventSearch = () => {
                 </View>
 
                 <FlatList
+                    ref={flatListRef}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
                     }
-                    data={searchResult}
+                    data={displayedResult}
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item, index }) => (
                         <EventCard
@@ -200,6 +264,7 @@ const EventSearch = () => {
                             <TouchableOpacity
                                 style={styles.paginationButton}
                                 onPress={() => handlePagination('left')}
+                                disabled={currentPage == 1}
                             >
                                 <Image
                                     source={icons.chevronLeft}
@@ -213,6 +278,8 @@ const EventSearch = () => {
                             <TouchableOpacity
                                 style={styles.paginationButton}
                                 onPress={() => handlePagination('right')}
+                                disabled={searchResult.length < 20}
+
                             >
                                 <Image
                                     source={icons.chevronRight}

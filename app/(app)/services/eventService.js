@@ -50,26 +50,28 @@ class eventService {
    * @returns un tableau d'événements  correspondants aux critères de recherche ainsi que la référence du dernier objet affiché
    */
   static fetchEvents = async (queryOptions, setLoading) => {
-    console.log("queryOptions", queryOptions);
     setLoading(true);
     const items = [];
-    const { minRating, animationTypeFilter, searchTerm, lastVisible, maxResults } = queryOptions
+    const { maxResults, searchTerm, minRating, animationTypeFilter, lastVisible, page } = queryOptions
 
     try {
-      let collectionRef = collection(FIRESTORE_DB, "events");
+      let collectionRef = collection(FIRESTORE_DB, "events",);
 
 
       // Recherche par mot clé
-      /*   if (searchTerm) {
-          collectionRef = query(
-            collectionRef,
-            where("titre_fr", ">=", searchTerm),
-            where("titre_fr", "<=", searchTerm + "\uf8ff")
-          );
-        } */
+      if (searchTerm && searchTerm != "" && searchTerm != "all") {
+        console.log("searchTerm", searchTerm);
+
+        collectionRef = query(
+          collectionRef,
+          where("titre_fr", ">=", searchTerm),
+          where("titre_fr", "<=", searchTerm + "\uf8ff")
+        );
+      }
 
       // Filtre sur une note minimale
       if (minRating) {
+        console.log("minRating", minRating);
         collectionRef = query(
           collectionRef,
           where("rating", ">=", minRating),
@@ -78,24 +80,27 @@ class eventService {
 
       // Filtre sur le type d'animation
       if (animationTypeFilter?.length > 0) {
+        console.log("animationTypeFilter", animationTypeFilter);
         collectionRef = query(
           collectionRef,
           where("type_animation_project", "in", animationTypeFilter)
         );
       }
 
+      collectionRef = query(collectionRef, orderBy("identifiant", "desc"), limit(maxResults)
+      );
+
       // Pagination
       if (lastVisible) {
-        console.log("Next Page");
-        collectionRef = query(collectionRef, orderBy("identifiant", "desc"), startAfter(lastVisible), limit(maxResults));
+        console.log("Page > 1");
+        console.log("lastVisible", lastVisible.data().titre_fr);
 
-      } else {
-        console.log("First Page");
-        collectionRef = query(collectionRef, orderBy("identifiant", "desc"), limit(maxResults));
+        collectionRef = query(collectionRef, startAfter(lastVisible));
       }
 
       const querySnapshot = await getDocs(collectionRef);
       const newLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+      console.log("newLastVisible", newLastVisible.data().titre_fr);
 
       querySnapshot.forEach((doc) => {
         const e = { id: doc.id, ...doc.data() };
@@ -103,7 +108,7 @@ class eventService {
       });
 
       setLoading(false);
-      return { lastVisible: newLastVisible, items };
+      return { newLastVisible, items };
 
     } catch (error) {
       setLoading(false);

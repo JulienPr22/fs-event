@@ -82,7 +82,7 @@ const EventSearch = () => {
     // Nouvelle recherche, on vide le tableau de résultat et on remet la page à 1
     const handleNewSearch = async () => {
         console.log("lastEventVisible", lastEventVisible);
-        const { items, newLastVisible } = await fetchEvents();
+        const { items, newLastVisible } = await fetchEvents(searchTerm);
         setSearchResult(items);
         setDisplayedResult(items);
 
@@ -96,7 +96,7 @@ const EventSearch = () => {
     // Recherche des événement d'une nouvelle page
     const handleSearch = async () => {
         try {
-            const { items, newLastVisible } = await fetchEvents();
+            const { items, newLastVisible } = await fetchEvents(searchTerm);
             setSearchResult(prevEvents => [...prevEvents, ...items]);
             setDisplayedResult(items);
             setLastEventVisible(newLastVisible)
@@ -131,9 +131,9 @@ const EventSearch = () => {
                 const resultTodisplay = searchResult.slice(start, end)
                 setDisplayedResult(resultTodisplay)
             } else {
-                console.log("new page to load")
+                console.log("new page to load", searchTerm)
                 console.log(lastEventVisible.data());
-                await handleSearch(searchTerm)
+                await handleSearch()
 
             }
         }
@@ -154,7 +154,7 @@ const EventSearch = () => {
     const handleRefresh = async () => {
         setRefreshing(true);
         try {
-            await handleSearch();
+            await handleNewSearch();
         } catch (error) {
             console.log(error);
         } finally {

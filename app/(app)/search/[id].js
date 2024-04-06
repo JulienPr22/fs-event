@@ -115,20 +115,19 @@ const EventSearch = () => {
             nextPage = currentPage - 1;
 
             // On affiche les résultats de la page précedente
-            if (nextPage <= maxReachedPage) {
-                const start = nextPage * 20
-                const end = start + 20
+                const start = (nextPage -1) * 20
+                const end = start + 19
                 const resultTodisplay = searchResult.slice(start, end)
                 setDisplayedResult(resultTodisplay)
-            }
+
         } else if (direction === 'right') {
             nextPage = currentPage + 1;
 
             // si on a déjà charger cette page, on  affiche directement le contenu stocké
             if (nextPage <= maxReachedPage) {
                 console.log("page already reached")
-                const start = nextPage * 20
-                const end = start + 20
+                const start = (nextPage -1) * 20
+                const end = start + 19
                 const resultTodisplay = searchResult.slice(start, end)
                 setDisplayedResult(resultTodisplay)
             } else {

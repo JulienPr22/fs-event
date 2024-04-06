@@ -199,25 +199,13 @@ const EventDetails = () => {
     }
   };
 
-  const imageSource = () => {
-    /*  const source = {
-       uri: checkImageURL(event.image)
-         ? event.image
-         : event.organisateur_logo
-     }
-     console.log("source", source);
-     return source */
-  }
-
   const displayTabContent = () => {
     switch (activeTab) {
 
       case "À Propos":
         return (
           <EventAbout
-            description={event.description_longue_fr ?? "Cet événement n'a pas de description"}
-            dates={event.date_debut}
-            capacite={event.capacite ?? "Non renseigné"} />
+            description={event.description_longue_fr ?? "Cet événement n'a pas de description"}/>
         );
 
       case "Adresse":

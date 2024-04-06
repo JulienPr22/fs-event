@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 
 import styles from './welcome.style';
-import { icons } from '../../../constants';
+import { COLORS, icons } from '../../../constants';
 import { UserContext } from '../../../(app)/UserContext';
 
 const Welcome = ({ handleClick }) => {
@@ -23,6 +23,7 @@ const Welcome = ({ handleClick }) => {
             value={text}
             onChangeText={(text) => setText(text)}
             placeholder='Saisissez un mot clé'
+            placeholderTextColor={COLORS.gray2}
             returnKeyType='search'
             onSubmitEditing={() => handleClick(text) }
           />

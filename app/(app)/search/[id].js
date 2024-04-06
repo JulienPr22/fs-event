@@ -68,7 +68,7 @@ const EventSearch = () => {
     useEffect(() => {
         (async () => {
             if (params.id !== "all") {
-                 setSearchTerm(params.id)
+                setSearchTerm(params.id)
             }
 
             const { items, newLastVisible } = await fetchEvents(params.id);
@@ -115,10 +115,10 @@ const EventSearch = () => {
             nextPage = currentPage - 1;
 
             // On affiche les résultats de la page précedente
-                const start = (nextPage -1) * 20
-                const end = start + 19
-                const resultTodisplay = searchResult.slice(start, end)
-                setDisplayedResult(resultTodisplay)
+            const start = (nextPage - 1) * 20
+            const end = start + 19
+            const resultTodisplay = searchResult.slice(start, end)
+            setDisplayedResult(resultTodisplay)
 
         } else if (direction === 'right') {
             nextPage = currentPage + 1;
@@ -126,7 +126,7 @@ const EventSearch = () => {
             // si on a déjà charger cette page, on  affiche directement le contenu stocké
             if (nextPage <= maxReachedPage) {
                 console.log("page already reached")
-                const start = (nextPage -1) * 20
+                const start = (nextPage - 1) * 20
                 const end = start + 19
                 const resultTodisplay = searchResult.slice(start, end)
                 setDisplayedResult(resultTodisplay)
@@ -142,8 +142,9 @@ const EventSearch = () => {
 
     }
 
-    const handleApplyFilters = () => {
+    const handleApplyFilters = async () => {
         setAnimationTypeFilter(checkedItems.filter(item => item.checked).map(item => item.label))
+        await handleNewSearch()
     };
 
     const handleOnClose = async () => {
@@ -214,6 +215,7 @@ const EventSearch = () => {
                             value={searchTerm}
                             onChangeText={(text) => setSearchTerm(text)}
                             placeholder='Saisissez un mot clé'
+                            placeholderTextColor={COLORS.gray2}
                             returnKeyType='search'
                             onSubmitEditing={handleNewSearch}
                         />

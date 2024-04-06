@@ -59,6 +59,7 @@ export default function SignIn() {
         style={styles.input}
         value={email}
         placeholder='Email'
+        placeholderTextColor={COLORS.gray2}
         autoCapitalize='none'
         inputMode='email'
         onChangeText={setEmail}
@@ -68,6 +69,7 @@ export default function SignIn() {
         value={password}
         secureTextEntry={true}
         placeholder='Mot de passe'
+        placeholderTextColor={COLORS.gray2}
         autoCapitalize='none'
         onChangeText={setPassword}
       />
@@ -78,6 +80,7 @@ export default function SignIn() {
             style={styles.input}
             value={name}
             placeholder='Nom'
+            placeholderTextColor={COLORS.gray2}
             autoCapitalize='words'
             onChangeText={(text) => setName(text)}
           />

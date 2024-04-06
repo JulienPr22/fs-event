@@ -26,7 +26,7 @@ const PopularEvents = ({ refreshing }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>événements populaires</Text>
+        <Text style={styles.headerTitle}>Événements populaires</Text>
         <TouchableOpacity onPress={() => router.push(`/search/all`)}>
           <Text style={styles.headerBtn}>Voir tous</Text>
         </TouchableOpacity>

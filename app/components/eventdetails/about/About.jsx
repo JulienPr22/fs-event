@@ -11,16 +11,6 @@ const About = ({ description, dates, capacite }) => {
         <Text style={styles.contextText}>{description}</Text>
       </View>
 
-      <View style={styles.contentBox}>
-        <Text style={styles.headText}>Capacité: </Text>
-        <Text style={styles.contextText}>{capacite} p.</Text>
-      </View>
-
-      <View style={styles.contentBox}>
-        <Text style={styles.headText}>{dates}</Text>
-      </View>
-
-
     </View>
   );
 };

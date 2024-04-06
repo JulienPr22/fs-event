@@ -24,7 +24,7 @@ class eventService {
         collectionRef,
         where("rating", ">=", 4),
         orderBy("identifiant", "desc"),
-        limit(50));
+        limit(30));
 
 
       const querySnapshot = await getDocs(collectionRef);

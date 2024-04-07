@@ -12,8 +12,8 @@ import eventService from '../services/eventService';
 
 
 const INITIAL_REGION = {
-  latitude: 48.8666,
-  longitude: 2.3333,
+  latitude: 48.083328,
+  longitude: -1.68333,
   latitudeDelta: 2,
   longitudeDelta: 2
 }
@@ -32,9 +32,10 @@ function MapScreen() {
 
   useEffect(() => {
     (async () => {
-      setRegionLocation({ latitude: INITIAL_REGION.latitude, longitude: INITIAL_REGION.longitude })
+      setRegionLocation({ latitude: user.location.coords.latitude, longitude: user.location.coords.longitude })
+
       // Récupération des événements proches
-      const eventsData = await eventService.getNearbyEvents(INITIAL_REGION.latitude, INITIAL_REGION.longitude, 10)
+      const eventsData = await eventService.getNearbyEvents(user.location.coords.latitude,  user.location.coords.longitude, 10)
       setEvents(eventsData)
       console.log("eventsData", eventsData);
       setIsDataLoaded(true)
@@ -82,15 +83,6 @@ function MapScreen() {
       Linking.openURL(platformURL);
     }
   };
-
-  const imageSource = (event) => {
-    return checkImageURL(event.image)
-      ? { uri: event.image }
-      : checkImageURL(event.organisateur_logo)
-        ? { uri: event.organisateur_logo }
-        : require('../../assets/images/placeholder.png');
-
-  }
 
   return (
     <View style={styles.container}>

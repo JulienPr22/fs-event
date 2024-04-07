@@ -75,132 +75,132 @@ const ProfileScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite, justifyContent: "flex-start" }}>
-      <Stack.Screen options={{
+      <ScrollView showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <Stack.Screen options={{
 
-        headerRight: () => (
-          <ScreenMaterialHeaderBtn iconName={editing ? "save" : "logout"} handlePress={editing ? handleSave : signOut} />
-        ),
-      }}></Stack.Screen>
+          headerRight: () => (
+            <ScreenMaterialHeaderBtn iconName={editing ? "save" : "logout"} handlePress={editing ? handleSave : signOut} />
+          ),
+        }}></Stack.Screen>
 
 
-      <View style={styles.container}>
-        <Text style={styles.title}>Mes Informations</Text>
-        <View>
-
-          <View style={styles.field}>
-            <Text style={styles.infoLabel} >Nom: </Text>
-            <Text style={styles.infoValue}>{user.name}</Text>
-          </View>
-          <View style={styles.field}>
-            <Text style={styles.infoLabel}>Mail: </Text>
-            <Text style={styles.infoValue}>{user.email}</Text>
-          </View>
-
-          <View style={styles.field}>
-            <Text style={styles.infoLabel}>Rôle: </Text>
-            <Text style={styles.infoValue}>{user.role == "visitor" ? "Visiteur" : "Contributeur"}</Text>
-          </View>
-
-        </View>
-      </View>
-
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : (
-        relatedEvents && relatedEvents.length > 0 ? (
+        <View style={styles.container}>
+          <Text style={styles.title}>Mes Informations</Text>
           <View>
-            <View style={styles.container}>
 
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "center" }}>
-                <Text style={styles.title}>Mon Parcours</Text>
-                <Pressable onPress={() => setEditing(true)} style={{ marginBottom: 15, marginLeft: 10 }} >
-                  <MaterialIcons name='edit' size={24} color={COLORS.primary} />
+            <View style={styles.field}>
+              <Text style={styles.infoLabel} >Nom: </Text>
+              <Text style={styles.infoValue}>{user.name}</Text>
+            </View>
+            <View style={styles.field}>
+              <Text style={styles.infoLabel}>Mail: </Text>
+              <Text style={styles.infoValue}>{user.email}</Text>
+            </View>
 
-                </Pressable>
-              </View>
+            <View style={styles.field}>
+              <Text style={styles.infoLabel}>Rôle: </Text>
+              <Text style={styles.infoValue}>{user.role == "visitor" ? "Visiteur" : "Contributeur"}</Text>
+            </View>
 
-              <View>
+          </View>
+        </View>
 
-                {
-                  relatedRoute && editing ? (
-                    <TextInput
-                      multiline
-                      numberOfLines={5}
-                      style={styles.input}
-                      value={description}
-                      onChangeText={(text) => setDescription(text)}
-                      placeholder='Décrivez votre parcours'
-                      autoCapitalize='none'
-                      returnKeyType='done'
-                      inputMode="text"
-                      blurOnSubmit
-                      onSubmitEditing={handleSave}
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          relatedEvents && relatedEvents.length > 0 ? (
+            <View>
+              <View style={styles.container}>
 
-                    />
-                  ) : (
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "center" }}>
+                  <Text style={styles.title}>Mon Parcours</Text>
+                  <Pressable onPress={() => setEditing(true)} style={{ marginBottom: 15, marginLeft: 10 }} >
+                    <MaterialIcons name='edit' size={24} color={COLORS.primary} />
 
-                    <View style={styles.field}>
-                      <Text style={styles.infoValue}>{description}</Text>
-                    </View>)
-                }
-
-
-                <View style={styles.field}>
-                  <View style={styles.tabsContainer}>
-                    <Text style={styles.infoLabel}>Publié:</Text>
-
-                    <TouchableOpacity
-                      style={styles.tab(published)}
-                      onPress={onPressPublishedYes}
-                    >
-                      <Text style={styles.tabText(published, true)}>Oui</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={styles.tab(published)}
-                      onPress={onPressPublishedNo}
-                    >
-                      <Text style={styles.tabText(published, false)}>Non</Text>
-                    </TouchableOpacity>
-                  </View>
+                  </Pressable>
                 </View>
 
+                <View>
 
+                  {
+                    relatedRoute && editing ? (
+                      <TextInput
+                        multiline
+                        numberOfLines={5}
+                        style={styles.input}
+                        value={description}
+                        onChangeText={(text) => setDescription(text)}
+                        placeholder='Décrivez votre parcours'
+                        autoCapitalize='none'
+                        returnKeyType='done'
+                        inputMode="text"
+                        blurOnSubmit
+                        onSubmitEditing={handleSave}
+
+                      />
+                    ) : (
+
+                      <View style={styles.field}>
+                        <Text style={styles.infoValue}>{description}</Text>
+                      </View>)
+                  }
+
+
+                  <View style={styles.field}>
+                    <View style={styles.tabsContainer}>
+                      <Text style={styles.infoLabel}>Publié:</Text>
+
+                      <TouchableOpacity
+                        style={styles.tab(published)}
+                        onPress={onPressPublishedYes}
+                      >
+                        <Text style={styles.tabText(published, true)}>Oui</Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={styles.tab(published)}
+                        onPress={onPressPublishedNo}
+                      >
+                        <Text style={styles.tabText(published, false)}>Non</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+
+
+                </View>
+              </View>
+
+              <View  >
+                <View style={styles.cardsContainer} >
+                  {
+
+                    relatedEvents?.map((event) => (
+                      <EventCard
+                        event={event}
+                        key={`popular-event-${event.id}`}
+                        onPress={() => {
+                          router.push(`/event-details/${event.id}`);
+                        }}
+                      />
+                    ))
+                  }
+                </View>
 
               </View>
             </View>
 
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              }
-            >
-              <View style={styles.cardsContainer} >
-                {
 
-                  relatedEvents?.map((event) => (
-                    <EventCard
-                      event={event}
-                      key={`popular-event-${event.id}`}
-                      onPress={() => {
-                        router.push(`/event-details/${event.id}`);
-                      }}
-                    />
-                  ))
-                }
-              </View>
-
-            </ScrollView>
-          </View>
-
-
-        ) : (
-          <View style={{ alignItems: "center" }}>
-            <Text style={{ color: COLORS.tertiary, marginTop: SIZES.medium }}>Aucun parcours n'a été créé</Text>
-          </View>
-        ))}
-
+          ) : (
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ color: COLORS.tertiary, marginTop: SIZES.medium }}>Aucun parcours n'a été créé</Text>
+            </View>
+          ))}
+      </ScrollView>
     </SafeAreaView >
   );
 }

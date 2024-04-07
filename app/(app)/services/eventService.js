@@ -92,15 +92,11 @@ class eventService {
 
       // Pagination
       if (lastVisible) {
-        console.log("Page > 1");
-        console.log("lastVisible", lastVisible.data().titre_fr);
-
         collectionRef = query(collectionRef, startAfter(lastVisible));
       }
 
       const querySnapshot = await getDocs(collectionRef);
       const newLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
-      console.log("newLastVisible", newLastVisible.data().titre_fr);
 
       querySnapshot.forEach((doc) => {
         const e = { id: doc.id, ...doc.data() };
@@ -162,7 +158,6 @@ class eventService {
         }
       }
     }
-    console.log("matchingDocs", nearbyEvents);
     return nearbyEvents;
   }
 
@@ -176,7 +171,6 @@ class eventService {
       await updateDoc(docRef, { rating: updatedRating, votes: updatedVotes });
 
     } catch (error) {
-      console.error('Erreur lors de la mise à jour de la note de l\'événement :', error);
 
     }
   }

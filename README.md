@@ -106,8 +106,8 @@ Suivre ces étapes pour installer le projet sur votre machine
 **Cloner le Repository**
 
 ```bash
-git
-cd
+git clone https://github.com/JulienPr22/fete-science-app.git
+cd fete-science-app
 ```
 
 **Installation**

@@ -57,20 +57,21 @@ Vous trouverez ici les informations générales de notre projet comme les explic
 
 ## <a name="features"> Features</a>
 
-**Recherche**: La fonction recherche permet de récupérer des événements en fonction de plusieurs critères comme le type d'animation (visite, spectacle, jeu etc...) ou d'une note minimale.
+**Recherche**: La fonction recherche permet de récupérer des événements en fonction de plusieurs critères comme le type d'animation (visite, spectacle, jeu, etc...) ou d'une note minimale.
 
 **Carte interactive**:
-- l'Écran permettant de visualiser les événements sur une carte interactive
-- Il est possible de recentrer la vue sur notre position actuel
-- Il est possible d'actualiser la recherche pour afficher les événements proche de la région sélectionnée
-- Un clique sur un marker permet d'afficher des informations sur l'événement et d'accéder à l'écran de détails
-- Il est possible d'ouvrir l'itinéraire vers événement sélectionné dans google map
 
-**Authentification**: L'application permet de s'authentifier en utilisant un service Firebase d'authentification (email / mot de passe). Si l'utilisateur est connecté, une session encapsule l'application à l'aide de Session Provider. Il n'est pas possible d'accéder aux écrans principaux si on est pas authentifié.
+- l'Écran permettant de visualiser les événements sur une carte interactive.
+- Il est possible de recentrer la vue sur notre position actuelle.
+- Il est possible d'actualiser la recherche pour afficher les événements proches de la région sélectionnée.
+- Un clic sur un marker permet d'afficher des informations sur l'événement et d'accéder à l'écran de détails
+- Il est possible d'ouvrir l'itinéraire vers l'événement sélectionné dans Google map.
 
-**Noter un événements**: Si l'utilisateur a le rôle "visitor" (Visiteur), il peut noter un événements quand il est sur l'écran de détail. La note et le nombre de votes sont alors mis à jours en base de données.
+**Authentification**: L'application permet de s'authentifier en utilisant un service Firebase d'authentification (email/mot de passe). Si l'utilisateur est connecté, une session encapsule l'application à l'aide de Session Provider. Il n'est pas possible d'accéder aux écrans principaux si on n'est pas authentifié.
 
-**Remplissage d'un l'événement**: Si l'utilisateur a le rôle "contributor" (Contributeur), il peut mettre à jour le taux de remplissage d'un événement. Le remplissage de l'événement est alors mis à jour en base de données.
+**Noter un événements**: Si l'utilisateur a le rôle "visitor" (visiteur), il peut noter un événement quand il est sur l'écran de détail. La note et le nombre de votes sont alors mis à jour en base de données.
+
+**Remplissage d'un l'événement**: Si l'utilisateur a le rôle "contributor" (contributeur), il peut mettre à jour le taux de remplissage d'un événement. Le remplissage de l'événement est alors mis à jour en base de données.
 
 **Ajout d'un événement à un parcours**: Si l'utilisateur a le rôle "visitor" (Visiteur), il peut ajouter un événement quand il est sur l'écran de détail. L'événement est alors ajouter à la liste des événements référencés dans la collection route dont le creatorId est l'id de l'utilisateur.
 
